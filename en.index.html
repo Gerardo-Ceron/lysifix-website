@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="alternate" hreflang="en" href="https://lysifix.dev/en/">
+    <link rel="alternate" hreflang="es-MX" href="https://lysifix.dev/">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HXJR4L9W3M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HXJR4L9W3M');
+</script>
+    <meta charset="UTF-8">
+    
+    <!-- 1. Lo que la gente y las chicas verán visualmente en Google -->
+      <title>Lysifix | Custom Software Solutions and Web Design by Gerardo Cerón</title>
+    <meta name="description" content="Official Lysifix website by Gerardo Cerón. Software engineering, advanced Python automation, Flask development, web scraping, and custom bots.">
+    <!-- 2. Datos estructurados para los robots de Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Lysifix",
+      "url": "https://lysifix.dev",
+      "logo": "https://lysifix.dev",
+      "image": "https://lysifix.dev",
+      "description":  "Custom software development, Python automation, web scraping, and custom bots.",
+      "founder": {
+        "@type": "Person",
+        "name": "Gerardo Cerón"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Santiago de Querétaro",
+        "addressRegion": "Qro.",
+        "addressCountry": "MX"
+      },
+      "priceRange": "$$"
+    }
+    </script>
+    </script>
+    <style>
+    .terminal-window {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-family: 'Courier New', Courier, monospace;
+    margin: 15px auto;
+    max-width: 90%;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.terminal-header {
+    background-color: #323232;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.red { background-color: #ff5f56; }
+.yellow { background-color: #ffbd2e; }
+.green { background-color: #27c93f; }
+
+.terminal-title {
+    color: #aaa;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+.terminal-body {
+    padding: 12px;
+    color: #00ff00; /* Verde clásico de consola */
+    font-size: 13px;
+    text-align: left;
+    min-height: 40px;
+    line-height: 1.4;
+    height: 110px;
+    overflow: hidden;
+}
+
+/* Efecto de parpadeo para el cursor */
+.cursor {
+    animation: blink 1s infinite;
+    color: #00ff00;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}    
+    /* Estilos blindados para que no choquen con estilos.css */
+#chat-contenedor {
+    position: relative !important;
+    flex: 0 1 220px !important;
+    width: 250px !important;
+    
+    /* CAMBIO 1: Cambia el alto fijo por un alto máximo y automático */
+    height: auto !important; 
+    max-height: 380px !important; 
+    
+    border: 1px solid #ccc !important;
+    border-radius: 10px !important;
+    display: none;
+    flex-direction: column !important;
+    background-color: white !important;
+    font-family: Arial, sans-serif !important;
+    box-shadow: 0 4px 10px rgba(2,0,0,0.1) !important;
+    z-index: 2 !important;
+    
+    /* CAMBIO 2: Permite que aparezca una barra de scroll si el texto es muy largo en celulares */
+    overflow-y: auto !important; 
+}
+    #chat-header { 
+        background: #c19b02 !important; 
+        color: white !important; 
+        padding: 5px !important; 
+        border-top-left-radius: 9px !important; 
+        border-top-right-radius: 9px !important; 
+        font-weight: bold !important; 
+    }
+    #historial { 
+        flex: 1 !important; 
+        padding: 15px !important; 
+        overflow-y: scroll !important; 
+        scrollbar-width: none !important;
+        display: flex !important; 
+        flex-direction: column !important; 
+        gap: 8px !important; 
+        background: #151515 !important;
+    }
+    #historial .mensaje { 
+        padding: 12px 12px !important; 
+        border-radius: 10px !important; 
+        max-width: 100% !important; 
+        font-size: 11px !important; 
+        margin-bottom: 5px !important;
+    }
+    #historial .usuario { 
+        background: #c19b02 !important; 
+        color: white !important; 
+        align-self: flex-end !important; 
+    }
+   #historial .bot {
+    background: #262626 !important;
+    color: white !important;
+    align-self: flex-start !important;
+    
+    /* 🛠️ AÑADE ESTAS TRES LÍNEAS AQUÍ: */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+}
+        #historial .bot a {
+    display: inline-block !important;
+    margin-top: 8px !important;
+    padding: 6px 12px !important;
+    background-color: #1dbf73 !important; /* Verde oficial de Fiverr */
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 50px !important;
+    font-weight: bold !important;
+    white-space: nowrap !important; /* Evita que el texto del botón se rompa */
+    text-align: center !important;
+    align-self: center !important;
+}
+    #chat-input-area { 
+        display: flex !important; 
+        border-top: 1px solid #ccc !important; 
+        background: white !important;
+    }
+    #chat-input-area #entrada { 
+        flex: 1 !important; 
+        padding: 8px !important; 
+        border: none !important; 
+        outline: none !important; 
+        background: white !important;
+        color: black !important;
+    }
+    #chat-input-area #enviar { 
+        background: #c19b02 !important; 
+        color: white !important; 
+        border: none !important; 
+        padding: 10px 10px !important; 
+        cursor: pointer !important; 
+    }
+</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Lysifix |  Custom Software Solutions and Web Design by Gerardo Cerón</title>
+    <meta name="description" content="Official website of Lysifix by Gerardo Cerón. Custom software development, advanced Python automation, Flask development, web scraping, and custom bots.">
+
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+    <meta name="msvalidate.01" content="EC30F42CCB7F433EA8A0C539E01DF53E" />
+<body>
+    <div class="terminal-window">
+    <div class="terminal-header">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="terminal-title">lysifix_bot.py</span>
+    </div>
+    <div class="terminal-body">
+        <span id="terminal-text"></span><span class="cursor">|</span>
+    </div>
+</div>
+    <div class="site-shell">
+        <header class="site-header">
+            <div class="brand">
+                <img src="favicon.ico" alt="Logotipo de Lysifix" class="brand-logo">
+                <div>
+                    <p class="brand-name" style="color: #c19b02;">Lysifix</p>
+                    <p class="brand-tag">Web, software & experience digital</p>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <a href="#about">About Me</a>
+                <a href="#proyectos">Projects</a>
+                <a href="#contacto">Contact</a>
+            </nav>
+            <div id="chat-contenedor">
+                <div id="chat-header">Lysifix Virtual Assistant</div>
+                <div id="historial">
+                    <div class="mensaje bot">  Hello! Welcome to <em><strong>Lysifix</strong></em>  How can I help you today?</div>
+                </div>
+                <div id="chat-input-area">
+                    <input type="text" id="entrada" placeholder="Ask me anything..">
+                    <button id="enviar" onclick="enviarMensaje()">▶️</button>
+                </div>
+            </div>
+        </header>
+
+
+        <main>
+            <section class="hero reveal">
+                <div class="hero-copy">
+                    <div class="hero-badges">
+                        <span class="hero-badge">Premium Design</span>
+                        <span class="hero-badge">Modern Experience</span>
+                        <span class="hero-badge">Digital Solutions</span>
+                    </div>
+                    <h1 style="margin-bottom: 24px; line-height: 1.3;">Custom Software Development and Tailored Solutions to Grow Your Business</h1>
+                    <p>Custom web design and software solutions for entrepreneurs and businesses looking for digital products with style, performance, and purpose.</p>
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <strong>+8</strong>
+                            <span>Projects</span>
+                        </div>
+                        <div class="stat-card">
+                            <strong>100%</strong>
+                            <span>Custom-Built</span>
+                        </div>
+                        <div class="stat-card">
+                            <strong>3D</strong>
+                            <span>Visual Design</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        
+                    </div>
+                </div>
+                <aside class="hero-panel ventana-codigo reveal">
+                    <div class="barra-superior">
+                        <div class="botones">
+                            <span class="boton cerrar"></span>
+                            <span class="boton minimizar"></span>
+                            <span class="boton maximizar"></span>
+                        </div>
+                        <span class="titulo-archivo">LysifixEngine.jsx</span>
+                    </div>
+                    <img src="img.png" alt="Vista previa de proyecto" class="preview-image">
+                </aside>
+            </section>
+
+                    <section id="about" class="about-section showcase-section reveal">
+                        <h2 style="color: #c19b02; font-weight: bold;">About Me</h2>
+                    <p class="lead">Hello, I'm Gerardo Cerón, a software developer and process automation specialist behind <strong>Lysifix</strong>.
+        I build advanced Python solutions designed to improve productivity for entrepreneurs, business owners, and independent projects.
+        My primary goal is to eliminate repetitive manual tasks, process large volumes of data, and solve specific technical challenges through custom-built digital tools.
+        I optimize your daily workflows, minimize human errors, and give you back the most valuable asset in your business: your time.</p>
+                
+                    <div class="badges">
+                        <span>🎯 Results-Driven Approach</span>
+                        <span>⚡ Clean Code</span>
+                        <span>💼 Custom Solutions</span>
+                    </div>
+                    </section>
+
+                    <section class="service-section showcase-section reveal">
+                    <span style="color: #c19b02; font-weight: bold">Python Automation Scripts 📜</span>
+                    <h2 style="font-size: 2rem; margin-top: 10px;">What Type of Python Scripts Can We Build for You?</h2>
+                    <p> Save hours of manual work, eliminate human error, and get clean, structured data ready to be used in any web application.</p>
+                    <p><strong>What's Included in Your Project:</strong></p>
+                    <ul>
+                        <li><strong>File and Data Automation:</strong>  Smart integration between Excel, CSV, TXT, and JSON files. We consolidate complex reports and extract valuable information with a single click.</li>
+                        <li><strong>Bulk File Organization:</strong>  Mass document classification and renaming following your exact specifications. Find any file in seconds through automated folder structures.</li>
+                        <li><strong>Data Cleaning and Processing:</strong>  Automatic duplicate removal and correction of common formatting and typing errors. We clean and optimize your databases so you can make accurate business decisions.</li>
+                        <li><strong>Custom Software Development:</strong> Tailor-made applications for challenges that off-the-shelf software cannot solve. We build automated inventory alerts, commission calculators, and specialized business tools designed around your workflow.</li>
+                    </ul>
+                    </section>
+
+
+                    <section class="service-section showcase-section reveal">
+                    <span style="color: #c19b02; font-weight: bold;">Desktop Applications 💻</span>
+                    <h2 style="font-size: 2rem; margin-top: 10px;"> Custom Desktop Software Solutions</h2>
+                    <p>I design practical and fully visual software solutions that help automate complex tasks, improve team productivity, and manage your company's internal data without relying on an internet connection.</p>
+                    <p><strong>What We Solve for You:</strong></p>
+                    <ul>
+                        <li><strong>Centralized Operations Management:</strong> Local software tools designed for advanced inventory control, automated calculations, and internal business reporting.</li>
+                        <li><strong>Intuitive Graphical User Interfaces (GUI):</strong>  Clean, modern, and user-friendly interfaces built to accelerate your team's workflow and reduce operational fatigue.</li>
+                        <li><strong>Lightweight and Portable Architecture:</strong> Optimized applications that run instantly on any Windows computer, ensuring stability and minimal resource consumption.</li>
+                    </ul>
+                    </section>
+
+                    <section class="service-section showcase-section reveal">
+                    <span style="color: #c19b02; font-weight: bold;">Web 🌐 & Mobile 📱 Development</span>
+                    <h2 style="font-size: 2rem; margin-top: 10px;"> Your Business on Every Screen</h2>
+                    <p>We create modern websites and mobile applications that adapt to the pace of your business. No complicated installations required, and ready to use from any browser or mobile device.</p>
+                    <p><strong>What's Included in Your Project:</strong></p>
+                    <ul>
+                        <li><strong>Responsive Web and Mobile Design:</strong> Your platform will look and perform beautifully on desktop computers, Android devices, and iPhones alike.</li>
+                        <li><strong>Unique User Experience:</strong>  We design clean, attractive, and intuitive interfaces focused on providing the best experience for your customers.</li>
+                        <li><strong>Maximum Performance:</strong> We optimize every line of code to ensure your website or application loads instantly from anywhere in the world.</li>
+                    </ul>
+                    </section>
+
+                    <section id="proyectos" class="section-contact reveal">
+                        <div>
+                                        <h2>Featured Projects</h2>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;"> A selection of software solutions and applications that showcase my technical expertise, programming skills, and functional design approach.
+</p></p>
+                        </div>
+                    </section>
+              </main>
+
+          <div class="section-">
+                                <div>
+                                    <span style="color: #c19b02; font-weight: bold;">Python Automation Scripts 📜</span>
+                                    <h2>Mailgun Integration & Email Deliverability</h2>
+                                </div>
+                            </div>
+                                <div class="showcase-grid">
+                    <article class="showcase-card showcase-card--desktop">
+                        <div class="showcase-preview">
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-bar"></span>
+                        </div>
+                        <div class="showcase-media">
+                            <img src="terminal-mailgun2.gif" alt="Vista previa de la calculadora en consola" class="showcase-image">
+                        </div>
+                        <div class="showcase-content">
+                            <div class="showcase-icon">💻</div>
+                            <h3 style="color: #c19b02; font-weight: bold;"> Email & Delivery Automation</h3>
+                            <p>Advanced email infrastructure configuration and delivery optimization for reliable, high-performance messaging systems.</p>
+                            <ul class="showcase-list">
+                                <li>DNS record configuration and troubleshooting (SPF, DKIM, and DMARC) to reduce spam placement and prevent bounced emails.</li>
+                                <li>Clean Mailgun API integration with web applications (Flask/Django) and third-party platforms.</li>
+                                <li>Domain reputation monitoring and optimization to ensure business emails consistently reach the inbox instead of the spam folder.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <div class="showcase-item">
+                        <p class="showcase-above-text"> Backend Engineering & Email Automation</p>
+                        <article class="showcase-card showcase-card--desktop">
+                            <div class="showcase-preview">
+                                <span class="preview-dot"></span>
+                                <span class="preview-dot"></span>
+                                <span class="preview-dot"></span>
+                                <span class="preview-bar"></span>
+                            </div>
+                            <div class="showcase-media">
+                                <img src="terminal-mailgun.gif" alt="Vista previa de la interfaz visual de la calculadora" class="showcase-image">
+                            </div>
+                            <div class="showcase-content">
+                                <div class="showcase-icon">📁</div>
+                                <h3 style="color: #c19b02; font-weight: bold;"> Security & Authentication Focused</h3>
+                                <p> Robust DNS infrastructure and backend implementation documented in Python.</p>
+                                <ul class="showcase-list">
+                                    <li>Strict SPF, DKIM, and DMARC authentication record configuration to validate and protect your domain.</li>
+                                    <li>Deliverability-focused code designed to pass spam filters.</li>
+                                    <li>Automation of transactional emails, system alerts, and advanced webhook processing.</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                        </div>
+                   </section>
+
+
+                            <div class="section-">
+                                <div>
+                                    <span style="color: #c19b02; font-weight: bold;">Python Automation Scripts 📜</span>
+                                    <h2>Workflow Automation</h2>
+                                </div>
+                            </div>
+                                <div class="showcase-grid">
+                    <article class="showcase-card showcase-card--desktop">
+                        <div class="showcase-preview">
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-bar"></span>
+                        </div>
+                        <div class="showcase-media">
+                            <img src="automatizacion-1.gif" alt="Vista previa de la calculadora en consola" class="showcase-image">
+                        </div>
+                        <div class="showcase-content">
+                            <div class="showcase-icon">💻</div>
+                            <h3 style="color: #c19b02; font-weight: bold;"> Automated File Processing</h3>
+                            <p>Automated file format integration and data processing.</p>
+                            <ul class="showcase-list">
+                                <li>Eliminate repetitive copy-and-paste tasks.</li>
+                                <li> Extract data from multiple JSON invoices automatically.</li>
+                                <li>Consolidate monthly Excel reports into a single workflow.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <div class="showcase-item">
+                        <p class="showcase-above-text">Reporting & Workflow Consolidation</p>
+                        <article class="showcase-card showcase-card--desktop">
+                            <div class="showcase-preview">
+                                <span class="preview-dot"></span>
+                                <span class="preview-dot"></span>
+                                <span class="preview-dot"></span>
+                                <span class="preview-bar"></span>
+                            </div>
+                            <div class="showcase-media">
+                                <img src="automatizacion-2.gif" alt="Vista previa de la interfaz visual de la calculadora" class="showcase-image">
+                            </div>
+                            <div class="showcase-content">
+                                <div class="showcase-icon">📁</div>
+                                <h3 style="color: #c19b02; font-weight: bold;"> Optimized Source Code</h3>
+                                <p>Clean, well-structured, and documented Python code ready for deployment.</p>
+                                <ul class="showcase-list">
+                                    <li> Ready-to-use automation.</li>
+                                    <li>Consolidated reporting.</li>
+                                    <li>Clear and professional deliverables.</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                        </div>
+                   </section>
+
+         <div class="section-">
+                                
+            <section class="showcase-section reveal">
+                <div class="section-heading">
+                    <div>
+                        <span style="color: #c19b02; font-weight: bold;"> Python Automation Scripts 📜</span>
+                        <h2> Project Portfolio & Automation Scripts</h2>
+                    </div>
+                    <p>Python-powered solutions designed for process automation, file management, and workflow efficiency.</p>
+                </div>
+                <div class="showcase-grid">
+                    <article class="showcase-card showcase-card--desktop">
+                        <div class="showcase-preview">
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-bar"></span>
+                        </div>
+                        <div class="showcase-media">
+                            <img src="scripts.gif" alt="Modelo de simulador financiero en Python" class="showcase-image">
+                        </div>
+                        <div class="showcase-content">
+                            <div class="showcase-icon">💻</div>
+                            <h3 style="color: #c19b02; font-weight: bold;"> Investment Projection Tool</h3>
+                            <p>Automated investment forecasting and financial calculations.</p>
+                            <ul class="showcase-list">
+                                <li>Instantly calculate projected returns based on simple interest.</li>
+                                <li>Automatically separate invested capital from net profits.</li>
+                                <li> Modular Python architecture ready for API integration.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="showcase-card showcase-card--desktop">
+                        <div class="showcase-preview">
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-bar"></span>
+                        </div>
+                        <div class="showcase-media">
+                            <img src="scripts2.gif" alt="Modelo de organizador masivo en Python" class="showcase-image">
+                        </div>
+                        <div class="showcase-content">
+                            <div class="showcase-icon">💻</div>
+                            <h3 style="color: #c19b02; font-weight: bold;"> Bulk Document Processor</h3>
+                            <p> Automated file management and intelligent batch renaming.</p>
+                            <ul class="showcase-list">
+                                <li>Batch document classification and renaming.</li>
+                                <li>Secure file system operations powered by Python's native os library.</li>
+                                <li>Eliminate repetitive manual file management tasks across local folders.</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+
+            <section class="showcase-section reveal">
+                <div class="section-heading">
+                    <div>
+                        <span style="color: #c19b02; font-weight: bold;">Python Automation Scripts 📜</span>
+                        <h2>Efficient Automation & Data Processin</h2>
+                    </div>
+                    <p>Custom Python solutions and workflow optimization designed to transform and process large-scale data efficiently.</p>
+                </div>
+                <div class="showcase-grid">
+                    <article class="showcase-card showcase-card--desktop">
+                        <div class="showcase-preview">
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-bar"></span>
+                        </div>
+                        <div class="showcase-media">
+                            <img src="inversion.gif" alt="Modelo de simulador financiero en Python" class="showcase-image">
+                        </div>
+                        <div class="showcase-content">
+                            <div class="showcase-icon">💻</div>
+                            <h3 style="color: #c19b02; font-weight: bold;"> Database Cleaner</h3>
+                            <p>Automated data normalization and large-scale database cleaning.</p>
+                            <ul class="showcase-list">
+                                <li>Remove unnecessary whitespace and standardize text formatting in bulk.</li>
+                                <li> Utilize optimized native methods to ensure fast and efficient processing.</li>
+                                <li>Prepare databases and raw data for automated workflows and marketing campaigns.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="showcase-card showcase-card--desktop">
+                        <div class="showcase-preview">
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-dot"></span>
+                            <span class="preview-bar"></span>
+                        </div>
+                        <div class="showcase-media">
+                            <img src="inversion2.gif" alt="Modelo de organizador masivo en Python" class="showcase-image">
+                        </div>
+                        <div class="showcase-content">
+                            <div class="showcase-icon">💻</div>
+                            <h3 style="color: #c19b02; font-weight: bold;">Format Converter</h3>
+                            <p>Automated CSV-to-JSON conversion and data structuring.</p>
+                            <ul class="showcase-list">
+                                <li>Transform tabular datasets into web-ready data structures.</li>
+                                <li>Leverage optimized native libraries to ensure secure and reliable data migration.</li>
+                                <li>Connect traditional storage systems with modern applications and workflows.</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+     
+               <section id="contacto" class="section-contact reveal">
+                <div>
+                                        <h2>Secure Hiring & Software Development</h2>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;"> For your peace of mind and mine, I use <strong>Fiverr</strong> as my official platform for invoicing, payment processing, and project delivery.
+                                        <ul>
+                                    <p><strong>How does this benefit you as a client?</strong></p>
+                                
+                            <li><strong>Protected Payments:</strong>  Your funds remain securely protected and are only released once you receive and approve the completed software.</li>
+                        
+                    <li><strong>Delivery Guarantee:</strong> The entire process is backed and supported by a trusted global platform.</li>
+                
+            <li><strong>Transparency:</strong>  Clear agreements, defined delivery timelines, and hassle-free billing.</p></div>
+                </ul>
+            </div>
+        </main>
+
+        
+              <section id="contacto" class="section-contact reveal">
+                <div>
+                                        <h2>Hire Securely Through Fiverr</h2>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;">For complete peace of mind, all contracts, custom project quotes, and final software deliveries are handled exclusively through <strong>Fiverr</strong>, ensuring a secure, transparent, and fully protected process for both parties.</p>
+                </div>
+                  <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" target="_blank" rel="noopener noreferrer" class="boton-fiverr" style="display: inline-flex; align-items: center; gap: 8px;">
+    <svg xmlns="http://w3.org" viewBox="0 0 512 512" style="width: 16px; height: 16px; fill: currentcolor;"><path d="M448 32H64C46.3 32 32 46.3 32 64v384c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V64c0-17.7-14.3-32-32-32zM212.9 295.8h-40.4V384h-41.6V208h82v40.4h-40.4v24c0 13.9 9.9 23.4 23.4 23.4h17v31.4v-31.4zm60.7 88.2h-41.6V254h41.6v130zm0-149.2h-41.6v-41.6h41.6v41.6zm80.2 149.2h-43.1l-34-84.5h43.3l13.6 40.4 13.6-40.4h42.1l-35.5 84.5zm76.5 0h-43.1l-34-84.5h43.3l13.6 40.4 13.6-40.4H466l-35.7 84.5z"/></svg>
+    Visit Fiverr
+</a>
+            </section>
+        </main>
+
+            <section id="contacto" class="section-contact reveal">
+                <div>
+                                      
+                                        <h2>Let's Build Your Next Project Together</h2>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;">Transparency and trust are the foundation of great software development. I invite you to explore my public <strong>GitHub</strong> repositories to see the architecture, code quality, and engineering principles behind my projects. Your next software solution starts here.</p>
+                </div>
+                <a href="https://github.com/Gerardo-Ceron" target="_blank" rel="noopener noreferrer" class="boton-github" style="display: inline-flex; align-items: center; gap: 8px;">
+    <svg xmlns="http://w3.org" viewBox="0 0 496 512" style="width: 16px; height: 16px; fill: currentcolor;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5.7 1.3-1.6.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-.7zm-14.4-1.7c-.3 2 1.6 3.9 4.3 4.3 2.6.3 5-.1 5.3-2.2s-1.6-3.9-4.3-4.3c-2.6-.4-5 .1-5.3 2.2z"/></svg>
+    Visit GitHub
+</a>
+            </section>
+        </main>
+
+
+
+      <section id="contacto" class="section-contact reveal">
+                <div>
+                                      
+                                        <h2>See Our Projects in Action</h2>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;"> Explore our applications, automation tools, websites, and custom software solutions in action. Follow us on <strong>Instagram</strong> for exclusive content, productivity tips, project updates, and technology solutions designed to simplify everyday work.</p>
+                </div>
+               <a href="https://www.instagram.com/lysifix/" target="_blank" rel="noopener noreferrer" class="boton-instagram" style="display: inline-flex; align-items: center; gap: 8px;">
+    <svg xmlns="http://w3.org" viewBox="0 0 448 512" style="width: 16px; height: 16px; fill: currentcolor;"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.8 9.9 67.6 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+    Visit Instagram
+</a>
+            </section>
+        </main>
+
+            <section id="contacto" class="section-contact reveal">
+                <div>
+                                        <h2>Connect with the Lysifix Ecosystem</h2>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;"> Connect with me on <strong>LinkedIn</strong> to learn more about my professional background, software projects, development updates, and everything happening within the <strong>Lysifix</strong> ecosystem.</p>
+                </div>
+               <a href="https://www.linkedin.com/in/gerardo-cer%C3%B3n-0b66b5443/" target="_blank" rel="noopener noreferrer" class="boton-linkedin" style="display: inline-flex; align-items: center; gap: 8px;">
+    <svg xmlns="http://w3.org" viewBox="0 0 448 512" style="width: 16px; height: 16px; fill: currentcolor;"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    Visit LinkedIn
+</a>
+            </section>
+        </main>
+
+<footer class="site-footer reveal">
+            <p> Developed by Gerardo Cerón. &copy; 2026 Lysifix. <em>All Rights Reserved.</em></p>
+        </footer>
+    </div>
+
+    <script>
+        async function enviarMensaje() {
+            const input = document.getElementById('entrada');
+            const historial = document.getElementById('historial');
+            const texto = input.value.trim();
+            if (!texto) return;
+// Guardia de seguridad: Detecta patrones sospechosos
+    const patronPeligroso = /<script.*?>|javascript:|onerror=|onload=/i;
+    if (patronPeligroso.test(texto)) {
+        console.warn("¡Intento de ataque detectado en el chat!");
+        alert("Acción bloqueada: No se permite código HTML en el chat.");
+        input.value = '';
+        return; // Esto detiene la función por completo antes de crear el mensaje
+    }
+            const mensajeUsuario = document.createElement('div');
+            mensajeUsuario.className = 'mensaje usuario';
+            mensajeUsuario.textContent = texto;
+            historial.appendChild(mensajeUsuario);
+            input.value = '';
+
+            const indicador = document.createElement('div');
+            indicador.className = 'mensaje bot';
+            indicador.innerHTML = '💭 Thinking...';
+            historial.appendChild(indicador);
+            historial.scrollTop = historial.scrollHeight;
+
+        try {
+            const respuestaAsistente = obtenerRespuestaAsistente(texto);
+            const tiempoPensando = Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+            await new Promise(resolve => setTimeout(resolve, tiempoPensando));
+
+            indicador.innerHTML = respuestaAsistente;
+        } catch (error) {
+            indicador.innerHTML = `⚠️ ${error.message || 'Unable to connect to the assistant.'}`;
+            console.error(error);
+        }
+        historial.scrollTop = historial.scrollHeight;
+    }
+
+    function obtenerRespuestaAsistente(mensajeUsuario) {
+        const mensaje = mensajeUsuario.toLowerCase().trim();
+        let saludoInicial = "";
+
+        if (
+            mensaje.includes("hello") ||
+            mensaje.includes("hi") ||
+            mensaje.includes("hey") ||
+            mensaje.includes("greetings")
+        ) {
+            saludoInicial = "Hello! ";
+        }
+
+        if (
+            mensaje.includes("delivery") ||
+            mensaje.includes("deadline") ||
+            mensaje.includes("time") ||
+            mensaje.includes("duration") ||
+            mensaje.includes("how long") ||
+            mensaje.includes("days") ||
+            mensaje.includes("completion") ||
+            mensaje.includes("turnaround") ||
+            mensaje.includes("cuándo lo tienen")
+        ) {
+            return `${saludoInicial}Delivery times vary depending on the complexity of the project (typically between 1 and 7 days). You can review the exact delivery times for each package on my Fiverr profile: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+        }
+        
+        if (
+            mensaje.includes("tool") ||
+            mensaje.includes("software") ||
+            mensaje.includes("integration") ||
+            mensaje.includes("tecnology") ||
+            mensaje.includes("program") ||
+            mensaje.includes("can you use") ||
+            mensaje.includes("not listed")
+        ) {
+            return `${saludoInicial}If you need a tool, programming language, or integration that is not listed on the website, feel free to contact me through Fiverr and we can discuss a custom solution tailored to your needs: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+        }
+
+        if (
+            mensaje.includes("payment") ||
+            mensaje.includes("pay") ||
+            mensaje.includes("deposit") ||
+            mensaje.includes("invoice") ||
+            mensaje.includes("billing") ||
+            mensaje.includes("transfer") ||
+            mensaje.includes("payment method")
+        ) {
+            return `${saludoInicial}For maximum security and fraud protection, all payments and transactions are processed exclusively through my Fiverr profile: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+        }
+        if (
+            mensaje.includes("fiverr") ||
+            mensaje.includes("outside") ||
+            mensaje.includes("direct deal") ||
+            mensaje.includes("whatsapp") ||
+            mensaje.includes("email") ||
+            mensaje.includes("pdf") ||
+            mensaje.includes("file") ||
+            mensaje.includes("document")
+        ) {
+            return `${saludoInicial}All projects and technical consulting services are handled through Fiverr's secure platform. I do not conduct business outside Fiverr in order to guarantee transparency and protection for both parties. You can safely start a project here: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+        }
+        if (
+            mensaje.includes("project") ||
+            mensaje.includes("projects") ||
+            mensaje.includes("services") ||
+            mensaje.includes("portfolio") ||
+            mensaje.includes("scope") ||
+            mensaje.includes("solution") ||
+            mensaje.includes("what do you build")
+        ) {
+            return `${saludoInicial}I develop everything from simple automation scripts to complete web applications. You can explore my full range of services and project examples on Fiverr: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+        }
+
+        if (
+            mensaje.includes("web") ||
+            mensaje.includes("automation") ||
+            mensaje.includes("data") ||
+            mensaje.includes("file") ||
+            mensaje.includes("software") ||
+            mensaje.includes("script") ||
+            mensaje.includes("information") ||
+            mensaje.includes("info")
+        ) {
+            return `${saludoInicial}I specialize in automation scripts, data processing, custom software development, and web solutions. You can review the details and request a quote directly through Fiverr: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+        }
+    if (
+        mensaje.includes("price") ||
+        mensaje.includes("pricing") ||
+        mensaje.includes("cost") ||
+        mensaje.includes("quote") ||
+        mensaje.includes("estimate") ||
+        mensaje.includes("budget")
+    ) 
+        return `${saludoInicial}For pricing information, custom automation solutions, and personalized project quotes, please visit my Fiverr profile: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+    if (
+        mensaje.includes("guarantee") ||
+        mensaje.includes("warranty") ||
+        mensaje.includes("issue") ||
+        mensaje.includes("error") ||
+        mensaje.includes("support") ||
+        mensaje.includes("maintenance") ||
+        mensaje.includes("not working")
+    ) {
+        return `${saludoInicial}All my projects include support and troubleshooting assistance. For secure communication and project revisions, please contact me through Fiverr: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+    }
+
+   
+    if (
+        mensaje.includes("security") ||
+        mensaje.includes("secure") ||
+        mensaje.includes("privacy") ||
+        mensaje.includes("confidential") ||
+        mensaje.includes("my data") ||
+        mensaje.includes("information")
+    ) 
+        return `${saludoInicial}Your information is handled securely and protected under strict confidentiality standards. For safe file sharing and project discussions, please contact me through Fiverr: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+
+
+    if (
+        mensaje.includes("process") ||
+        mensaje.includes("workflow") ||
+        mensaje.includes("methodology") ||
+        mensaje.includes("progress") ||
+        mensaje.includes("updates") ||
+        mensaje.includes("review")
+    ) {
+        return `${saludoInicial}My development process is fully transparent. We define the project requirements step by step, and you'll receive progress updates throughout the entire project via Fiverr: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+    }
+    
+    if (
+        mensaje.includes("python") ||
+        mensaje.includes("javascript") ||
+        mensaje.includes("excel") ||
+        mensaje.includes("technology") ||
+        mensaje.includes("technologies") ||
+        mensaje.includes("portfolio") ||
+        mensaje.includes("example")
+    ) {
+        return `${saludoInicial}I specialize in Python development (Flask/Django), advanced Excel and CSV automation, data processing, and custom bots. You can explore real project examples on my Fiverr profile: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+    }
+ 
+    if (
+        mensaje.includes("service") || 
+        mensaje.includes("services") || 
+        mensaje.includes("work") || 
+        mensaje.includes("development") ||
+        mensaje.includes("software") || 
+        mensaje.includes("web") ||
+        mensaje.includes("automation") ||
+        mensaje.includes("data") ||
+        mensaje.includes("file") ||
+        mensaje.includes("script")
+    ) {
+        return `${saludoInicial}I provide Python automation, custom bots, web scraping, data processing, and Flask web application development. Explore the full service catalog here: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+    }
+
+    
+    if (
+    mensaje.includes("contact") ||
+    mensaje.includes("hire") ||
+    mensaje.includes("phone") ||
+    mensaje.includes("call") ||
+    mensaje.includes("email") ||
+    mensaje.includes("message") ||
+    mensaje.includes("communicate") ||
+    mensaje.includes("information") ||
+    mensaje.includes("info")
+    ) {
+        return `${saludoInicial}For project inquiries, direct communication, support, and secure hiring, please contact me through my official Fiverr profile: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+    }
+
+         // 13. SOLO SALUDO (Si no detectó ninguna pregunta anterior)
+    if (saludoInicial !== "") {
+        return saludoInicial.trim();
+    }
+   // RESPUESTA POR DEFECTO: SI NO DETECTÓ NINGUNA PALABRA ANTERIOR
+    return `Sorry, I'm still learning and couldn't understand your question. If you'd like a project quote or would like to contact me directly, please visit my Fiverr profile here: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visit Fiverr</a>`;
+ }     
+    document.getElementById('entrada').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') enviarMensaje();
+        });
+
+        const revealElements = document.querySelectorAll('.reveal');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const showReveals = () => {
+            revealElements.forEach((element) => element.classList.add('is-visible'));
+        };
+
+        if (!prefersReducedMotion) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.16 });
+
+            revealElements.forEach((element) => observer.observe(element));
+            window.setTimeout(showReveals, 120);
+        } else {
+            showReveals();
+        }
+    </script>
+
+    <!-- Botón flotante -->
+<button id="boton-chat-flotante" style="position: fixed; bottom: 20px; right: 20px; background-color: #c19b02; color: white; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999;">
+    💬 Chat
+</button>
+
+<!-- Interruptor del chat -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const chatContenedor = document.getElementById("chat-contenedor");
+    const botonChat = document.getElementById("boton-chat-flotante"); 
+
+    if (botonChat && chatContenedor) {
+        botonChat.addEventListener("click", function() {
+            // Alterna entre mostrar en flex u ocultar
+            if (chatContenedor.style.display === "none" || chatContenedor.style.display === "") {
+                chatContenedor.style.display = "flex";
+            } else {
+                chatContenedor.style.display = "none";
+            }
+        });
+    }
+});
+const textLines = [
+    "> python -m lysifix_bot --run",
+    "🤖 Loading automation scripts...",
+    "🔍 Scraping data... Done.",
+    "🚀 Status: Online & Ready."
+];
+
+let lineIndex = 0;
+let charIndex = 0;
+const textElement = document.getElementById("terminal-text");
+
+function typeTerminal() {
+    if (lineIndex < textLines.length) {
+        let currentLine = textLines[lineIndex];
+        
+        if (charIndex < currentLine.length) {
+            // Escribir carácter por carácter
+            textElement.innerHTML += currentLine.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeTerminal, 50); // Velocidad de escritura (50ms)
+        } else {
+            // Agregar un salto de línea al terminar la frase
+            textElement.innerHTML += "<br>";
+            lineIndex++;
+            charIndex = 0;
+            setTimeout(typeTerminal, 800); // Pausa entre líneas (800ms)
+        }
+    } else {
+        // Bucle infinito: Limpia la terminal y reinicia después de 3 segundos
+        setTimeout(() => {
+            textElement.innerHTML = "";
+            lineIndex = 0;
+            charIndex = 0;
+            typeTerminal();
+        }, 3000);
+    }
+}
+
+// Iniciar la animación cuando cargue la página
+document.addEventListener("DOMContentLoaded", typeTerminal);
+</script>
+</body>
+</html>

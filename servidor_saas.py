@@ -5,6 +5,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
+CORS(app)
 bcrypt = Bcrypt(app)
 
 # 1. CONFIGURACIÓN DE BASE DE DATOS

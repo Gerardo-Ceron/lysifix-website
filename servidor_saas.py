@@ -82,6 +82,32 @@ def registrar_usuario():
         "status": "success", 
         "message": f"Usuario {email} creado con éxito con 5 créditos gratis."
     }), 21
+    # 4. RUTA PARA REGISTRAR UN USUARIO DE PRUEBA
+@app.route('/api/registrar', methods=['POST'])
+def registrar_usuario():
+    datos = request.get_json() or {}
+    email = datos.get('email')
+    password = datos.get('password')
+    
+    if not email or not password:
+        return jsonify({"status": "error", "message": "Email y contraseña requeridos"}), 400
+        
+    # Verificar si el usuario ya existe
+    usuario_existente = session.query(Usuario).filter_by(email=email).first()
+    if usuario_existente:
+        return jsonify({"status": "error", "message": "El usuario ya existe"}), 400
+        
+    # Encriptar la contraseña por seguridad e insertar en la base de datos
+    password_encriptada = bcrypt.generate_password_hash(password).decode('utf-8')
+    nuevo_usuario = Usuario(email=email, password=password_encriptada, creditos=5)
+    
+    session.add(nuevo_usuario)
+    session.commit()
+    
+    return jsonify({
+        "status": "success", 
+        "message": f"Usuario {email} creado con éxito con 5 créditos gratis."
+    }), 201
 if __name__ == '__main__':
     # Corre el servidor local
     app.run(debug=True, port=5000)

@@ -1110,6 +1110,7 @@ function typeTerminal() {
 
 // Iniciar la animación cuando cargue la página
 document.addEventListener("DOMContentLoaded", typeTerminal);
+
   // 1. CONTROL DE CRÉDITOS Y SIMULACIÓN DE AUTOMATIZACIÓN
   // Inicializamos los 5 créditos gratis en la memoria del navegador
   let creditosDisponibles = 5;
@@ -1119,25 +1120,43 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
   const btnLimpiar = document.getElementById('btn-limpiar');
   const btnConvertir = document.getElementById('btn-convertir');
 
-  function procesarServicio(e, nombreServicio) {
-    e.preventDefault(); // Evita que la página intente recargarse o enviar un formulario
+  // Para la prueba real, simularemos que el usuario logueado es prueba@lysifix.com
+  const emailUsuarioActual = "prueba@lysifix.com";
 
-    if (creditosDisponibles > 0) {
-      creditosDisponibles--;
-      
-      // Simula el procesamiento con un mensaje dinámico
-    alert(`⚡ [Lysifix Backend] Ejecutando script de Python para: ${nombreServicio}...\n\n¡Proceso Exitoso! Tus datos han sido procesados.\nTe quedan ${creditosDisponibles} créditos gratuitos.`);
-    } else {
-      // Alerta de bloqueo (Paywall) cuando se acaban los créditos gratis
-      alert("🚨 ¡Créditos Agotados!\nHabas alcanzado el límite del plan básico gratuito de Lysifix.\n\nTe redirigiremos automáticamente a nuestros Paquetes Pro para continuar.");
-      
+  function procesarServicio(e, nombreServicio) {
+    e.preventDefault(); 
+
+    // Hacemos una petición real al backend de Python mediante FETCH
+    fetch('http://127.0.0', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: emailUsuarioActual })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        alert(`⚡ [Lysifix Real Backend] Running Python script for: ${nombreServicio}...\n\n${data.message}\nRemaining credits in DB: ${data.creditos_restantes}`);
+      } else if (data.status === "bloqueado") {
+        alert("🚨 Credits Exhausted!\nYou have reached the limit of Lysifix's basic free plan.\n\nYou will be automatically redirected to our Pro Packs to continue.");
+        const seccionPrecios = document.getElementById('seccion-precios');
+        if (seccionPrecios) { seccionPrecios.scrollIntoView({ behavior: 'smooth' }); }
+      } else {
+        alert("❌ Error: " + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert("⚠️ No se pudo conectar con el servidor de Python. Asegúrate de que app.py esté corriendo en la terminal.");
+    });
+  }
+ 
       // Scroll suave y automático hacia la nueva sección de precios que diseñamos
       const seccionPrecios = document.getElementById('seccion-precios');
       if (seccionPrecios) {
         seccionPrecios.scrollIntoView({ behavior: 'smooth' });
       }
-    }
-  }
 
   // Escuchamos los clics de tus herramientas
 if (btnLimpiar) {

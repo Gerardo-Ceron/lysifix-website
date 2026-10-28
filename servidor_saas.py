@@ -113,7 +113,7 @@ def registrar_usuario():
 if __name__ == '__main__':
     # Corre el servidor local
     app.run(debug=True, port=5000)
-    # Pon esto hasta el final del archivo, abajo de app.run(debug=True, port=5000)
+    
 with app.app_context():
     existe = session.query(Usuario).filter_by(email="prueba@lysifix.com").first()
     if not existe:

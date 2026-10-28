@@ -1116,7 +1116,6 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
   let creditosDisponibles = 5;
 
   // Vinculamos tus botones interactivos actuales (Limpiador y Convertidor)
-  // Asegúrate de agregarle estos IDs a los botones correspondientes en tu HTML
   const btnLimpiar = document.getElementById('btn-limpiar');
   const btnConvertir = document.getElementById('btn-convertir');
 
@@ -1152,7 +1151,7 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
     });
   }
  
-      // Scroll suave y automático hacia la nueva sección de precios que diseñamos
+      // Scroll suave y automático hacia la nueva sección de precios
       const seccionPrecios = document.getElementById('seccion-precios');
       if (seccionPrecios) {
         seccionPrecios.scrollIntoView({ behavior: 'smooth' });

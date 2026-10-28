@@ -113,4 +113,13 @@ def registrar_usuario():
 if __name__ == '__main__':
     # Corre el servidor local
     app.run(debug=True, port=5000)
+    # Pon esto hasta el final del archivo, abajo de app.run(debug=True, port=5000)
+with app.app_context():
+    existe = session.query(Usuario).filter_by(email="prueba@lysifix.com").first()
+    if not existe:
+        pass_enc = bcrypt.generate_password_hash("secreto123").decode('utf-8')
+        user_prueba = Usuario(email="prueba@lysifix.com", password=pass_enc, creditos=5)
+        session.add(user_prueba)
+        session.commit()
+        print("🚀 [Lysifix] ¡Usuario prueba@lysifix.com listo en la base de datos!")
 

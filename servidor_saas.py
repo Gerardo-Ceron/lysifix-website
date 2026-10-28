@@ -60,7 +60,7 @@ def consumir_credito():
         }), 403
 # 4. RUTA PARA REGISTRAR UN USUARIO DE PRUEBA
 @app.route('/api/registrar', methods=['POST'])
-def registrar_usuario():
+def registrar_usuario_saas():
     datos = request.get_json() or {}
     email = datos.get('email')
     password = datos.get('password')

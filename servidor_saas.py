@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker
 from flask_bcrypt import Bcrypt

@@ -682,7 +682,7 @@
 
         try {
             // 3. Petición al servidor Flask usando la ruta relativa
-            const respuestaServidor = await fetch('https://onrender.com', {
+            const respuestaServidor = await fetch('/api/consumir-credito', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)
 
 # Configuración de OpenAI con credenciales automáticas

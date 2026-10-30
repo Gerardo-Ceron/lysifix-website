@@ -658,43 +658,57 @@
     </div>
 
     <script>
-        async function enviarMensaje() {
-            const input = document.getElementById('entrada');
-            const historial = document.getElementById('historial');
-            const texto = input.value.trim();
-            if (!texto) return;
-// Guardia de seguridad: Detecta patrones sospechosos
-    const patronPeligroso = /<script.*?>|javascript:|onerror=|onload=/i;
-    if (patronPeligroso.test(texto)) {
-        console.warn("¡Intento de ataque detectado en el chat!");
-        alert("Acción bloqueada: No se permite código HTML en el chat.");
-        input.value = '';
-        return; // Esto detiene la función por completo antes de crear el mensaje
-    }
-            const mensajeUsuario = document.createElement('div');
-            mensajeUsuario.className = 'mensaje usuario';
-            mensajeUsuario.textContent = texto;
-            historial.appendChild(mensajeUsuario);
-            input.value = '';
+    async function enviarMensaje() {
+        // Declaramos las variables para que JavaScript encuentre los elementos en este HTML
+        const input = document.getElementById('entrada');
+        const historial = document.getElementById('historial');
 
-            const indicador = document.createElement('div');
-            indicador.className = 'mensaje bot';
-            indicador.innerHTML = '💭 Thinking...';
-            historial.appendChild(indicador);
-            historial.scrollTop = historial.scrollHeight;
+        const texto = input.value.trim();
+        if (!texto) return;
+
+        // 1. Creamos y agregamos tu mensaje en pantalla
+        const mensajeUsuario = document.createElement('div');
+        mensajeUsuario.className = 'mensaje usuario';
+        mensajeUsuario.innerHTML = texto;
+        historial.appendChild(mensajeUsuario);
+        input.value = '';
+
+        // 2. Creamos el indicador de "Thinking..." en inglés
+        const indicador = document.createElement('div');
+        indicador.className = 'mensaje bot';
+        indicador.innerHTML = 'Thinking...';
+        historial.appendChild(indicador);
+        historial.scrollTop = historial.scrollHeight;
 
         try {
-            const respuestaAsistente = obtenerRespuestaAsistente(texto);
-            const tiempoPensando = Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
-            await new Promise(resolve => setTimeout(resolve, tiempoPensando));
+            // 3. Petición al servidor Flask usando la ruta relativa
+            const respuestaServidor = await fetch('/api/consumir-credito', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mensaje: texto,
+                    email: 'prueba@lysifix.com'
+                })
+            });
 
-            indicador.innerHTML = respuestaAsistente;
+            const data = await respuestaServidor.json();
+
+            // 4. Mostramos el resultado real de OpenAI
+            if (data.status === 'success') {
+                indicador.innerHTML = data.respuesta; 
+            } else {
+                indicador.innerHTML = `⚠️ ${data.message}`; 
+            }
+
         } catch (error) {
-            indicador.innerHTML = `⚠️ ${error.message || 'Unable to connect to the assistant.'}`;
             console.error(error);
+            indicador.innerHTML = '⚠️ Could not connect to the assistant.';
         }
+
         historial.scrollTop = historial.scrollHeight;
-    }
+    }    
 
     function obtenerRespuestaAsistente(mensajeUsuario) {
         const mensaje = mensajeUsuario.toLowerCase().trim();
@@ -968,3 +982,4 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
 </script>
 </body>
 </html>
+

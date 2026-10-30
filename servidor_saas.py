@@ -79,5 +79,5 @@ def consumir_credito():
         session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -1,3 +1,23 @@
+import os
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import declarative_base, sessionmaker
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
+app = Flask(_name_)
+CORS(app)
+
+# Configuración de OpenAI con credenciales automáticas
+client = OpenAI()
+
+# Configuración de Base de Datos SQLite local
+engine = create_engine('sqlite:///lysifix.db', echo=True)
+Base = declarative_base()
 # ==========================================
 # RUTAS PARA EL DISEÑO Y LA PÁGINA WEB
 # ==========================================

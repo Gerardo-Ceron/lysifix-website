@@ -10,7 +10,7 @@ load_dotenv()
 
 # PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/": {"origins": ""}})
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()

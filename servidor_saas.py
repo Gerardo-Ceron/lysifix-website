@@ -24,7 +24,7 @@ class Usuario(Base):
     _tablename_ = 'usuarios'
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
-    creditos = Column(Integer, default=100))
+    creditos = Column(Integer, default=100)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()

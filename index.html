@@ -676,17 +676,16 @@
         historial.scrollTop = historial.scrollHeight;
  
         try {
-            // 3. Petición al servidor Flask
-            const respuestaServidor = await fetch('https://lysifix.dev/en/site.webmanifest', { 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mensaje: texto,
-                    email: 'prueba@lysifix.com'
-                })
-            });
+           // 3. Petición al servidor Flask usando la ruta relativa
+const respuestaServidor = await fetch('/api/chat', { // <-- Cambia a tu ruta de Flask
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        // Tu objeto con el mensaje
+    })
+});
 
             const data = await respuestaServidor.json();
 

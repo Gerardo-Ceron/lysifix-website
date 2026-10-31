@@ -84,7 +84,9 @@ def consumir_credito():
         
     usuario = session.query(Usuario).filter_by(email=email_usuario).first()
     if not usuario:
-        return jsonify({"status": "error", "message": "Usuario no encontrado"}), 404
+        usuario = Usuario(email=email_usuario, creditos=100)
+        session.add(usuario)
+        session.commit()
         
     if usuario.creditos <= 0:
         return jsonify({"status": "bloqueado", "message": "Créditos agotados. Redirigiendo al Paywall."}), 403

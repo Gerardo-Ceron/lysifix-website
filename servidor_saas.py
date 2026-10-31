@@ -131,37 +131,49 @@ def chat():
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response
-        
+
     try:
         datos = request.get_json()
         mensaje_usuario = datos.get('mensaje')
-        idioma_pagina = datos.get('idioma', 'es') # Si no se envía, por defecto es español
-
-        # Si viene de la página en inglés, adaptamos las instrucciones al inglés
-        if idioma_pagina == 'en':
-            instrucciones = "You are the official virtual assistant for Lysifix, a platform that offers automation solutions and SaaS services..."
-            # ... El resto de tus instrucciones traducidas al inglés aquí ...
-        else:
-            instrucciones = "Eres el asistente virtual oficial de Lysifix..."
-
         
-        # 1. LLAMADA REAL A LA IA (Asegúrate de usar tu variable 'client' u 'openai')
+        # 1. LEEMOS EL IDIOMA QUE MANDA TU PÁGINA (Si no viene, por defecto es español)
+        idioma_pagina = datos.get('idioma', 'es')
+
+        # 2. SELECCIONAMOS LAS INSTRUCCIONES SEGÚN EL IDIOMA
+        if idioma_pagina == 'en':
+            instrucciones = (
+                "You are the official virtual assistant for Lysifix, a platform that offers automation solutions and SaaS services. "
+                "Your goal is to guide the user based on their project size. If the user asks for pricing, quotes, or if you can do web scraping (data extraction), "
+                "immediately mention that Lysifix offers automated services directly on the website with three plans: Basic for $5 USD, Medium for $20 USD, and Pro for $50 USD. "
+                "Explain that if their request is small or urgent, they can upload their files to the platform and the program will process them in minutes, 100% automatically. "
+                "On the other hand, clarify that if they are looking for a much more specific, custom software or with crazier/complex instructions, they can request the service through Fiverr, where Lysifix works and delivers projects completely securely. "
+                "Be very charismatic, professional, always speak in the third person on behalf of the brand, and ALWAYS reply in the same language the user is writing to you."
+            )
+        else:
+            instrucciones = (
+                "Eres el asistente virtual oficial de Lysifix, una plataforma que ofrece soluciones de automatización y servicios SaaS. "
+                "Tu objetivo es guiar al usuario según el tamaño de su proyecto. Si el usuario te pregunta por precios, cotizaciones o si puedes hacer un web scraping (extracción de datos), "
+                "menciónale de inmediato que Lysifix cuenta con servicios automáticos directamente en la página con tres planes: Básico de $5 dólares, Medio de $20 dólares y Pro de $50 dólares; "
+                "explícle que si su servicio es pequeño o de urgencia, puede subir sus archivos en la plataforma y el programa se los trabajará en minutos de forma 100% automática. "
+                "Por otro lado, aclara que si lo que busca es un programa o web scraper mucho más específico, personalizado o con instrucciones más locochonas, puede solicitar el servicio a través de Fiverr, "
+                "donde Lysifix trabaja y entrega los proyectos de forma totalmente segura. "
+                "Sé muy carismático, profesional, habla siempre en tercera persona en nombre de la marca y responde SIEMPRE en el mismo idioma en el que el usuario te escriba."
+            )
+
         completion = client.chat.completions.create(
-            model="gpt-4o-mini", # O el modelo que estés usando (gpt-3.5-turbo, etc.)
+            model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Eres el asistente virtual oficial de Lysifix, una plataforma que ofrece soluciones de automatización y servicios SaaS. Tu objetivo es guiar al usuario según el tamaño de su proyecto. Si el usuario te pregunta por precios, cotizaciones o si puedes hacer un web scraping (extracción de datos), menciónale de inmediato que Lysifix cuenta con servicios automáticos directamente en la página con tres planes: Básico de $5 dólares, Medio de $20 dólares y Pro de $50 dólares; explícale que si su servicio es pequeño o de urgencia, puede subir sus archivos en la plataforma y el programa se los trabajará en minutos de forma 100% automática. Por otro lado, aclara que si lo que busca es un programa o web scraper mucho más específico, personalizado o con instrucciones más locochonas, puede solicitar el servicio a través de Fiverr, donde Lysifix trabaja y entrega los proyectos de forma totalmente segura. Sé muy carismático, profesional, habla siempre en tercera persona en nombre de la marca y responde SIEMPRE en el mismo idioma en el que el usuario te escriba."},
+                {"role": "system", "content": instrucciones},
                 {"role": "user", "content": mensaje_usuario}
             ]
         )
-        
-        # 2. EXTRAER EL TEXTO GENERADO POR LA IA
-        respuesta_ia = completion.choices[0].message.content
-        
-        # 3. ENVIAR LA RESPUESTA REAL AL FRONTEND
+
+        respuesta_ia = completion.choices.message.content
+
         response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         return response
-        
+
     except Exception as e:
         response = make_response(jsonify({"error": str(e)}), 400)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"

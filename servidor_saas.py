@@ -115,7 +115,7 @@ def consumir_credito():
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Importante para evitar bloqueos del navegador
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)  # Esto permite que tu HTML se comunique con Flask sin problemas
 
 # --- AGREGA ESTE BLOQUE EXACTAMENTE AQUÍ ---

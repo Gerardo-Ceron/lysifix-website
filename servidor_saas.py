@@ -123,12 +123,6 @@ def consumir_credito():
         session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
 
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # Importante para evitar bloqueos del navegador
-
-app = Flask(__name__)
-CORS(app)  # Esto permite que tu HTML se comunique con Flask sin problemas
-
 # --- AGREGA ESTE BLOQUE EXACTAMENTE AQUÍ ---
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():

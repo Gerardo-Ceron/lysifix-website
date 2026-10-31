@@ -112,6 +112,31 @@ def consumir_credito():
         session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
 
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # Importante para evitar bloqueos del navegador
+
+app = Flask(_name_)
+CORS(app)  # Esto permite que tu HTML se comunique con Flask sin problemas
+
+# --- AGREGA ESTE BLOQUE EXACTAMENTE AQUÍ ---
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    try:
+        # 1. Recibe los datos enviados desde el JavaScript
+        datos = request.get_json()
+        mensaje_usuario = datos.get('mensaje') # Ajusta 'mensaje' al nombre que uses en tu JS
+        
+        # 2. Aquí irá tu lógica de IA (OpenAI, Gemini, etc.) 
+        # Por ahora, ponemos una respuesta de prueba para verificar que funcione:
+        respuesta_asistente = f"Recibí tu mensaje: '{mensaje_usuario}'. ¡El backend ya está conectado!"
+        
+        # 3. Responde al navegador en formato JSON
+        return jsonify({"respuesta": respuesta_asistente}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+# -------------------------------------------
+
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))
      app.run(host='0.0.0.0', port=port)

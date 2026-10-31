@@ -21,7 +21,7 @@ Base = declarative_base()
 from sqlalchemy import Column, Integer, String
 
 class Usuario(Base):
-    _tablename_ = 'usuarios'
+    __tablename__ = 'usuarios'
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
     creditos = Column(Integer, default=100)

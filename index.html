@@ -688,24 +688,28 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com', {
         })
     });
 
-    const datosEntregados = await respuestaServidor.json();
-    console.log("Respuesta del servidor:", datosEntregados);
+    const data = await respuestaServidor.json();
+    console.log("Respuesta del servidor:", data);
+
+    // 4. Mostramos el resultado real
+    if (data.status === 'success') {
+        indicador.textContent = data.respuesta;
+    } else {
+        indicador.textContent = ⚠️ ${data.message};
+    }
 
 } catch (error) {
     console.error("Error al conectar con el asistente:", error);
+    indicador.innerHTML = '⚠️ No se pudo conectar con el servidor';
 }
+
+// Esto queda fuera del try-catch para que siempre se ejecute al final
+historial.scrollTop = historial.scrollHeight;
             // 4. Mostramos el resultado real
            if (data.status === 'success') {
     indicador.textContent = data.respuesta;
 } else {
     indicador.textContent = `⚠️ ${data.message}`;
-}
-
-    const datosEntregados = await respuestaServidor.json();
-    console.log("Respuesta del servidor:", datosEntregados);
-
-} catch (error) {
-    console.error("Error al conectar con el asistente:", error);
 }
         historial.scrollTop = historial.scrollHeight;
     }

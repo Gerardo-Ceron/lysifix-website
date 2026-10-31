@@ -684,9 +684,9 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com/chat
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            email: 'anonimo',
-            mensaje: input.value
-        })
+        email: 'anonimo',
+        mensaje: document.getElementById('entrada').value
+    })
     });
 
     const data = await respuestaServidor.json();

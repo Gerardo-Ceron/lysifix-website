@@ -73,7 +73,7 @@ def archivos_en(filename):
 # ==========================================
 # RUTA PARA CONSUMIR CRÉDITOS Y LLAMAR A OPENAI
 # ==========================================
-@app.route('/api/consumir-credito', methods=["POST"])
+@app.route('/api/consumir_credito', methods=['POST', 'OPTIONS'])
 def consumir_credito():
     datos = request.get_json() or {}
     email_usuario = datos.get('email')

@@ -712,10 +712,6 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com', {
 } catch (error) {
     console.error("Error al conectar con el asistente:", error);
 }
-} catch (error) {
-    console.error("Error al conectar con el asistente:", error);
-}
-
             // 4. Mostramos el resultado real de OpenAI
             if (data.status === 'success') {
     indicador.textContent = data.respuesta;

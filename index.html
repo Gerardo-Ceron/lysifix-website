@@ -700,15 +700,6 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com', {
 } else {
     indicador.textContent = `⚠️ ${data.message}`;
 }
-method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email: 'anonimo',
-            mensaje: input.value
-        })
-    });
 
     const datosEntregados = await respuestaServidor.json();
     console.log("Respuesta del servidor:", datosEntregados);

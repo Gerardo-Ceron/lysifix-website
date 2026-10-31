@@ -123,26 +123,35 @@ def consumir_credito():
         session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# --- AGREGA ESTE BLOQUE EXACTAMENTE AQUÍ ---
+# from flask import Flask, request, jsonify, make_response, send_from_directory
+
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
     if request.method == 'OPTIONS':
-        return '', 200
-    try:
-        # 1. Recibe los datos enviados desde el JavaScript
-        datos = request.get_json()
-        mensaje_usuario = datos.get('mensaje') # Ajusta 'mensaje' al nombre que uses en tu JS
+        # Esta respuesta manual ya te solucionó el problema del preflight
+        response = make_response('', 200)
+        response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return response
         
-        # 2. Aquí irá tu lógica de IA (OpenAI, Gemini, etc.) 
-        # Por ahora, ponemos una respuesta de prueba para verificar que funcione:
+    try:
+        datos = request.get_json()
+        mensaje_usuario = datos.get('mensaje')
+        
+        # ... Tu lógica de IA aquí ...
         respuesta_asistente = f"Recibí tu mensaje: '{mensaje_usuario}'. ¡El backend ya está conectado!"
         
-        # 3. Responde al navegador en formato JSON
-        return jsonify({"respuesta": respuesta_asistente}), 200
-
+        # MODIFICA ESTA LÍNEA DE RETORNO AL FINAL DEL TRY:
+        response = make_response(jsonify({"respuesta": respuesta_asistente}), 200)
+        response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
+        return response
+        
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
-# -------------------------------------------
+        # MODIFICA ESTA LÍNEA DE RETORNO EN EL EXCEPT:
+        response = make_response(jsonify({"error": str(e)}), 400)
+        response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
+        return response
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))

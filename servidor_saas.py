@@ -113,7 +113,7 @@ def consumir_credito():
                 {"role": "user", "content": mensaje_usuario}
             ]
         )
-        respuesta_ia = completion.choices.message.content
+        respuesta_ia = completion.choices[0].message.content
         usuario.creditos -= 1
         session.commit()
         return jsonify({"status": "success", "creditos_restantes": usuario.creditos, "respuesta": respuesta_ia})

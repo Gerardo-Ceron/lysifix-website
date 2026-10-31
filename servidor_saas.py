@@ -111,10 +111,14 @@ def consumir_credito():
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": instrucciones},
-                {"role": "user", "content": mensaje_usuario}
-            ]
-        )
+                {"role": "system", "content": (
+                    "Eres el asistente virtual oficial de Lysifix. "
+                    "Cuando un usuario te pregunte si puedes ayudarlo con un programa, software o servicio de automatización para su empresa, "
+                    "debes responder siempre con entusiasmo y en tercera persona usando frases como '¡Claro! Lysifix te puede ayudar con eso' o "
+                    "'En Lysifix somos expertos en desarrollar soluciones de automatización a la medida para empresas'. "
+                    "Sé muy profesional, habla en nombre de la marca, dale una breve idea de lo que se puede lograr y siempre invítalo a "
+                    "ponerse en contacto a través de la sección de contacto de la página web para cotizar su proyecto."
+                )},
         respuesta_ia = completion.choices.message.content
         usuario.creditos -= 1
         session.commit()

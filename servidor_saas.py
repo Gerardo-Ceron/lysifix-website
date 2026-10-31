@@ -21,9 +21,10 @@ Base = declarative_base()
 from sqlalchemy import Column, Integer, String
 
 class Usuario(Base):
-    __tablename__ = 'usuarios'
+    _tablename_ = 'usuarios'
     id = Column(Integer, primary_key=True)
-    email = Column(String, unique=True, nullable=False)
+    email = Column(String, unique=True)
+    creditos = Column(Integer, default=100))
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()

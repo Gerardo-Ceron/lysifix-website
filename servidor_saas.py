@@ -128,7 +128,7 @@ def consumir_credito():
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
     if request.method == 'OPTIONS':
-        # Esta respuesta manual ya te solucionó el problema del preflight
+        # Esta respuesta manual ya solucionó el problema del preflight
         response = make_response('', 200)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
@@ -139,16 +139,16 @@ def chat():
         datos = request.get_json()
         mensaje_usuario = datos.get('mensaje')
         
-        # ... Tu lógica de IA aquí ...
+        # ... Lógica de IA aquí ...
         respuesta_asistente = f"Recibí tu mensaje: '{mensaje_usuario}'. ¡El backend ya está conectado!"
         
-        # MODIFICA ESTA LÍNEA DE RETORNO AL FINAL DEL TRY:
+        # LÍNEA DE RETORNO AL FINAL DEL TRY:
         response = make_response(jsonify({"respuesta": respuesta_asistente}), 200)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         return response
         
     except Exception as e:
-        # MODIFICA ESTA LÍNEA DE RETORNO EN EL EXCEPT:
+        # LÍNEA DE RETORNO EN EL EXCEPT:
         response = make_response(jsonify({"error": str(e)}), 400)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         return response

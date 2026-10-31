@@ -690,7 +690,8 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com/chat
         },
         body: JSON.stringify({
         email: 'anonimo',
-        mensaje: texto
+        mensaje: texto,
+        idioma: 'en' // <-- Le avisamos al backend que estamos en la versión en inglés
     })
     });
 

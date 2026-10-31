@@ -126,6 +126,8 @@ def consumir_credito():
 # --- AGREGA ESTE BLOQUE EXACTAMENTE AQUÍ ---
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
+    if request.method == 'OPTIONS':
+        return '', 200
     try:
         # 1. Recibe los datos enviados desde el JavaScript
         datos = request.get_json()

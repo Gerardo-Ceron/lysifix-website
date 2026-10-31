@@ -705,13 +705,7 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com', {
 
 // Esto queda fuera del try-catch para que siempre se ejecute al final
 historial.scrollTop = historial.scrollHeight;
-            // 4. Mostramos el resultado real
-           if (data.status === 'success') {
-    indicador.textContent = data.respuesta;
-} else {
-    indicador.textContent = `⚠️ ${data.message}`;
-}
-        historial.scrollTop = historial.scrollHeight;
+         
     }
     function obtenerRespuestaAsistente(mensajeUsuario) {
         const mensaje = mensajeUsuario.toLowerCase().trim();

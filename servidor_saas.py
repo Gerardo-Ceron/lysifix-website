@@ -168,7 +168,7 @@ def chat():
             ]
         )
 
-        respuesta_ia = completion.choices.message.content
+        respuesta_ia = completion.choices[0].message.content
 
         response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"

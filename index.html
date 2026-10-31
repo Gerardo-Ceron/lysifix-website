@@ -678,18 +678,22 @@
         try {
            // 3. Petición al servidor Flask usando la ruta relativa
 const respuestaServidor = await fetch('https://lysifix-website.onrender.com', { 
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        email: 'correo_usuario@ejemplo.com', // Recuerda enviar el email que pide tu Python
-        mensaje: input.value
-    })
-});
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: 'anonimo',
+            mensaje: input.value
+        })
+    });
 
-            const data = await respuestaServidor.json();
+    const datosEntregados = await respuestaServidor.json();
+    console.log("Respuesta del servidor:", datosEntregados);
 
+} catch (error) {
+    console.error("Error al conectar con el asistente:", error);
+}
             // 4. Mostramos el resultado real
             if (data.status === 'success') {
                 indicador.innerHTML = data.respuesta; // Imprime la respuesta de OpenAI

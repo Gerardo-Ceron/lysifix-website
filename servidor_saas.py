@@ -130,7 +130,7 @@ app = Flask(__name__)
 CORS(app)  # Esto permite que tu HTML se comunique con Flask sin problemas
 
 # --- AGREGA ESTE BLOQUE EXACTAMENTE AQUÍ ---
-@app.route('/api/chat', methods=['POST'])
+@app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
     try:
         # 1. Recibe los datos enviados desde el JavaScript

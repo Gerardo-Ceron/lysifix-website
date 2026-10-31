@@ -74,14 +74,25 @@ def archivos_en(filename):
 # ==========================================
 # RUTA PARA CONSUMIR CRÉDITOS Y LLAMAR A OPENAI
 # ==========================================
-@app.route('/api/consumir_credito', methods=['POST'])
+@app.route('/api/consumir_credito', methods=['POST', 'OPTIONS'])
 def consumir_credito():
+    # Manejo automático de peticiones de seguridad del navegador (Preflight)
+    import flask
+    if flask.request.method == 'OPTIONS':
+        voto = flask.make_response()
+        voto.headers.add("Access-Control-Allow-Origin", "*")
+        voto.headers.add('Access-Control-Allow-Headers', "*")
+        voto.headers.add('Access-Control-Allow-Methods', "*")
+        return voto
+
     datos = request.get_json() or {}
-    email_usuario = datos.get('email')
-    mensaje_usuario = datos.get('mensaje')
-    
-    if not email_usuario or not mensaje_usuario:
-        return jsonify({"status": "error", "message": "Faltan datos"}), 400
+    email_usuario = datos.get('email', 'anonimo')
+    mensaje_usuario = datos.get('mensaje', '')
+
+    if not mensaje_usuario:
+        respuesta = jsonify({"status": "error", "message": "El mensaje está vacío"})
+        respuesta.headers.add("Access-Control-Allow-Origin", "*")
+        return respuesta, 400
         
     usuario = session.query(Usuario).filter_by(email=email_usuario).first()
     if not usuario:

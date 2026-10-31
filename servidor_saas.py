@@ -128,7 +128,6 @@ def consumir_credito():
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
     if request.method == 'OPTIONS':
-        # Esta respuesta manual ya solucionó el problema del preflight
         response = make_response('', 200)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
@@ -139,16 +138,24 @@ def chat():
         datos = request.get_json()
         mensaje_usuario = datos.get('mensaje')
         
-        # ... Lógica de IA aquí ...
-        respuesta_asistente = f"Recibí tu mensaje: '{mensaje_usuario}'. ¡El backend ya está conectado!"
+        # 1. LLAMADA REAL A LA IA (Asegúrate de usar tu variable 'client' u 'openai')
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini", # O el modelo que estés usando (gpt-3.5-turbo, etc.)
+            messages=[
+                {"role": "system", "content": "Eres Lysifix, un asistente virtual experto en automatización web."},
+                {"role": "user", "content": mensaje_usuario}
+            ]
+        )
         
-        # LÍNEA DE RETORNO AL FINAL DEL TRY:
-        response = make_response(jsonify({"respuesta": respuesta_asistente}), 200)
+        # 2. EXTRAER EL TEXTO GENERADO POR LA IA
+        respuesta_ia = completion.choices[0].message.content
+        
+        # 3. ENVIAR LA RESPUESTA REAL AL FRONTEND
+        response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         return response
         
     except Exception as e:
-        # LÍNEA DE RETORNO EN EL EXCEPT:
         response = make_response(jsonify({"error": str(e)}), 400)
         response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         return response

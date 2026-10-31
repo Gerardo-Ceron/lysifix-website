@@ -716,11 +716,6 @@ method: 'POST',
 } catch (error) {
     console.error("Error al conectar con el asistente:", error);
 }
-        } catch (error) {
-    console.error(error);
-            indicador.innerHTML = '⚠️ No se pudo conectar con el asistente.';
-        }
-
         historial.scrollTop = historial.scrollHeight;
     }
     function obtenerRespuestaAsistente(mensajeUsuario) {

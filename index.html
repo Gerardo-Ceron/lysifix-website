@@ -695,11 +695,11 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com', {
     console.error("Error al conectar con el asistente:", error);
 }
             // 4. Mostramos el resultado real
-            if (data.status === 'success') {
-                indicador.innerHTML = data.respuesta; // Imprime la respuesta de OpenAI
-            } else {
-                indicador.innerHTML = `⚠️ ${data.message}`; // Imprime si se agotan créditos
-            }
+           if (data.status === 'success') {
+    indicador.textContent = data.respuesta;
+} else {
+    indicador.textContent = `⚠️ ${data.message}`;
+}
 
         } catch (error) {
     console.error(error);

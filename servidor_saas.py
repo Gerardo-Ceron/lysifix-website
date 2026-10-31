@@ -18,6 +18,12 @@ client = OpenAI()
 # Configuración de Base de Datos SQLite local
 engine = create_engine('sqlite:///lysifix.db', echo=True)
 Base = declarative_base()
+from sqlalchemy import Column, Integer, String
+
+class Usuario(Base):
+    _tablename_ = 'usuarios'
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True, nullable=False)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()

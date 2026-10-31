@@ -1,4 +1,4 @@
-"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -679,21 +679,19 @@
         indicador.innerHTML = 'Thinking...';
         historial.appendChild(indicador);
         historial.scrollTop = historial.scrollHeight;
- 
-        try {
-            // 3. Petición al servidor Flask usando la ruta correcta
-const respuestaServidor = await fetch('https://onrender.com', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        mensaje: texto,
-        email: 'prueba@lysifix.com'
-    })
-});
 
-const data = await respuestaServidor.json();
+        try {
+            // 3. Petición al servidor Flask usando la ruta relativa
+            const respuestaServidor = await fetch('https://lysifix-website.onrender.com/api/consumir-credito', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mensaje: texto,
+                    email: 'prueba@lysifix.com'
+                })
+            });
 
             const data = await respuestaServidor.json();
 
@@ -704,8 +702,8 @@ const data = await respuestaServidor.json();
                 indicador.innerHTML = `⚠️ ${data.message}`; 
             }
 
-        } catch.error(error) {
-            console (error);
+        } catch (error) {
+            console.error(error);
             indicador.innerHTML = '⚠️ Could not connect to the assistant.';
         }
 
@@ -984,4 +982,4 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
 </script>
 </body>
 </html>
-"""
+

@@ -681,17 +681,19 @@
         historial.scrollTop = historial.scrollHeight;
  
         try {
-            // 3. Petición al servidor Flask usando la ruta relativa
-            const respuestaServidor = await fetch('https://lysifix-website.onrender.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mensaje: texto,
-                    email: 'prueba@lysifix.com'
-                })
-            });
+            // 3. Petición al servidor Flask usando la ruta correcta
+const respuestaServidor = await fetch('https://onrender.com', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        mensaje: texto,
+        email: 'prueba@lysifix.com'
+    })
+});
+
+const data = await respuestaServidor.json();
 
             const data = await respuestaServidor.json();
 

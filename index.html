@@ -677,13 +677,14 @@
  
         try {
            // 3. Petición al servidor Flask usando la ruta relativa
-const respuestaServidor = await fetch('/api/consumir_credito', { // <-- Cambia a tu ruta de Flask
+const respuestaServidor = await fetch('/api/consumir_credito', { 
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        // Tu objeto con el mensaje
+        email: 'correo_usuario@ejemplo.com', // Recuerda enviar el email que pide tu Python
+        mensaje: input.value
     })
 });
 

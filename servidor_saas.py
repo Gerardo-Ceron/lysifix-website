@@ -19,8 +19,6 @@ client = OpenAI()
 engine = create_engine('sqlite:///lysifix.db', echo=True)
 Base = declarative_base()
 
-from sqlalchemy.orm import sessionmaker
-
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 # ==========================================

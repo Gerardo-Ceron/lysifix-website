@@ -135,6 +135,15 @@ def chat():
     try:
         datos = request.get_json()
         mensaje_usuario = datos.get('mensaje')
+        idioma_pagina = datos.get('idioma', 'es') # Si no se envía, por defecto es español
+
+        # Si viene de la página en inglés, adaptamos las instrucciones al inglés
+        if idioma_pagina == 'en':
+            instrucciones = "You are the official virtual assistant for Lysifix, a platform that offers automation solutions and SaaS services..."
+            # ... El resto de tus instrucciones traducidas al inglés aquí ...
+        else:
+            instrucciones = "Eres el asistente virtual oficial de Lysifix..."
+
         
         # 1. LLAMADA REAL A LA IA (Asegúrate de usar tu variable 'client' u 'openai')
         completion = client.chat.completions.create(

@@ -27,6 +27,7 @@ class Usuario(Base):
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
+Base.metadata.create_all(bind=engine)
 # ==========================================
 # RUTAS PARA EL DISEÑO Y LA PÁGINA WEB
 # ==========================================

@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -11,10 +12,12 @@ app.use(cors());
 app.use(express.json());
 
 // Configuración para recibir los archivos en una carpeta temporal
-const upload = multer({ dest: 'uploads/' });
+const uploadDirectory = path.join(__dirname, 'uploads');
+fs.mkdirSync(uploadDirectory, { recursive: true });
+const upload = multer({ dest: uploadDirectory });
 
 // ESTA ES LA RUTA QUE ANTES DABA ERROR 405
-app.post('/procesar-archivo', upload.single('file'), (req, res) => {
+function processFile(req, res) {
     try {
         if (!req.file) {
             return res.status(400).send('No se subió ningún archivo.');
@@ -43,7 +46,9 @@ app.post('/procesar-archivo', upload.single('file'), (req, res) => {
         console.error(error);
         res.status(500).send('Error interno en el servidor.');
     }
-});
+}
+
+app.post(['/procesar-archivo', '/upload'], upload.single('file'), processFile);
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);

@@ -662,12 +662,11 @@
             <li><strong>Script Optimization:</strong> Modification, bug fixing (Debugging), or updating of existing scripts in (Python/JS).</li>
             <li><em>Restriction:</em> Limited to a single data source or a simplesingle technical issue per order.</li>
                             </ul>
-                             <div class="tarjeta-pie">
-        <!-- Reemplaza 'precio_basico_id' con tu ID real de Stripe más adelante -->
-        <button class="btn-amarillo-fiverr" onclick="iniciarPago('precio_premium_id')">
-    Order Now
-</button>
-    </div>
+                          <div class="card-action-container">
+    <!-- Unificamos todo en un solo botón interactivo seguro -->
+    <button class="btn-paypal" onclick="initiatePayment('basic_plan_id')">
+        Buy with <span class="pp-blue">Pay</span><span class="pp-light-blue">Pal</span>
+    </button>
 </div>
                     
                     </article>
@@ -689,12 +688,11 @@
             <li><strong>Deep Data Cleaning:</strong> Classification, validation, and complete normalization of extensive data structures.</li>
             <li><em>Value Note:</em> Designed to optimize your recurring local workflows.</li>
                             </ul>
-                             <div class="tarjeta-pie"> 
-        <!-- Reemplaza 'precio_basico_id' con tu ID real de Stripe más adelante -->
-        <button class="btn-amarillo-fiverr" onclick="iniciarPago('precio_premium_id')">
-    Order Now
-</button>
-    </div>
+                            <div class="card-action-container">
+    <!-- Unificamos todo en un solo botón interactivo seguro -->
+    <button class="btn-paypal" onclick="initiatePayment('professional_plan_id')">
+        Buy with <span class="pp-blue">Pay</span><span class="pp-light-blue">Pal</span>
+    </button>
 </div>
                     </article>
                 </div>
@@ -730,12 +728,12 @@
             <li><strong>High-SpeedScraping:</strong> Web Scraper optimized for massive and structured data extraction.</li>
             <li><em>Includes:</em> Clear technical documentation on the operation and use of the integrations.</li>
                              </ul>
-                             <div class="tarjeta-pie">
-        <!-- Reemplaza 'precio_basico_id' con tu ID real de Stripe más adelante -->
-        <button class="btn-amarillo-fiverr" onclick="iniciarPago('precio_premium_id')">
-    Order Now
-</button>
-    </div>
+                           <div class="card-action-container">
+    <!-- Unificamos todo en un solo botón interactivo seguro -->
+    <button class="btn-paypal" onclick="initiatePayment('advanced_plan_id')">
+        Buy with <span class="pp-blue">Pay</span><span class="pp-light-blue">Pal</span>
+    </button>
+</div>
                     </article>
                     <article class="showcase-card showcase-card--desktop">
                         <div class="showcase-preview">
@@ -756,16 +754,34 @@
                                 <li><strong>Warranty:</strong> Initial deployment support.</li>
                                 <li><em>Important Note:</em> Projects requiring complexdatabase integrations or monthly maintenance are quoted exclusively through <strong>Fiverr</strong>.</li>
                             </ul>
-                             <div class="tarjeta-pie">
-        <!-- Reemplaza 'precio_basico_id' con tu ID real de Stripe más adelante -->
-        <button class="btn-amarillo-fiverr" onclick="iniciarPago('precio_premium_id')">
-    Order Now
-</button>
-    </div>
+                             <div class="card-action-container">
+    <!-- Unificamos todo en un solo botón interactivo seguro -->
+    <button class="btn-paypal" onclick="initiatePayment('premium_plan_id')">
+        Buy with <span class="pp-blue">Pay</span><span class="pp-light-blue">Pal</span>
+    </button>
 </div>
                     </article>
                 </div>
             </section>
+
+            <!-- 1. FIN DE TU SECCIÓN DE PLANES / TARJETAS -->
+<!-- ... aquí terminan tus tarjetas de precios ... -->
+
+<!-- ============================================================ -->
+<!-- CONTENEDOR DE PAYPAL CENTRALIZADO (OCULTO POR DEFECTO) -->
+<!-- ============================================================ -->
+<div id="paypal-checkout-section" style="display: none; text-align: center; margin: 30px auto; max-width: 450px; background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05);">
+    <p style="color: #ffffff; font-family: sans-serif; font-size: 15px; margin-bottom: 15px; font-weight: bold;">
+        Complete your secure payment to activate your credits:
+    </p>
+    <div id="paypal-button-container"></div>
+</div>
+<!-- ============================================================ -->
+
+<!-- 2. INICIO DE TU ZONA DE SUBIDA DE ARCHIVOS -->
+<div class="zona-archivos">
+    <!-- Aquí va tu cuadro azul de arrastrar archivos que se ve en la foto -->
+</div>
 
             <!-- ========================================== -->
 <!-- SAAS COMPONENT WITH STRICT FIXED MEASURES  -->
@@ -1219,7 +1235,14 @@ function typeTerminal() {
 
 // Iniciar la animación cuando cargue la página
 document.addEventListener("DOMContentLoaded", typeTerminal);
+
 </script>
+
+
+<!-- 1. IMPORTACIÓN DEL SDK DE PAYPAL (Colócalo arriba o abajo de tu archivo main.js) -->
+<script src="https://www.paypal.com/sdk/js?client-id=BAAlfoyEhs5ZXSOS8Lu5JjtBeNZVvC76qJBbLKUXRlhKUAcy1Sytb7BG6XhXRo3PV0auBWDLrAizaO7jug"></script>
+
+<!-- 2. TU SCRIPT PRINCIPAL DE LA PÁGINA -->
 <script src="../main.js"></script>
 </body>
 </html>

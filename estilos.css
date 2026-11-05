@@ -837,3 +837,49 @@ a {
     box-shadow: 0 0 15px rgba(236, 248, 51, 0.4);
 }
 
+.card-action-container {
+    display: flex;
+    justify-content: center; /* Centra el botón horizontalmente */
+    align-items: center;     
+    width: 100%;             
+    margin-top: 25px;        
+}
+
+.btn-paypal {
+    display: inline-flex;    
+    align-items: center;
+    justify-content: center;
+    background-color: #ffc439; /* Amarillo PayPal */
+    color: #000000;  
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;        /* Inclinación sutil estilo PayPal */
+    padding: 12px 40px;        
+    border: none;              /* Quita el borde gris por defecto de los botones */
+    border-radius: 50px;       /* Forma de píldora */
+    cursor: pointer;           /* Hace que aparezca la mano al pasar el cursor */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); 
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Efectos de interacción */
+.btn-paypal:hover {
+    background-color: #f2ba36; 
+}
+
+.btn-paypal:active {
+    transform: scale(0.97);    
+}
+
+/* Colores de las letras de PayPal */
+.btn-paypal .pp-blue {
+    color: #003087;            /* Azul oscuro */
+    margin-left: 5px;          /* Separa el texto anterior */
+    font-weight: 800;          /* Un poco más de grosor para simular el logo */
+}
+
+.btn-paypal .pp-light-blue {
+    color: #0079c1;            /* Azul claro */
+    font-weight: 800;
+}

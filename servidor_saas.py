@@ -1,5 +1,7 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory, make_response
+import io
+import pandas as pd
+from flask import Flask, request, jsonify, send_from_directory, make_response, send_file
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -188,6 +190,59 @@ def chat():
     except Exception as e:
         response = make_response(jsonify({"error": str(e)}), 400)
         return add_cors_headers(response)
+
+@app.route('/upload', methods=['POST', 'OPTIONS'])
+def procesar_archivo_express():
+    if request.method == 'OPTIONS':
+        response = make_response('', 200)
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return add_cors_headers(response)
+
+    if not request.files:
+        return add_cors_headers(jsonify({"error": "No se recibió ningún archivo"})), 400
+
+    archivo = next(iter(request.files.values()))
+    nombre = archivo.filename or ""
+    extension = os.path.splitext(nombre)[1].lower()
+
+    if extension not in {".csv", ".xlsx", ".xls"}:
+        return add_cors_headers(jsonify({"error": "Formato no compatible"})), 400
+
+    try:
+        if extension == ".csv":
+            dataframe = pd.read_csv(archivo)
+            mimetype = "text/csv"
+        else:
+            dataframe = pd.read_excel(archivo, engine="openpyxl")
+            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+        if len(dataframe) > 10000:
+            return add_cors_headers(jsonify({"error": "Archivo demasiado grande para el servicio express"})), 400
+
+        dataframe.drop_duplicates(inplace=True)
+        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
+        dataframe.dropna(how="all", axis=1, inplace=True)
+
+        output = io.BytesIO()
+        if extension == ".csv":
+            dataframe.to_csv(output, index=False)
+        else:
+            dataframe.to_excel(output, index=False, engine="openpyxl")
+        output.seek(0)
+
+        response = send_file(
+            output,
+            mimetype=mimetype,
+            as_attachment=True,
+            download_name=f"Lysifix_Express_{os.path.basename(nombre)}",
+        )
+        return add_cors_headers(response)
+    except (ValueError, ImportError) as error:
+        return add_cors_headers(jsonify({"error": f"No se pudo procesar el archivo: {error}"})), 400
+    except Exception:
+        app.logger.exception("Error procesando archivo")
+        return add_cors_headers(jsonify({"error": "El archivo requiere análisis personalizado"})), 500
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))

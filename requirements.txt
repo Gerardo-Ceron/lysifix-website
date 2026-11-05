@@ -1,3 +1,8 @@
-fastapi
-uvicorn
-groq
+Flask
+flask-cors
+openai
+openpyxl
+pandas
+python-dotenv
+SQLAlchemy
+xlrd

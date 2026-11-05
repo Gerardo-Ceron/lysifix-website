@@ -1,4 +1,7 @@
 import os
+import io
+import pandas as pd
+from fastapi import FastAPI, UploadFile, File, HTTPException, Response
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -25,7 +28,8 @@ async def home():
 
 # 2. EL CONECTOR DEL CHAT (Mantiene tu bot inteligente)
 class MensajeUsuario(BaseModel):
-    message: str
+    message: str | None = None
+    mensaje: str | None = None
 
 def obtener_respuesta_ia(mensaje_usuario: str):
     mensaje = mensaje_usuario.lower()
@@ -55,11 +59,56 @@ def obtener_respuesta_ia(mensaje_usuario: str):
 
 @app.post("/chat")
 async def chat_endpoint(datos: MensajeUsuario):
-    if not datos.message or not datos.message.strip():
+    mensaje = datos.message or datos.mensaje
+    if not mensaje or not mensaje.strip():
         return {"respuesta": "El mensaje no puede estar vacío"}
-    respuesta_bot = obtener_respuesta_ia(datos.message)
+    respuesta_bot = obtener_respuesta_ia(mensaje)
     return {"respuesta": respuesta_bot}
 
-# 3. TRUCO FINAL DE FASTAPI: Sirve todas tus carpetas (css, img, assets) de forma nativa
-# Va hasta el final del archivo para que no tape las rutas del chat
-app.mount("/", StaticFiles(directory=".", html=True), name="static")
+
+@app.post("/procesar-archivo")
+async def procesar_archivo(file: UploadFile = File(...)):
+    if not (file.filename.endswith('.csv') or file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
+        raise HTTPException(status_code=400, detail="Formato no soportado.")
+
+    try:
+        contenido = await file.read()
+        archivo_en_memoria = io.BytesIO(contenido)
+        
+        if file.filename.endswith('.csv'):
+            df = pd.read_csv(archivo_en_memoria)
+        else:
+            df = pd.read_excel(archivo_en_memoria, engine='openpyxl')
+            
+        columna_email = None
+        for col in df.columns:
+            if 'email' in col.lower():
+                columna_email = col
+                break
+        
+        if columna_email:
+            df = df.drop_duplicates(subset=[columna_email])
+            
+        # Creamos el archivo limpio en memoria
+        output = io.BytesIO()
+        if file.filename.endswith('.csv'):
+            df.to_csv(output, index=False)
+            media_type = "text/csv"
+        else:
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                df.to_excel(writer, index=False)
+            media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            
+        output.seek(0)
+        bytes_finales = output.getvalue() # 🎯 Extraemos los bytes puros y completos
+        file.file.close()
+        
+        # 🚀 LA SOLUCIÓN: Enviamos la respuesta como un bloque de bytes indexado completo
+        return Response(
+            content=bytes_finales, 
+            media_type=media_type, 
+            headers={"Content-Disposition": f"attachment; filename=limpio_{file.filename}"}
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Fallo en Pandas: {str(e)}")

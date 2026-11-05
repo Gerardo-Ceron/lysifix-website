@@ -817,3 +817,23 @@ a {
   background-color: #0077b5;
   color: #ffffff; 
 }
+
+/* Forzar a que los botones de las tarifas tengan el look neón de la web */
+.tarjeta-pie button {
+    background-color: #c19b02 !important; /* Tu color amarillo neón */
+    color: #0f172a !important;            /* Texto oscuro idéntico al de tus botones actuales */
+    font-weight: 600 !important;
+    padding: 10px 24px !important;        /* Tamaño estilizado de píldora */
+    border: none !important;
+    border-radius: 9999px !important;     /* Esquinas totalmente redondeadas */
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efecto hover elegante alineado al resto de la página */
+.tarjeta-pie button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(236, 248, 51, 0.4);
+}
+

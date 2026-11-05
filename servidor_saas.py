@@ -10,7 +10,20 @@ load_dotenv()
 
 # PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
 app = Flask(__name__)
-CORS(app, resources={r"/": {"origins": ""}})
+ALLOWED_ORIGINS = {
+    "https://lysifix.dev",
+    "https://www.lysifix.dev",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+}
+CORS(app, resources={r"/*": {"origins": list(ALLOWED_ORIGINS)}})
+
+def add_cors_headers(response):
+    origin = request.headers.get("Origin")
+    if origin in ALLOWED_ORIGINS:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+    return response
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()
@@ -127,10 +140,9 @@ def consumir_credito():
 def chat():
     if request.method == 'OPTIONS':
         response = make_response('', 200)
-        response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return response
+        return add_cors_headers(response)
 
     try:
         datos = request.get_json()
@@ -171,13 +183,11 @@ def chat():
         respuesta_ia = completion.choices[0].message.content
 
         response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
-        response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
-        return response
+        return add_cors_headers(response)
 
     except Exception as e:
         response = make_response(jsonify({"error": str(e)}), 400)
-        response.headers["Access-Control-Allow-Origin"] = "https://lysifix.dev"
-        return response
+        return add_cors_headers(response)
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))

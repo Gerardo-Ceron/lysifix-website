@@ -59,3 +59,4 @@ tzdata==2026.3
 uvicorn==0.52.4
 Werkzeug==3.1.8
 xlrd==2.0.2
+requests==2.32.3

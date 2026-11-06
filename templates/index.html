@@ -1,14 +1,13 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 =======
-'''<!DOCTYPE html>
+
 >>>>>>> 8d0b0f3 (Estructura SaaS bilingüe con Flask y OpenAI)
 <html lang="es">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <head>
-<<<<<<< HEAD
     <link rel="alternate" hreflang="en" href="https://lysifix.dev/en/">
     <link rel="alternate" hreflang="es-MX" href="https://lysifix.dev/">
     
@@ -26,7 +25,7 @@
   gtag('config', 'G-HXJR4L9W3M');
 </script>
     <meta charset="UTF-8">
-<<<<<<< HEAD
+
      
 =======
     
@@ -57,7 +56,7 @@
       },
       "priceRange": "$$"
     }
-<<<<<<< HEAD
+
    </script>
 =======
     </script>
@@ -692,7 +691,7 @@
         historial.appendChild(indicador);
         historial.scrollTop = historial.scrollHeight;
 
-<<<<<<< HEAD
+
            console.log("Enviando petición...");
         try {
            // 3. Petición al servidor Flask usando la ruta relativa
@@ -728,37 +727,6 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com/chat
 
 // Esto queda fuera del try-catch para que siempre se ejecute al final
 historial.scrollTop = historial.scrollHeight;
-         
-=======
-        try {
-            // 3. Petición al servidor Flask
-            const respuestaServidor = await fetch('/api/consumir-credito', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mensaje: texto,
-                    email: 'prueba@lysifix.com'
-                })
-            });
-
-            const data = await respuestaServidor.json();
-
-            // 4. Mostramos el resultado real
-            if (data.status === 'success') {
-                indicador.innerHTML = data.respuesta; // Imprime la respuesta de OpenAI
-            } else {
-                indicador.innerHTML = `⚠️ ${data.message}`; // Imprime si se agotan créditos
-            }
-
-        } catch (error) {
-            console.error(error);
-            indicador.innerHTML = '⚠️ No se pudo conectar con el asistente.';
-        }
-
-        historial.scrollTop = historial.scrollHeight;
->>>>>>> 8d0b0f3 (Estructura SaaS bilingüe con Flask y OpenAI)
     }
     function obtenerRespuestaAsistente(mensajeUsuario) {
         const mensaje = mensajeUsuario.toLowerCase().trim();
@@ -1047,8 +1015,8 @@ function typeTerminal() {
 document.addEventListener("DOMContentLoaded", typeTerminal);
 </script>
 </body>
-<<<<<<< HEAD
+
 </html>
 =======
-</html>'''
+</html>
 >>>>>>> 8d0b0f3 (Estructura SaaS bilingüe con Flask y OpenAI)

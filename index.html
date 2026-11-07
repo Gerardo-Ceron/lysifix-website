@@ -944,9 +944,10 @@ const response = await fetch('https://lysifix-saas-oficial.onrender.com/chat', {
         body: JSON.stringify({
         email: 'anonimo',
         mensaje: texto,
-        idioma: 'es'
+        idioma: 'es',
+
     })
-    });
+        });
 
         if (!response.ok) {
             throw new Error(`El servidor respondió con HTTP ${response.status}`);

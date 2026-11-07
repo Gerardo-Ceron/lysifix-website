@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lysifix | Procesa tu Archivo Express</title>
+    <!-- Enlazamos tus mismos estilos para mantener la coherencia visual -->
+    <link rel="stylesheet" href="estilos.css">
+    
+    <style>
+        /* Estilos específicos para la caja interactiva de arrastre */
+        .contenedor-carga {
+            max-width: 550px;
+            margin: 60px auto;
+            padding: 40px 30px;
+            background-color: #1e293b; /* Fondo gris oscuro que combina con tu estilo */
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .contenedor-carga h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .contenedor-carga p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Tu zona interactiva con el borde punteado amarillo */
+        .drop-zone {
+            border: 2px dashed #eab308; 
+            border-radius: 12px;
+            padding: 50px 20px;
+            background-color: #0f172a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Efecto cuando el usuario arrastra el archivo justo encima */
+        .drop-zone--active {
+            background-color: #1e293b;
+            border-color: #ffffff;
+            transform: scale(1.02);
+        }
+
+        .texto-link {
+            color: #eab308;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .estado-procesando {
+            display: none;
+            margin-top: 25px;
+            color: #eab308;
+            font-weight: bold;
+            font-size: 15px;
+            animation: parpadeo 1.5s infinite;
+        }
+
+        @keyframes parpadeo {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Usamos tus clases globales para heredar el fondo oscuro y la estructura de Lysifix -->
+    <div class="site-shell">
+        <div class="div.section-">
+            
+            <div class="contenedor-carga">
+                <h2>¡Pago Verificado con Éxito!</h2>
+                <p>Sube tu base de datos para iniciar la automatización y limpieza express inmediata.</p>
+                
+                <!-- Caja de Arrastre Funcional -->
+                <div id="drop-zone" class="drop-zone">
+                    <p>Arrastra tu archivo Excel o CSV aquí o <span class="texto-link">búscalo en tu equipo</span></p>
+                    <input type="file" id="file-input" accept=".xlsx, .xls, .csv" style="display: none;">
+                </div>
+
+                <!-- Mensaje automático de procesamiento -->
+                <div id="status-message" class="estado-procesando">
+                    ⚙️ Procesando tu archivo... Tu descarga iniciará en unos segundos.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const statusMessage = document.getElementById('status-message');
+
+    // Abre el explorador de archivos al hacer clic en la zona
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) enviarAlServidor(e.target.files[0]);
+    });
+
+    // Efecto visual al arrastrar el archivo sobre la caja
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drop-zone--active');
+    });
+
+    ['dragleave', 'dragend'].forEach(evento => {
+        dropZone.addEventListener(evento, () => {
+            dropZone.classList.remove('drop-zone--active');
+        });
+    });
+
+    // Captura el archivo cuando lo sueltan dentro
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drop-zone--active');
+        if (e.dataTransfer.files.length) {
+            enviarAlServidor(e.dataTransfer.files[0]);
+        }
+    });
+
+    // Envía el archivo al motor de Python y fuerza la descarga
+    function enviarAlServidor(file) {
+        const nombre = file.name.toLowerCase();
+        if (!nombre.endsWith('.xlsx') && !nombre.endsWith('.xls') && !nombre.endsWith('.csv')) {
+            alert("Por favor, sube únicamente archivos Excel (.xlsx, .xls) o CSV.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Bloqueamos la interfaz visualmente para evitar que suban más archivos mientras procesa
+        statusMessage.style.display = 'block';
+        dropZone.style.pointerEvents = 'none';
+        dropZone.style.opacity = '0.4';
+
+        // URL del backend (la cambiaremos cuando lo subas a Railway)
+        const urlBackend = 'http://127.0.0';
+
+        fetch(urlBackend, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error al procesar.');
+            return response.blob();
+        })
+        .then(blob => {
+            // Fuerza la descarga inmediata en el navegador
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "Lysifix_Express_" + file.name;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            // Reestablece la caja de carga
+            statusMessage.style.display = 'none';
+            dropZone.style.pointerEvents = 'auto';
+            dropZone.style.opacity = '1';
+        })
+        .catch(error => {
+            alert("Hubo un error con la estructura del archivo. Intenta con otro o valídalo.");
+            statusMessage.style.display = 'none';
+            dropZone.style.pointerEvents = 'auto';
+            dropZone.style.opacity = '1';
+            console.error(error);
+        });
+    }
+</script>
+
+</body>
+</html>

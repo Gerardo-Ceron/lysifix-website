@@ -218,6 +218,8 @@
 
     <!-- Configuración para Android y dispositivos móviles -->
     <link rel="manifest" href="./site.webmanifest">
+    <script src="https://www.paypal.com/sdk/js?client-id=BAAlfoyEhs5ZXSOS8Lu5JjtBeNZVvC76qJBbLKUXRlhKUAcy1Sytb7BG6XhXRo3PV0auBWDLrAizaO7jug"></script>
+
 </head>
     <meta name="msvalidate.01" content="EC30F42CCB7F433EA8A0C539E01DF53E" />
 <body>
@@ -770,21 +772,21 @@
              <!-- 1. FIN DE TU SECCIÓN DE PLANES / TARJETAS -->
 <!-- ... aquí terminan tus tarjetas de precios ... -->
 
-<!-- ============================================================ -->
-<!-- CONTENEDOR DE PAYPAL CENTRALIZADO (OCULTO POR DEFECTO) -->
-<!-- ============================================================ -->
-<div id="paypal-checkout-section" style="display: none; text-align: center; margin: 30px auto; max-width: 450px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-    <p style="color: #ffffff; font-family: sans-serif; font-size: 15px; margin-bottom: 15px; font-weight: bold;">
-        Completa tu pago seguro para activar tus créditos:
-    </p>
-    <div id="paypal-button-container"></div>
-</div>
-<!-- ============================================================ -->
+<!-- ================================================================= -->
+<!-- NUEVA CAJA DE PAGO CENTRALIZADA LYSIFIX -->
+<!-- ================================================================= -->
+<div id="lysifix-paypal-checkout" style="max-width: 500px; margin: 40px auto; padding: 30px; text-align: center;">
 
-<!-- 2. INICIO DE TU ZONA DE SUBIDA DE ARCHIVOS -->
-<div class="zona-archivos">
-    <!-- Aquí va tu cuadro azul de arrastrar archivos que se ve en la foto -->
+    <!-- Icono decorativo de candado seguro -->
+    <div style="font-size: 2rem; margin-bottom: 10px; color: #03adfa;">🔒</div>
+    <h3 style="color: #ffffff; margin-bottom: 8px; font-family: sans-serif; font-size: 1.4rem;">Paso Final: Checkout Seguro</h3>
+
+    <!-- Contenedor Oficial donde PayPal inyectará sus botones Smart Buttons -->
+    <!-- (Nota: Le quitamos el display:none o dejamos que JavaScript lo maneje, pero ya sin textos estorbando) -->
+    <div id="paypal-button-container" style="min-height: 150px; margin-top: 20px;"></div>
+
 </div>
+<!-- ================================================================= -->
 
 
 <!-- ========================================== -->
@@ -811,7 +813,7 @@
         </p>
         
         <!-- Input oculto indispensable -->
-        <input type="file" id="emailFile" style="display: none;" accept=".csv, .xlsx, .xls">
+        <input type="file" id="file-input" style="display: none;" accept=".csv, .xlsx, .xls">
     </div>
 
     <!-- Botón Azul Proporcionado -->
@@ -934,7 +936,7 @@
            console.log("Enviando petición...");
         try {
            // 3. Petición al servidor Flask usando la ruta relativa
-const respuestaServidor = await fetch('http://127.0.0.1:5000', { 
+const response = await fetch('http://127.0.0.1:5001/chat', {
        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -946,11 +948,11 @@ const respuestaServidor = await fetch('http://127.0.0.1:5000', {
     })
     });
 
-        if (!respuestaServidor.ok) {
-            throw new Error(`El servidor respondió con HTTP ${respuestaServidor.status}`);
+        if (!response.ok) {
+            throw new Error(`El servidor respondió con HTTP ${response.status}`);
         }
 
-  const data = await respuestaServidor.json();
+  const data = await response.json();
         console.log("Respuesta del servidor:", data);
 
         // // 4. Mostramos el resultado real
@@ -1259,7 +1261,6 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
 
 
 <!-- 1. IMPORTACIÓN DEL SDK DE PAYPAL (Colócalo arriba o abajo de tu archivo main.js) -->
-<script src="https://www.paypal.com/sdk/js?client-id=BAAlfoyEhs5ZXSOS8Lu5JjtBeNZVvC76qJBbLKUXRlhKUAcy1Sytb7BG6XhXRo3PV0auBWDLrAizaO7jug"></script>
 
 <!-- 2. TU SCRIPT PRINCIPAL DE LA PÁGINA -->
 <script src="main.js"></script>

@@ -214,10 +214,10 @@ def procesar_archivo_express():
 
     try:
         if extension == ".csv":
-            dataframe = pd.read_csv(archivo)
+            dataframe = pd.read_csv(archivo, nrows=5)
             mimetype = "text/csv"
         else:
-            dataframe = pd.read_excel(archivo, engine="openpyxl")
+            dataframe = pd.read_excel(archivo, engine="openpyxl", nrows=5)
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         if len(dataframe) > 10000:
@@ -248,6 +248,6 @@ def procesar_archivo_express():
         return add_cors_headers(jsonify({"error": "El archivo requiere análisis personalizado"})), 500
 
 if __name__ == '__main__':
-     port = int(os.environ.get("PORT", 5000))
-     app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, port=5001)
     

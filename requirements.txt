@@ -1,14 +1,4 @@
-<<<<<<< HEAD
-Flask
-flask-cors
-openai
-openpyxl
-pandas
-python-dotenv
-SQLAlchemy
-xlrd
-=======
-fastapi
-uvicorn
-groq
->>>>>>> 8d0b0f3 (Estructura SaaS bilingüe con Flask y OpenAI)
+flask==3.1.3
+flask-cors==5.0.0
+pandas==2.2.2
+openpyxl==3.1.5

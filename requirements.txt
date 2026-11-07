@@ -1,3 +1,4 @@
+setuptools
 flask
 flask-cors
 pandas==2.0.3

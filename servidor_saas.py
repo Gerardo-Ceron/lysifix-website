@@ -141,8 +141,11 @@ def consumir_credito():
 
 # from flask import Flask, request, jsonify, make_response, send_from_directory
 
+# Primero la ruta original
 @app.route('/chat', methods=['POST', 'OPTIONS'])
-@app.route('/en/chat', methods=['POST', 'OPTIONS']) # <-- AGREGA ESTA LÍNEA AQUÍ MISMO
+# Inmediatamente abajo la ruta espejo
+@app.route('/en/chat', methods=['POST', 'OPTIONS'])
+# E inmediatamente abajo (sin espacios ni comentarios) pones la función
 def chat():
     if request.method == 'OPTIONS':
         response = make_response('', 200)

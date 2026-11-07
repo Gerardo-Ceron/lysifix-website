@@ -142,6 +142,7 @@ def consumir_credito():
 # from flask import Flask, request, jsonify, make_response, send_from_directory
 
 @app.route('/chat', methods=['POST', 'OPTIONS'])
+@app.route('/en/chat', methods=['POST', 'OPTIONS']) # <-- AGREGA ESTA LÍNEA AQUÍ MISMO
 def chat():
     if request.method == 'OPTIONS':
         response = make_response('', 200)

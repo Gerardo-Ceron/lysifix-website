@@ -155,8 +155,7 @@ def chat():
         datos = request.get_json(silent=True) or {}
         mensaje_usuario = (datos.get('mensaje') or '').strip()
         if not mensaje_usuario:
-            response = make_response(jsonify({"error": "El mensaje está vacío"}), 400)
-            return add_cors_headers(response)
+            return jsonify({"error": "El mensaje está vacío"}), 400
 
         # 1. LEEMOS EL IDIOMA QUE MANDA TU PÁGINA (Si no viene, por defecto es español)
         idioma_pagina = datos.get('idioma', 'es')

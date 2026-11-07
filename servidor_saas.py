@@ -143,11 +143,19 @@ def consumir_credito():
 
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
+    # Responder de inmediato con éxito al chequeo de seguridad de CORS (Preflight)
     if request.method == 'OPTIONS':
-        response = make_response('', 200)
-        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return add_cors_headers(response)
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
+        return response, 200
+
+  
+
+    respuesta_json = jsonify({"respuesta": respuesta_texto}) 
+    respuesta_json.headers.add('Access-Control-Allow-Origin', '*')
+    return respuesta_json
 
     try:
         datos = request.get_json()

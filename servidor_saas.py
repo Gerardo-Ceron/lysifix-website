@@ -13,22 +13,9 @@ load_dotenv()
 # PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
 app = Flask(__name__)
 
-ALLOWED_ORIGINS = [
-    "https://lysifix.dev",
-    "https://lysifix.dev",
-    "https://onrender.com",
-    "https://github.io",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500"
-]
 
-CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
-def add_cors_headers(response):
-    origin = request.headers.get("Origin")
-    if origin in ALLOWED_ORIGINS:
-        response.headers["Access-Control-Allow-Origin"] = origin
-        response.headers["Vary"] = "Origin"
-    return response
+
+CORS(app)
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()

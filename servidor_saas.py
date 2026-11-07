@@ -13,26 +13,7 @@ load_dotenv()
 # PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
 app = Flask(__name__)
 
-
-@app.route('/chat', methods=['POST', 'OPTIONS'])
-def chat():
-    # 1. Si el navegador pregunta por los permisos (OPTIONS), respóndele que SÍ de inmediato
-    if request.method == 'OPTIONS':
-        response = jsonify({'status': 'ok'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
-        return response, 200
-
-    # 2. Asegúrate de que tu respuesta normal (POST) también lleve el permiso al final
-    # ... AQUÍ VA TODO TU CÓDIGO ACTUAL DEL CHAT ...
-    # Al final de tu función, donde haces el return del mensaje de OpenAI, asegúrate de añadirle esto:
-    
-    respuesta_json = jsonify({"respuesta": respuesta_de_openai}) # El return que ya tengas hecho
-    respuesta_json.headers.add('Access-Control-Allow-Origin', '*')
-    return respuesta_json
-
-
+CORS(app)
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()
 

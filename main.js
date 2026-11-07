@@ -4,7 +4,7 @@
     // ==========================================
     // CONFIGURACIÓN GENERAL
     // ==========================================
-    const API_BASE_URL = 'http://127.0.0.1:5001';
+    const API_BASE_URL = 'https://lysifix-saas-oficial.onrender.com';
     const esIngles = window.location.pathname.includes('/en/');
     const MAX_FILE_SIZE = 25 * 1024 * 1024;
     const EXTENSIONES_PERMITIDAS = ['csv', 'xlsx', 'xls'];

@@ -1,5 +1,6 @@
 setuptools
 flask
 flask-cors
-pandas==2.2.3
+pandas==2.2.4
 openpyxl
+gunicorn

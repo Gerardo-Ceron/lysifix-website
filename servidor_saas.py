@@ -15,7 +15,18 @@ app = Flask(__name__)
 
 
 
-CORS(app)
+ALLOWED_ORIGINS = {
+    origin.strip()
+    for origin in os.environ.get("ALLOWED_ORIGINS", "*").split(",")
+    if origin.strip()
+}
+CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
+def add_cors_headers(response):
+    origin = request.headers.get("Origin")
+    if origin in ALLOWED_ORIGINS:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+    return response
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()

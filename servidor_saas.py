@@ -191,13 +191,11 @@ def chat():
 
         respuesta_ia = completion.choices[0].message.content
 
-        response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
-        return add_cors_headers(response)
+        return jsonify({"respuesta": respuesta_ia})
 
     except Exception as e:
         app.logger.exception("Error procesando el chat")
-        response = make_response(jsonify({"error": "No se pudo procesar el mensaje"}), 500)
-        return add_cors_headers(response)
+        return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():

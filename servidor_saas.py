@@ -11,10 +11,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Inicializamos la aplicación Flask
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Configuración global de CORS para permitir peticiones desde tu frontend
-CORS(app, resources={r"/*": {"origins": ["https://lysifix.de", "http://localhost:5500", "http://127.0.0.1:5500"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": ["https://lysifix-saas-oficial.onrender.com", "http://localhost:5500", "http://127.0.0.1:5500"]}}, supports_credentials=True)
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()

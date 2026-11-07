@@ -21,8 +21,14 @@ client = OpenAI()
 
 # Configuración de Base de Datos SQLite local
 engine = create_engine('sqlite:///lysifix.db', echo=True)
-Base = declarative_base()
 
+# ASÍ SE DECLARA CORRECTAMENTE EN LAS VERSIONES RECIENTES:
+from sqlalchemy.orm import DeclarativeBase
+
+class Base(DeclarativeBase):
+    pass
+
+# Tu clase Usuario ahora heredará de esta nueva Base sin dar errores de mapeo
 class Usuario(Base):
     _tablename_ = 'usuarios'
     id = Column(Integer, primary_key=True)

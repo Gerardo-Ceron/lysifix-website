@@ -173,7 +173,7 @@
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
-
+            mostrarMensajeArchivo('✅ Procesamiento completado. La descarga ha iniciado.');
             downloadLink.href = url;
             downloadLink.download = 'Lysifix_Express_' + file.name;
             document.body.appendChild(downloadLink);
@@ -181,7 +181,7 @@
             downloadLink.remove();
             window.URL.revokeObjectURL(url);
 
-            mostrarMensajeArchivo('✅ Procesamiento completado. La descarga ha iniciado.');
+           
         } catch (error) {
             console.error('Error al procesar el archivo:', error);
             mostrarMensajeArchivo('❌ ' + error.message);

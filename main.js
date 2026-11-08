@@ -143,21 +143,31 @@
             archivoPendienteId = null;
             archivoActual = file; 
             
-           // --- BLOQUE PREMIUM DE ARCHIVO CARGADO ---
+            // Reemplazado por SweetAlert estético para el primer aviso de éxito de carga
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: esIngles ? 'Success!' : '¡Archivo Cargado!',
-                    text: esIngles ? 'File successfully loaded: ' + file.name : 'Archivo cargado correctamente: ' + file.name,
-                    icon: 'success',
+                    title: esIngles ? 'File Uploaded!' : '¡Archivo Cargado!',
+                    text: esIngles ? `Successfully loaded: ${file.name}` : `Se cargó correctamente el archivo: ${file.name}`,
+                    icon: 'info',
                     confirmButtonColor: '#03adfa'
                 });
+            } else {
+                mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
             }
-
+            
             alSubirArchivoExitoso(file);
 
-        }); // <-- Este cierre del addEventListener DEBE quedar impecable
-    } // <-- Cierre de la función configurarSelectorDeArchivos
-    
+            const statusInstruction = document.getElementById("paypal-status-instruction");
+            const buttonContainer = document.getElementById("paypal-button-container");
+            const seccionCheckout = document.getElementById('lysifix-paypal-checkout');
+
+            if (statusInstruction) {
+                statusInstruction.innerHTML = esIngles 
+                    ? "File uploaded successfully! Please complete your secure payment below." 
+                    : "¡Archivo cargado con éxito! Por favor, completa tu pago seguro abajo.";
+                statusInstruction.style.color = "#4ade80";
+            }
+                
             if (seccionCheckout) {
                 seccionCheckout.style.display = "block";
                 seccionCheckout.scrollIntoView({ behavior: 'smooth' });
@@ -198,7 +208,7 @@
 
        try {
             // 1. Enviamos el archivo al servidor en Render
-            const response = await fetch(API_BASE_URL + '/upload', {
+            const response = await fetch(API_BASE_URL + '/procesar-archivo', {
                 method: 'POST',
                 body: formData
             });
@@ -408,7 +418,24 @@
         }
     };
 
-   
+    async function guardarArchivoPendiente() {
+        try {
+            if (!archivoActual) {
+                throw new Error('No hay ningún archivo seleccionado.');
+            }
+
+            const formData = new FormData();
+            formData.append('file', archivoActual, archivoActual.name);
+
+            const response = await fetch(API_BASE_URL + '/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al procesar el archivo en el servidor.');
+            }
+
             // LEER COMO BLOB BINARIO (Esto elimina el SyntaxError de "PK")
             const blobExcel = await response.blob();
 

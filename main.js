@@ -143,19 +143,14 @@
             archivoPendienteId = null;
             archivoActual = file; 
             
-            // Reemplazado por SweetAlert estético para el primer aviso de éxito de carga
-            if (typeof Swal !== 'undefined') {
+           if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: esIngles ? 'File Uploaded!' : '¡Archivo Cargado!',
-                    text: esIngles ? `Successfully loaded: ${file.name}` : `Se cargó correctamente el archivo: ${file.name}`,
-                    icon: 'info',
+                    title: esIngles ? 'Success!' : '¡Archivo Cargado!',
+                    text: esIngles ? 'File successfully loaded: ' + file.name : 'Archivo cargado correctamente: ' + file.name,
+                    icon: 'success',
                     confirmButtonColor: '#03adfa'
                 });
-            } else {
-                mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
             }
-            
-            alSubirArchivoExitoso(file);
 
             const statusInstruction = document.getElementById("paypal-status-instruction");
             const buttonContainer = document.getElementById("paypal-button-container");

@@ -1,6 +1,22 @@
 (function () {
     'use strict';
 
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Configuración de CORS
+app.use(cors({
+  origin: 'http://127.0.0.1:5500', // Reemplaza exactamente por el origen de tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Tus rutas van aquí abajo...
+app.post('/chat', (req, res) => {
+  // Código de tu endpoint
+});
+
     // ==========================================
     // CONFIGURACIÓN GENERAL
     // ==========================================
@@ -488,7 +504,7 @@
 
         try {
             // 2. ENVÍO REAL AL BACKEND UTILIZANDO TU API_BASE_URL OFICIAL
-            const response = await fetch(API_BASE_URL + '/chat', {
+            const response = await fetch('https://lysifix-saas-oficial.onrender.com/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: mensajeUsuario })

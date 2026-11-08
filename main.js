@@ -143,7 +143,8 @@
             archivoPendienteId = null;
             archivoActual = file; 
             
-           if (typeof Swal !== 'undefined') {
+           // --- BLOQUE PREMIUM DE ARCHIVO CARGADO ---
+            if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     title: esIngles ? 'Success!' : '¡Archivo Cargado!',
                     text: esIngles ? 'File successfully loaded: ' + file.name : 'Archivo cargado correctamente: ' + file.name,
@@ -152,17 +153,11 @@
                 });
             }
 
-            const statusInstruction = document.getElementById("paypal-status-instruction");
-            const buttonContainer = document.getElementById("paypal-button-container");
-            const seccionCheckout = document.getElementById('lysifix-paypal-checkout');
+            alSubirArchivoExitoso(file);
 
-            if (statusInstruction) {
-                statusInstruction.innerHTML = esIngles 
-                    ? "File uploaded successfully! Please complete your secure payment below." 
-                    : "¡Archivo cargado con éxito! Por favor, completa tu pago seguro abajo.";
-                statusInstruction.style.color = "#4ade80";
-            }
-                
+        }); // <-- Este cierre del addEventListener DEBE quedar impecable
+    } // <-- Cierre de la función configurarSelectorDeArchivos
+    
             if (seccionCheckout) {
                 seccionCheckout.style.display = "block";
                 seccionCheckout.scrollIntoView({ behavior: 'smooth' });

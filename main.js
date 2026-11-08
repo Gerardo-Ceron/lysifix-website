@@ -191,44 +191,48 @@
         const textoOriginal = botonProcesar ? botonProcesar.textContent : 'Procesar';
         if (botonProcesar) botonProcesar.textContent = 'Procesando...';
 
-        try {
+       try {
+            // 1. Enviamos el archivo al servidor en Render
             const response = await fetch(API_BASE_URL + '/upload', {
                 method: 'POST',
                 body: formData
             });
 
-            if (!response.ok) throw new Error('El servidor no pudo procesar el archivo.');
+            if (!response.ok) throw new Error('Error al procesar el archivo en el servidor.');
 
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const downloadLink = document.createElement('a');
+            // 2. RECIBIR COMO BLOB BINARIO PURO (Esto evita el SyntaxError de "PK")
+            const blobExcel = await response.blob();
 
-            downloadLink.href = url;
-            downloadLink.download = 'Lysifix_Express_' + file.name;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            downloadLink.remove();
-            window.URL.revokeObjectURL(url);
+            // 3. Forzar la descarga automática del archivo de 5 filas gratis
+            const urlDescarga = window.URL.createObjectURL(blobExcel);
+            const linkTemporal = document.createElement('a');
+            linkTemporal.href = urlDescarga;
+            linkTemporal.download = 'Muestra_Gratis_' + file.name;
+            document.body.appendChild(linkTemporal);
+            linkTemporal.click();
+            document.body.removeChild(linkTemporal);
+            window.URL.revokeObjectURL(urlDescarga);
 
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: esIngles ? '✨ Optimization Completed!' : '✨ ¡Optimización Completada!',
-                    text: esIngles ? 'Your complete file has been processed and downloaded.' : 'Tu archivo completo ha sido procesado y descargado con éxito.',
-                    icon: 'success',
-                    confirmButtonColor: '#28a745'
-                });
+            // 4. ¡DISPARAMOS LA VENTANA PREMIUM COMERCIAL INMEDIATAMENTE!
+            if (typeof window.lanzarAnuncioPremiumSaaS === 'function') {
+                window.lanzarAnuncioPremiumSaaS(file.name);
             }
+
         } catch (error) {
             console.error('Error al procesar el archivo:', error);
-            mostrarMensajeArchivo('❌ ' + error.message);
-        } finally {
-            if (botonProcesar) {
-                botonProcesar.disabled = false;
-                botonProcesar.textContent = textoOriginal;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un problema al procesar tu archivo. Inténtalo de nuevo.',
+                    icon: 'error',
+                    confirmButtonColor: '#03adfa'
+                });
             }
+        } finally {
+            if (botonProcesar) botonProcesar.disabled = false;
         }
     }
-
+        
     function configurarProcesamientoExpress() {
         if (botonProcesar) {
             botonProcesar.addEventListener('click', procesarArchivoExpress);

@@ -144,11 +144,10 @@ def consumir_credito():
 
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
-    if request.method == 'OPTIONS':
-        response = make_response('', 200)
-        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return add_cors_headers(response)
+   if request.method == 'OPTIONS':
+    response = make_response('', 200)
+    ...
+    return add_cors_headers(response)
 
     try:
         datos = request.get_json()

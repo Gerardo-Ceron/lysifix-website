@@ -938,6 +938,7 @@ const respuestaServidor = await fetch('https://lysifix-saas-oficial.onrender.com
         body: JSON.stringify({
         email: 'anonimo',
         mensaje: texto,
+        idioma: 'en' // <- Le avisa al servidor que responda en inglés
     })
     });
 

@@ -469,21 +469,24 @@
         if (!inputEntrada || !inputEntrada.value.trim()) return;
 
         const mensajeUsuario = inputEntrada.value.trim();
-        inputEntrada.value = ""; // Limpiar la caja de texto de inmediato
+        inputEntrada.value = ""; // Limpiar caja de texto de inmediato
 
         try {
-            // Enviamos el mensaje al backend oficial de Render que está en verde
+            // 1. Enviamos el mensaje adentro del bloque try con doble compatibilidad
             const response = await fetch(API_BASE_URL + '/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: mensajeUsuario })
+                body: JSON.stringify({ 
+                    message: mensajeUsuario,
+                    text: mensajeUsuario 
+                })
             });
 
             if (!response.ok) throw new Error('Falla en la respuesta del servidor de chat.');
             
             const data = await response.json();
             
-            // Si tu interfaz tiene una función global para pintar los mensajes en pantalla
+            // 2. Pintamos la respuesta en la interfaz
             if (typeof window.appendMessage === 'function') {
                 window.appendMessage(data.response, 'bot');
             } else {

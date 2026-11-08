@@ -143,11 +143,7 @@ def consumir_credito():
 
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
-   if request.method == 'OPTIONS':
-    response = make_response('', 200)
-    ...
-    return add_cors_headers(response)
-
+   
     try:
         datos = request.get_json()
         mensaje_usuario = datos.get('mensaje')
@@ -186,12 +182,10 @@ def chat():
 
         respuesta_ia = completion.choices[0].message.content
 
-        response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
-        return add_cors_headers(response)
+        return add_cors_headers(jsonify({"status": "success", "respuesta": respuesta_ia}))
 
     except Exception as e:
-        response = make_response(jsonify({"error": str(e)}), 400)
-        return add_cors_headers(response)
+       return add_cors_headers(jsonify({"status": "error", "message": str(e)})), 500
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():

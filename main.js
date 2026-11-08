@@ -4,7 +4,7 @@
     // ==========================================
     // CONFIGURACIÓN GENERAL
     // ==========================================
-    const API_BASE_URL = 'https://lysifix-saas-oficial.onrender.com';
+    const API_BASE_URL = 'https://onrender.com';
     const esIngles = window.location.pathname.includes('/en/');
     const MAX_FILE_SIZE = 25 * 1024 * 1024;
     const EXTENSIONES_PERMITIDAS = ['csv', 'xlsx', 'xls'];
@@ -31,7 +31,7 @@
     const botonProcesar = document.getElementById('btnProcesar');
     let archivoPendienteId = null;
     let archivoActual = null;
-    let planSeleccionadoGlobal = 'precio_premium_id'; // Plan por defecto si no eligen uno arriba
+    let planSeleccionadoGlobal = 'precio_premium_id'; 
 
     function obtenerExtension(file) {
         return file.name.split('.').pop().toLowerCase();
@@ -50,7 +50,11 @@
         return '';
     }
 
+    // FILTRO INTELIGENTE DE AVISOS: Bloquea avisos viejos de éxito para dar paso a SweetAlert
     function mostrarMensajeArchivo(message) {
+        if (message.includes("Procesamiento completado") || message.includes("La descarga ha iniciado") || message.includes("Archivo cargado correctamente")) {
+            return;
+        }
         if (typeof window.alert === 'function') {
             window.alert(message);
         }
@@ -66,14 +70,12 @@
     // ENLACE DE BOTONES DE PLANES (FLUJO PROFESIONAL)
     // ==========================================
     function configurarBotonesPlanes() {
-        // Buscamos todos los botones de "Buy with" en tu HTML de las tarjetas
         const botonesCompra = document.querySelectorAll('.plan-card button, [id*="buy-button"], .btn-plan, .pricing-button');
         
         botonesCompra.forEach(boton => {
             boton.addEventListener('click', function (event) {
                 event.preventDefault();
                 
-                // Intentamos capturar el ID del plan desde algún atributo o inferimos uno
                 const idAtributo = boton.getAttribute('data-plan-id') || boton.id;
                 if (idAtributo && PLANES_LYSIFIX[idAtributo]) {
                     planSeleccionadoGlobal = idAtributo;
@@ -81,13 +83,11 @@
                     planSeleccionadoGlobal = ALIAS_PLANES_INGLES[idAtributo];
                 }
 
-                // 1. SCROLL SUAVE: Bajamos al cliente de inmediato a la zona azul de arrastre
                 const zonaCarga = document.getElementById('dropZone') || document.getElementById('drop-zone') || document.querySelector('.dropzone');
                 if (zonaCarga) {
                     zonaCarga.scrollIntoView({ behavior: 'smooth' });
                 }
 
-                // 2. MENSAJE PROFESIONAL: Le pedimos amablemente que cargue su archivo para avanzar
                 const statusInstruction = document.getElementById("paypal-status-instruction");
                 if (statusInstruction) {
                     statusInstruction.innerHTML = esIngles 
@@ -128,7 +128,18 @@
             archivoPendienteId = null;
             archivoActual = file; 
             
-            mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
+            // Reemplazado por SweetAlert estético para el primer aviso de éxito de carga
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: esIngles ? 'File Uploaded!' : '¡Archivo Cargado!',
+                    text: esIngles ? `Successfully loaded: ${file.name}` : `Se cargó correctamente el archivo: ${file.name}`,
+                    icon: 'info',
+                    confirmButtonColor: '#03adfa'
+                });
+            } else {
+                mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
+            }
+            
             alSubirArchivoExitoso(file);
 
             const statusInstruction = document.getElementById("paypal-status-instruction");
@@ -142,7 +153,6 @@
                 statusInstruction.style.color = "#4ade80";
             }
                 
-            // DESPERTAR CHEKOUT: Hacemos visible el recuadro de PayPal e iniciamos los botones
             if (seccionCheckout) {
                 seccionCheckout.style.display = "block";
                 seccionCheckout.scrollIntoView({ behavior: 'smooth' });
@@ -150,7 +160,6 @@
 
             if (buttonContainer) {
                 buttonContainer.style.display = "block";  
-                // Llamamos a PayPal solo AHORA que el archivo existe en memoria global
                 iniciarPago(planSeleccionadoGlobal); 
             }
         });
@@ -201,7 +210,14 @@
             downloadLink.remove();
             window.URL.revokeObjectURL(url);
 
-            mostrarMensajeArchivo('✅ Procesamiento completado. La descarga ha iniciado.');
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: esIngles ? '✨ Optimization Completed!' : '✨ ¡Optimización Completada!',
+                    text: esIngles ? 'Your complete file has been processed and downloaded.' : 'Tu archivo completo ha sido procesado y descargado con éxito.',
+                    icon: 'success',
+                    confirmButtonColor: '#28a745'
+                });
+            }
         } catch (error) {
             console.error('Error al procesar el archivo:', error);
             mostrarMensajeArchivo('❌ ' + error.message);
@@ -218,60 +234,19 @@
             botonProcesar.addEventListener('click', procesarArchivoExpress);
         }
     }
+   // Inicialización segura cuando el HTML esté completamente cargado
+    document.addEventListener('DOMContentLoaded', 
+        function() {
+        configurarBotonesPlanes();
+        configurarSelectorDeArchivos();
+        configurarProcesamientoExpress();
+        console.log("🚀 Todos los botones y selectores de Lysifix han sido activados con éxito.");
+    });
 
     // ==========================================
-    // PASARELA DE COBRO PAYPAL Y BACKEND
+    // PASARELA DE COBRO PAYPAL Y BACKEND GLOBAL
     // ==========================================
-    async function guardarArchivoPendiente() {
-        const fileInput = document.getElementById('emailFile') || document.getElementById('file-input');
-        const archivo = archivoActual || (fileInput && fileInput.files[0]);
-        
-        const error = validarArchivo(archivo);
-        if (error) {
-            throw new Error(esIngles ? 'Select a valid file before paying.' : error);
-        }
-        if (archivoPendienteId) {
-            return archivoPendienteId;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('file', archivo, archivo.name);
-
-            const response = await fetch(API_BASE_URL + '/upload-pending', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error(esIngles
-                    ? 'The file could not be uploaded.'
-                    : 'No se pudo subir el archivo.');
-            }
-
-            const data = await response.json();
-            archivoPendienteId = data.file_id || data.id || data.archivo_id;
-
-            if (!archivoPendienteId) {
-                throw new Error(esIngles
-                    ? 'The server did not return a file ID.'
-                    : 'El servidor no devolvió un identificador de archivo.');
-            }
-
-            return archivoPendienteId;
-        } catch (error) {
-            console.error('Error al guardar el archivo pendiente:', error);
-            throw error;
-        }
-    }
-    
-    // ==========================================
-    // INICIALIZACIÓN Y FUNCIONES PÚBLICAS
-    // ==========================================
-    configurarBotonesPlanes();
-    configurarSelectorDeArchivos();
-    configurarProcesamientoExpress();
-async function iniciarPago(planId) {
+    window.iniciarPago = async function(planId) {
         const planIdCanonico = ALIAS_PLANES_INGLES[planId] || planId;
         const planSeleccionado = PLANES_LYSIFIX[planIdCanonico] || PLANES_LYSIFIX['precio_premium_id'];
         const seccionPago = document.getElementById('lysifix-paypal-checkout');
@@ -340,7 +315,7 @@ async function iniciarPago(planId) {
                             if (!response.ok || result.status !== 'success') {
                                 throw new Error(result.message || 'El servidor no pudo registrar el pago.');
                             }
-                            esperarResultado(capturedOrderId, contenedorBotones);
+                            window.esperarResultado(capturedOrderId, contenedorBotones);
                         });
                     });
             },
@@ -356,9 +331,9 @@ async function iniciarPago(planId) {
         }).render('#paypal-button-container').catch(function (error) {
             console.error('No se pudo mostrar el botón de PayPal:', error);
         });
-    }
+    };
 
-    function esperarResultado(orderId, contenedorBotones) {
+    window.esperarResultado = function(orderId, contenedorBotones) {
         const limite = Date.now() + 5 * 60 * 1000;
         const intervalo = window.setInterval(async function () {
             if (Date.now() > limite) {
@@ -385,8 +360,44 @@ async function iniciarPago(planId) {
                 console.error('Error consultando el estado del trabajo:', error);
             }
         }, 2000);
-    }
-    // Exportamos la función al navegador de forma segura
-    window.iniciarPago = iniciarPago;
-    window.alSubirArchivoExitoso = alSubirArchivoExitoso;
-})(); 
+    };
+
+    // ========================================================
+    // FUNCIÓN GLOBAL - SEGUNDO AVISO PREMIUM COMERCIAL
+    // ========================================================
+    window.lanzarAnuncioPremiumSaaS = function(nombreArchivo) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: esIngles ? '✨ Your Free Sample is Ready!' : '✨ ¡Tu muestra gratis está lista!',
+                html: esIngles 
+                    ? `We have processed and cleaned the first <b>5 rows</b> of your file so you can check the precision of Lysifix.<br><br>
+                       • Duplicate emails removed.<br>
+                       • Columns formatted and standardized.<br><br>
+                       <b>Ready to unlock all your data?</b> Download the full file instantly with the Pro Plan.`
+                    : `Hemos procesado y limpiado las primeras <b>5 filas</b> de tu archivo para que compruebes la precisión de Lysifix.<br><br>
+                       • Correos duplicados eliminados.<br>
+                       • Columnas normalizadas y limpias.<br><br>
+                       <b>¿Listo para descargar todo tu archivo?</b> Libera los registros restantes al instante adquiriendo el Plan Profesional.`,
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: esIngles ? '🚀 Unlock Full File' : '🚀 Liberar Archivo Completo',
+                cancelButtonText: esIngles ? 'Keep exploring' : 'Seguir explorando',
+                background: '#ffffff',
+                customClass: {
+                    popup: 'border-radius-15'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const seccionPlanes = document.getElementById('pricing') || document.getElementById('planes');
+                    if (seccionPlanes) {
+                        seccionPlanes.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+    };
+
+    // Cierre oficial de la estructura autoejecutable
+})();

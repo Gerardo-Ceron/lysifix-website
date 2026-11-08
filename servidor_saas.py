@@ -1,6 +1,6 @@
 import os
-import io
 import pandas as pd
+import io
 from flask import Flask, request, jsonify, send_from_directory, make_response, send_file
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String
@@ -10,45 +10,44 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
 app = Flask(__name__)
 
-ALLOWED_ORIGINS = [
+ALLOWED_ORIGINS = {
     "https://lysifix.dev",
-    "https://onrender.com",
-    "https://github.io",
+    "https://www.lysifix.dev",
+    "https://lysifix-website.onrender.com",
+    "https://gerardo-ceron.github.io",
     "http://localhost:5500",
-    "http://127.0.0.1:5500"
-]
+    "http://127.0.0.1:5500",
+}
 
-CORS(app, 
-     resources={r"/": {"origins": ""}}, 
-     supports_credentials=True,
-     methods=["GET", "POST", "OPTIONS"],
-     allow_headers=["Content-Type", "Authorization", "X-Requested-With"])
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+def add_cors_headers(response):
+    origin = request.headers.get("Origin")
+    if origin in ALLOWED_ORIGINS:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+    return response
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()
 
-
-db_path = os.path.join('/tmp', 'lysifix.db') if os.environ.get('RENDER') else 'lysifix.db'
-engine = create_engine(f'sqlite:///{db_path}', echo=True)
-
-# Declaración limpia de la Base para SQLAlchemy
+# Configuración de Base de Datos SQLite local
+engine = create_engine('sqlite:///lysifix.db', echo=True)
 Base = declarative_base()
+from sqlalchemy import Column, Integer, String
 
-# Definición del modelo Usuario usando el doble guion bajo estándar
 class Usuario(Base):
     __tablename__ = 'usuarios'
-    
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
     creditos = Column(Integer, default=100)
 
-# Inicialización segura de la sesión y las tablas
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 Base.metadata.create_all(bind=engine)
-
 # ==========================================
 # RUTAS PARA EL DISEÑO Y LA PÁGINA WEB
 # ==========================================
@@ -145,20 +144,16 @@ def consumir_credito():
 
 @app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
-    # Responder de inmediato con éxito al chequeo de seguridad de CORS (Preflight)
     if request.method == 'OPTIONS':
-        response = jsonify({'status': 'ok'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
-        return response, 200
+        response = make_response('', 200)
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return add_cors_headers(response)
 
     try:
-        datos = request.get_json(silent=True) or {}
-        mensaje_usuario = (datos.get('mensaje') or '').strip()
-        if not mensaje_usuario:
-            return jsonify({"error": "El mensaje está vacío"}), 400
-
+        datos = request.get_json()
+        mensaje_usuario = datos.get('mensaje')
+        
         # 1. LEEMOS EL IDIOMA QUE MANDA TU PÁGINA (Si no viene, por defecto es español)
         idioma_pagina = datos.get('idioma', 'es')
 
@@ -193,40 +188,32 @@ def chat():
 
         respuesta_ia = completion.choices[0].message.content
 
-        return jsonify({"respuesta": respuesta_ia})
+        response = make_response(jsonify({"respuesta": respuesta_ia}), 200)
+        return add_cors_headers(response)
 
     except Exception as e:
-        app.logger.exception("Error procesando el chat")
-        return jsonify({"error": f"Error interno: {str(e)}"}), 500
+        response = make_response(jsonify({"error": str(e)}), 400)
+        return add_cors_headers(response)
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
-@app.route('/upload-pending', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
     if request.method == 'OPTIONS':
         response = make_response('', 200)
-        response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return response
+        return add_cors_headers(response)
 
     if not request.files:
-        response = jsonify({"error": "No se recibió ningún archivo"})
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response, 400
+        return add_cors_headers(jsonify({"error": "No se recibió ningún archivo"})), 400
 
     archivo = next(iter(request.files.values()))
-    nombre_crudo = archivo.filename if archivo else ""
-    nombre = nombre_crudo[0] if isinstance(nombre_crudo, tuple) else str(nombre_crudo)
+    nombre = archivo.filename or ""
     extension = os.path.splitext(nombre)[1].lower()
 
-    if extension not in (".csv", ".xlsx", ".xls"):
-        response = jsonify({"error": "Formato no compatible"})
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response, 400
+    if extension not in {".csv", ".xlsx", ".xls"}:
+        return add_cors_headers(jsonify({"error": "Formato no compatible"})), 400
 
     try:
-        # Resetear puntero para leer el archivo desde el inicio de forma segura
-        archivo.seek(0)
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
             mimetype = "text/csv"
@@ -234,45 +221,11 @@ def procesar_archivo_express():
             dataframe = pd.read_excel(archivo, engine="openpyxl")
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
-      # Primero normalizamos los nombres de las columnas a texto en mayúsculas
-        dataframe.columns = [str(c).strip().upper() for c in dataframe.columns]
+        if len(dataframe) > 10000:
+            return add_cors_headers(jsonify({"error": "Archivo demasiado grande para el servicio express"})), 400
 
-        # ELIMINAR DUPLICADOS ENFOCADO ESTRICTAMENTE EN LA COLUMNA DE CORREO
-        if 'EMAIL' in dataframe.columns:
-            dataframe.drop_duplicates(subset=['EMAIL'], inplace=True)
-        else:
-            dataframe.drop_duplicates(inplace=True)
-
-        dataframe.dropna(how="all", axis=1, inplace=True)
-
-        # EL MODELO SAAS AUTOMATIZADO BIFURCADO:
-        # Si la petición incluye un parámetro secreto del frontend (ej. plan=pro), se libera completo.
-        # De lo contrario, por defecto siempre se recortará a un máximo de 5 líneas para la prueba gratuita.
-        plan_usuario = request.args.get('plan', 'gratis') or request.form.get('plan', 'gratis')
-        
-        if plan_usuario == 'pro':
-            if len(dataframe) > 10000:
-                response = jsonify({
-                    "error": "Archivo demasiado grande para el servicio express",
-                    "action": "custom_project",
-                    "link": "es.fiverr.com/gerardo_cg?public_mode=true"
-                })
-                response.headers["Access-Control-Allow-Origin"] = "*"
-                return response, 400
-        else:
-            # Bloque de seguridad para la prueba gratuita: Recorte estricto a 5 filas
-            if len(dataframe) > 5:
-                dataframe = dataframe.head(5)
-
-        # Primero normalizamos los nombres de las columnas a texto en mayúsculas
-        dataframe.columns = [str(c).strip().upper() for c in dataframe.columns]
-
-        # ELIMINAR DUPLICADOS ENFOCADO ESTRICTAMENTE EN LA COLUMNA DE CORREO
-        if 'EMAIL' in dataframe.columns:
-            dataframe.drop_duplicates(subset=['EMAIL'], inplace=True)
-        else:
-            dataframe.drop_duplicates(inplace=True)
-
+        dataframe.drop_duplicates(inplace=True)
+        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
         dataframe.dropna(how="all", axis=1, inplace=True)
 
         output = io.BytesIO()
@@ -282,28 +235,20 @@ def procesar_archivo_express():
             dataframe.to_excel(output, index=False, engine="openpyxl")
         output.seek(0)
 
-        nombre_salida = f"Lysifix_Muestra_{os.path.basename(nombre)}" if "upload-pending" in request.path else f"Lysifix_Express_{os.path.basename(nombre)}"
-
         response = send_file(
             output,
             mimetype=mimetype,
             as_attachment=True,
-            download_name=nombre_salida
+            download_name=f"Lysifix_Express_{os.path.basename(nombre)}",
         )
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response
-
+        return add_cors_headers(response)
     except (ValueError, ImportError) as error:
-        response = jsonify({"error": f"No se pudo procesar el archivo: {error}"})
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response, 400
+        return add_cors_headers(jsonify({"error": f"No se pudo procesar el archivo: {error}"})), 400
     except Exception:
         app.logger.exception("Error procesando archivo")
-        response = jsonify({"error": "El archivo requiere análisis personalizado"})
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response, 500
-
+        return add_cors_headers(jsonify({"error": "El archivo requiere análisis personalizado"})), 500
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))
      app.run(host='0.0.0.0', port=port)
+    

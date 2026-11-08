@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import httpx
 import pandas as pd
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, Response
 from pydantic import BaseModel
@@ -68,10 +68,8 @@ ORDENES_PROCESADAS = set()
 # ==========================================
 # PAGINAS Y CHAT
 # ==========================================
-@app.post("/")
-async def procesar_chat(request: Request):
-    datos = await request.json()
-    # Aquí iría tu lógica vieja que procesa el mensaje del usuario
+@app.get("/", response_class=HTMLResponse)
+async def home():
     index_path = BASE_DIR / "index.html"
     if not index_path.exists():
         return "<h1>Lysifix: Servidor activo</h1>"
@@ -118,6 +116,13 @@ def obtener_respuesta_ia(mensaje_usuario: str) -> str:
         return saludo.strip()
     return "Disculpa, todavía estoy aprendiendo y no entendí tu pregunta."
 
+
+@app.post("/chat")
+async def chat_endpoint(datos: MensajeUsuario):
+    mensaje = (datos.message or datos.mensaje or "").strip()
+    if not mensaje:
+        return {"respuesta": "El mensaje no puede estar vacío"}
+    return {"respuesta": obtener_respuesta_ia(mensaje)}
 
 
 # ==========================================
@@ -384,7 +389,7 @@ def procesar_archivo_automatico(usuario_email, ruta_entrada, order_id):
         print(f"❌ [ERROR AUTOMATIZACIÓN] Falló el script para {usuario_email}: {str(e)}")
 
 
-@app.post('/api/verificar_pago_y_procesar')
+@app.route('/api/verificar_pago_y_procesar', methods=['POST'])
 def verificar_pago_y_procesar():
     datos = request.get_json() or {}
     email_usuario = datos.get('email', 'anonimo')
@@ -430,15 +435,15 @@ def verificar_pago_y_procesar():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.get('/api/estado_trabajo/{order_id}')
+@app.route('/api/estado_trabajo/<order_id>', methods=['GET'])
 def constatar_estado_trabajo(order_id):
     """Ruta de monitoreo constante (polling) para verificar el estatus del archivo"""
     estado = TRABAJOS_ACTIVOS.get(order_id, {"status": "no_encontrado"})
     return jsonify(estado)
 
 
-@app.get('/api/descargar/{nombre_archivo}')
-def descargar_archivo(nombre_archivo):
+@app.route('/api/descargar/<nombre_archivo>', methods=['GET'])
+def descargar_archivo_final(nombre_archivo):
     """Ruta segura de despacho que descarga el archivo resultante en el equipo del cliente"""
     return send_from_directory(CARPA_DESCARGAS, secure_filename(nombre_archivo), as_attachment=True)
 
@@ -451,50 +456,3 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", "5000")),
         reload=False,
     )
-
-# === CONEXIÓN CON OPENAI ===
-@app.post("/chat")
-async def procesar_chat(datos: MensajeUsuario):
-    try:
-        # FastAPI automáticamente procesa el JSON por ti usando 'datos'
-        mensaje_usuario = datos.mensaje.strip() if datos.mensaje else ""
-        
-        if not mensaje_usuario:
-            return {"respuesta": "El mensaje no puede estar vacío."}
-            
-        # === AQUÍ COMIENZA TU BLOQUE DE OPENAI ===
-        from openai import OpenAI
-        client = OpenAI()
-        
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Eres el asistente oficial de Lysifix."},
-                {"role": "user", "content": mensaje_usuario}
-            ]
-        )
-        return {"respuesta": response.choices[0].message.content}
-        
-    except Exception as e:
-        print(f"Error: {e}")
-        return {"respuesta": "Hubo un error técnico."}
-    try:
-        from openai import OpenAI
-        # Inicializa el cliente. Asegúrate de tener tu clave configurada
-        # en las variables de entorno o ponla entre comillas aquí: client = OpenAI(api_key="TU_API_KEY")
-        client = OpenAI() 
-        
-        response = client.chat.completions.create(
-            model="gpt-4o-mini", # Es el modelo más rápido y económico actual
-            messages=[
-                {"role": "system", "content": "Eres el asistente oficial de Lysifix. Sé amable, profesional y ayuda a los usuarios con sus dudas sobre desarrollo y automatización."},
-                {"role": "user", "content": mensaje_usuario}
-            ]
-        )
-        # Retornamos la respuesta real de la Inteligencia Artificial
-        return response.choices[0].message.content
-
-    except Exception as e:
-        print(f"Error detectado en OpenAI: {e}")
-        # Si la API falla (por falta de saldo o API Key), dejamos este mensaje como plan de respaldo
-        return "Disculpa, en este momento tengo un problema técnico para conectarme con mi cerebro de IA. Por favor, intenta de nuevo en unos minutos."

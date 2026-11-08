@@ -356,7 +356,8 @@
                         <div>
                             <span style="color: #c19b02; font-weight: bold;">Python Projects 📜</span>
                                         <h2>Featured Projects</h2>
-                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;"> A selection of software solutions and applications that showcase my technical expertise, programming skills, and functional design approach.</p>
+                                        <p style="color: #cccccc; font-size: 1.1rem; margin-bottom: 20px;"> A selection of software solutions and applications that showcase my technical expertise, programming skills, and functional design approach.
+</p></p>
                         </div>
                     </section>
               </main>
@@ -908,6 +909,7 @@
         // Declaramos las variables para que JavaScript encuentre los elementos en este HTML
         const input = document.getElementById('entrada');
         const historial = document.getElementById('historial');
+
         const texto = input.value.trim();
         if (!texto) return;
 
@@ -928,7 +930,7 @@
         console.log("Enviando petición...");
         try {
            // 3. Petición al servidor Flask usando la ruta relativa
-const respuestaServidor = await fetch('https://lysifix-saas-oficial.onrender.com', { 
+const respuestaServidor = await fetch('https://lysifix-website.onrender.com/chat', { 
     method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -1237,11 +1239,10 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
 </script>
 
 
+<!-- 1. IMPORTACIÓN DEL SDK DE PAYPAL (Colócalo arriba o abajo de tu archivo main.js) -->
 <script src="https://www.paypal.com/sdk/js?client-id=BAAlfoyEhs5ZXSOS8Lu5JjtBeNZVvC76qJBbLKUXRlhKUAcy1Sytb7BG6XhXRo3PV0auBWDLrAizaO7jug"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script src="../main.js?v=200.0"></script>
-
+<!-- 2. TU SCRIPT PRINCIPAL DE LA PÁGINA -->
+<script src="../main.js"></script>
 </body>
 </html>

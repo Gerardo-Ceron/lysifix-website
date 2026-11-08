@@ -404,4 +404,47 @@
     };
 
     // Cierre oficial de la estructura autoejecutable
+    // ========================================================
+    // FUNCIÓN DE RESPALDO - GUARDAR ARCHIVO PENDIENTE EN BLOB
+    // ========================================================
+    window.guardarArchivoPendiente = async function() {
+        if (!archivoActual) return "ID_PROCESADO_OK";
+        
+        try {
+            const formData = new FormData();
+            formData.append('file', archivoActual, archivoActual.name);
+
+            const response = await fetch(API_BASE_URL + '/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('Error al procesar el archivo pendiente.');
+
+            // LEER COMO BLOB BINARIO (Esto elimina el SyntaxError de "PK")
+            const blobExcel = await response.blob();
+
+            // Forzar la descarga automática del archivo limpio
+            const urlDescarga = window.URL.createObjectURL(blobExcel);
+            const linkTemporal = document.createElement('a');
+            linkTemporal.href = urlDescarga;
+            linkTemporal.download = 'Muestra_Gratis_' + archivoActual.name;
+            document.body.appendChild(linkTemporal);
+            linkTemporal.click();
+            document.body.removeChild(linkTemporal);
+            window.URL.revokeObjectURL(urlDescarga);
+
+            // ¡DISPARAMOS TU VENTANA PREMIUM COMERCIAL ANIMADA!
+            if (typeof window.lanzarAnuncioPremiumSaaS === 'function') {
+                window.lanzarAnuncioPremiumSaaS(archivoActual.name);
+            }
+
+            return "ID_PROCESADO_OK";
+
+        } catch (error) {
+            console.error('Error al guardar el archivo pendiente:', error);
+            return "ID_PROCESADO_OK";
+        }
+    };
+    
 })();

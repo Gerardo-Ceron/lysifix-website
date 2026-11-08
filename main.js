@@ -208,7 +208,7 @@
 
        try {
             // 1. Enviamos el archivo al servidor en Render
-            const response = await fetch(API_BASE_URL + '/procesar-archivo', {
+            const response = await fetch(API_BASE_URL + '/upload', {
                 method: 'POST',
                 body: formData
             });

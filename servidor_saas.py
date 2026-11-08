@@ -31,7 +31,7 @@ def add_cors_headers(response):
     response.headers["Access-Control-Max-Age"] = "86400"  # Cachea la prueba por 24 horas
     return response
 
-    @app.before_request
+@app.before_request
 def handle_options_preflight():
     if request.method == 'OPTIONS':
         response = make_response()

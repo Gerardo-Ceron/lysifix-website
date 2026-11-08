@@ -22,21 +22,9 @@ ALLOWED_ORIGINS = {
     "http://127.0.0.1:5500",
 }
 
-CORS(app, resources={r"/*": {"origins": list(ALLOWED_ORIGINS)}})
+CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Requested-With"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Max-Age"] = "86400"  # Cachea la prueba por 24 horas
-    return response
 
-@app.before_request
-def handle_options_preflight():
-    if request.method == 'OPTIONS':
-        response = make_response()
-        response = add_cors_headers(response)
-        return response
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()

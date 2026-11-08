@@ -1,26 +1,8 @@
-(function () {
-    'use strict';
-
-const express = require('express');
-const cors = require('cors');
-const app = express();
-
-// Configuración de CORS
-app.use(cors({
-  origin: 'http://127.0.0.1:5500', // Reemplaza exactamente por el origen de tu frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-// Tus rutas van aquí abajo...
-app.post('/chat', (req, res) => {
-  // Código de tu endpoint
-});
 
     // ==========================================
     // CONFIGURACIÓN GENERAL
     // ==========================================
-    const API_BASE_URL = 'https://lysifix-saas-oficial.onrender.com';
+    const API_BASE_URL = 'https://lysifix-SaaS-oficial.onrender.com';
     const esIngles = window.location.pathname.includes('/en/');
     const MAX_FILE_SIZE = 25 * 1024 * 1024;
     const EXTENSIONES_PERMITIDAS = ['csv', 'xlsx', 'xls'];

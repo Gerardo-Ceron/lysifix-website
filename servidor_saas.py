@@ -197,15 +197,9 @@ def chat():
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
-    if request.method == 'OPTIONS':
-        response = make_response('', 200)
-        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return add_cors_headers(response)
-
     if not request.files:
         return add_cors_headers(jsonify({"error": "No se recibió ningún archivo"})), 400
-
+        
     archivo = next(iter(request.files.values()))
     nombre = archivo.filename or ""
     extension = os.path.splitext(nombre)[1].lower()

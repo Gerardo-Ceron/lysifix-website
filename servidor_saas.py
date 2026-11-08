@@ -25,10 +25,9 @@ ALLOWED_ORIGINS = {
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 def add_cors_headers(response):
-    origin = request.headers.get("Origin")
-    if origin in ALLOWED_ORIGINS:
-        response.headers["Access-Control-Allow-Origin"] = origin
-        response.headers["Vary"] = "Origin"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
     return response
 
 # Configuración de OpenAI con credenciales automáticas

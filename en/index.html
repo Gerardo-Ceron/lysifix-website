@@ -930,7 +930,7 @@
         console.log("Enviando petición...");
         try {
            // 3. Petición al servidor Flask usando la ruta relativa
-const respuestaServidor = await fetch('https://lysifix-website.onrender.com/chat', { 
+const respuestaServidor = await fetch('https://lysifix-saas-oficial.onrender.com/chat', { 
     method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -938,8 +938,6 @@ const respuestaServidor = await fetch('https://lysifix-website.onrender.com/chat
         body: JSON.stringify({
         email: 'anonimo',
         mensaje: texto,
-        message: texto,
-        idioma: 'en' // <-- Le avisamos al backend que estamos en la versión en inglés
     })
     });
 
@@ -1239,10 +1237,10 @@ document.addEventListener("DOMContentLoaded", typeTerminal);
 </script>
 
 
-<!-- 1. IMPORTACIÓN DEL SDK DE PAYPAL (Colócalo arriba o abajo de tu archivo main.js) -->
 <script src="https://www.paypal.com/sdk/js?client-id=BAAlfoyEhs5ZXSOS8Lu5JjtBeNZVvC76qJBbLKUXRlhKUAcy1Sytb7BG6XhXRo3PV0auBWDLrAizaO7jug"></script>
 
-<!-- 2. TU SCRIPT PRINCIPAL DE LA PÁGINA -->
-<script src="../main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="../main.js?v=200.0"></script>
 </body>
 </html>

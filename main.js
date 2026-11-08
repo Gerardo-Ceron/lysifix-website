@@ -461,36 +461,52 @@
             return "ID_PROCESADO_OK";
         }
     };
-// ========================================================
+
+    // ========================================================
     // MOTOR DE ATENCIÓN DE CHAT CON INTELIGENCIA ARTIFICIAL
     // ========================================================
     window.enviarMensaje = async function() {
         const inputEntrada = document.getElementById("entrada");
+        const historialChat = document.getElementById("historial") || document.querySelector(".chat-messages") || document.querySelector(".messages");
+        
         if (!inputEntrada || !inputEntrada.value.trim()) return;
 
         const mensajeUsuario = inputEntrada.value.trim();
-        inputEntrada.value = ""; // Limpiar caja de texto de inmediato
+
+        // 1. Pintamos de inmediato el mensaje del usuario en la ventana
+        if (historialChat) {
+            historialChat.innerHTML += `
+                <div class="mensaje usuario" style="text-align: right; margin: 10px; padding: 10px; background: #03adfa; color: white; border-radius: 10px; display: block; clear: both; float: right; max-width: 80%;">
+                    ${mensajeUsuario}
+                </div>
+            `;
+            historialChat.scrollTop = historialChat.scrollHeight;
+        }
+
+        // Limpiamos la caja de escribir de inmediato para dar fluidez
+        inputEntrada.value = ""; 
 
         try {
-            // 1. Enviamos el mensaje adentro del bloque try con doble compatibilidad
+            // 2. ENVÍO REAL AL BACKEND UTILIZANDO TU API_BASE_URL OFICIAL
             const response = await fetch(API_BASE_URL + '/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    message: mensajeUsuario,
-                    text: mensajeUsuario 
-                })
+                body: JSON.stringify({ message: mensajeUsuario })
             });
 
             if (!response.ok) throw new Error('Falla en la respuesta del servidor de chat.');
             
             const data = await response.json();
+            const respuestaIA = data.response || data.text || data.message || "Procesado con éxito";
             
-            // 2. Pintamos la respuesta en la interfaz
-            if (typeof window.appendMessage === 'function') {
-                window.appendMessage(data.response, 'bot');
-            } else {
-                console.log("Respuesta de la IA de Lysifix:", data.response);
+            // 3. Pintamos la respuesta de la IA en la ventana de chat
+            if (historialChat) {
+                historialChat.innerHTML += `
+                    <div class="mensaje bot" style="text-align: left; margin: 10px; padding: 10px; background: #333; color: white; border-radius: 10px; display: block; clear: both; float: left; max-width: 80%;">
+                        <b>Lysifix IA:</b> ${respuestaIA}
+                    </div>
+                `;
+                historialChat.scrollTop = historialChat.scrollHeight;
             }
 
         } catch (error) {

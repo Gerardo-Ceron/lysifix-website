@@ -19,7 +19,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5500",
     "http://127.0.0.1:5500"
 ]
-CORS(app, resources={r"/": {"origins": ""}})
+CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()

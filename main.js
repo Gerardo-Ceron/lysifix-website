@@ -461,5 +461,37 @@
             return "ID_PROCESADO_OK";
         }
     };
+// ========================================================
+    // MOTOR DE ATENCIÓN DE CHAT CON INTELIGENCIA ARTIFICIAL
+    // ========================================================
+    window.enviarMensaje = async function() {
+        const inputEntrada = document.getElementById("entrada");
+        if (!inputEntrada || !inputEntrada.value.trim()) return;
 
+        const mensajeUsuario = inputEntrada.value.trim();
+        inputEntrada.value = ""; // Limpiar la caja de texto de inmediato
+
+        try {
+            // Enviamos el mensaje al backend oficial de Render que está en verde
+            const response = await fetch(API_BASE_URL + '/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: mensajeUsuario })
+            });
+
+            if (!response.ok) throw new Error('Falla en la respuesta del servidor de chat.');
+            
+            const data = await response.json();
+            
+            // Si tu interfaz tiene una función global para pintar los mensajes en pantalla
+            if (typeof window.appendMessage === 'function') {
+                window.appendMessage(data.response, 'bot');
+            } else {
+                console.log("Respuesta de la IA de Lysifix:", data.response);
+            }
+
+        } catch (error) {
+            console.error("Error en la conexión del asistente:", error);
+        }
+    };
 })();

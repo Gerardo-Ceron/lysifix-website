@@ -1,7 +1,7 @@
 import os
 import io
 import pandas as pd
-from flask import Flask, request, jsonify, send_from_directory, make_response
+from flask import Flask, request, jsonify, send_from_directory, make_response, send_file
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -19,15 +19,12 @@ ALLOWED_ORIGINS = [
     "http://localhost:5500",
     "http://127.0.0.1:5500"
 ]
-CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
+CORS(app, resources={r"/": {"origins": ""}})
 
 # Configuración de OpenAI con credenciales automáticas
 client = OpenAI()
 
-# ==========================================
-# CONFIGURACIÓN DE BASE DE DATOS COMPLETAMENTE CORREGIDA
-# ==========================================
-# Cambiamos la ruta a /tmp para que Render tenga permisos de escritura obligatorios
+
 db_path = os.path.join('/tmp', 'lysifix.db') if os.environ.get('RENDER') else 'lysifix.db'
 engine = create_engine(f'sqlite:///{db_path}', echo=True)
 
@@ -198,24 +195,33 @@ def chat():
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
+@app.route('/upload-pending', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
     if request.method == 'OPTIONS':
         response = make_response('', 200)
+        response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return add_cors_headers(response)
+        return response
 
     if not request.files:
-        return add_cors_headers(jsonify({"error": "No se recibió ningún archivo"})), 400
+        response = jsonify({"error": "No se recibió ningún archivo"})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 400
 
     archivo = next(iter(request.files.values()))
-    nombre = archivo.filename or ""
+    nombre_crudo = archivo.filename if archivo else ""
+    nombre = nombre_crudo[0] if isinstance(nombre_crudo, tuple) else str(nombre_crudo)
     extension = os.path.splitext(nombre)[1].lower()
 
-    if extension not in {".csv", ".xlsx", ".xls"}:
-        return add_cors_headers(jsonify({"error": "Formato no compatible"})), 400
+    if extension not in (".csv", ".xlsx", ".xls"):
+        response = jsonify({"error": "Formato no compatible"})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 400
 
     try:
+        # Resetear puntero para leer el archivo desde el inicio de forma segura
+        archivo.seek(0)
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
             mimetype = "text/csv"
@@ -223,11 +229,45 @@ def procesar_archivo_express():
             dataframe = pd.read_excel(archivo, engine="openpyxl")
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
-        if len(dataframe) > 10000:
-            return add_cors_headers(jsonify({"error": "Archivo demasiado grande para el servicio express"})), 400
+      # Primero normalizamos los nombres de las columnas a texto en mayúsculas
+        dataframe.columns = [str(c).strip().upper() for c in dataframe.columns]
 
-        dataframe.drop_duplicates(inplace=True)
-        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
+        # ELIMINAR DUPLICADOS ENFOCADO ESTRICTAMENTE EN LA COLUMNA DE CORREO
+        if 'EMAIL' in dataframe.columns:
+            dataframe.drop_duplicates(subset=['EMAIL'], inplace=True)
+        else:
+            dataframe.drop_duplicates(inplace=True)
+
+        dataframe.dropna(how="all", axis=1, inplace=True)
+
+        # EL MODELO SAAS AUTOMATIZADO BIFURCADO:
+        # Si la petición incluye un parámetro secreto del frontend (ej. plan=pro), se libera completo.
+        # De lo contrario, por defecto siempre se recortará a un máximo de 5 líneas para la prueba gratuita.
+        plan_usuario = request.args.get('plan', 'gratis') or request.form.get('plan', 'gratis')
+        
+        if plan_usuario == 'pro':
+            if len(dataframe) > 10000:
+                response = jsonify({
+                    "error": "Archivo demasiado grande para el servicio express",
+                    "action": "custom_project",
+                    "link": "es.fiverr.com/gerardo_cg?public_mode=true"
+                })
+                response.headers["Access-Control-Allow-Origin"] = "*"
+                return response, 400
+        else:
+            # Bloque de seguridad para la prueba gratuita: Recorte estricto a 5 filas
+            if len(dataframe) > 5:
+                dataframe = dataframe.head(5)
+
+        # Primero normalizamos los nombres de las columnas a texto en mayúsculas
+        dataframe.columns = [str(c).strip().upper() for c in dataframe.columns]
+
+        # ELIMINAR DUPLICADOS ENFOCADO ESTRICTAMENTE EN LA COLUMNA DE CORREO
+        if 'EMAIL' in dataframe.columns:
+            dataframe.drop_duplicates(subset=['EMAIL'], inplace=True)
+        else:
+            dataframe.drop_duplicates(inplace=True)
+
         dataframe.dropna(how="all", axis=1, inplace=True)
 
         output = io.BytesIO()
@@ -237,18 +277,27 @@ def procesar_archivo_express():
             dataframe.to_excel(output, index=False, engine="openpyxl")
         output.seek(0)
 
+        nombre_salida = f"Lysifix_Muestra_{os.path.basename(nombre)}" if "upload-pending" in request.path else f"Lysifix_Express_{os.path.basename(nombre)}"
+
         response = send_file(
             output,
             mimetype=mimetype,
             as_attachment=True,
-            download_name=f"Lysifix_Express_{os.path.basename(nombre)}",
+            download_name=nombre_salida
         )
-        return add_cors_headers(response)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
+
     except (ValueError, ImportError) as error:
-        return add_cors_headers(jsonify({"error": f"No se pudo procesar el archivo: {error}"})), 400
+        response = jsonify({"error": f"No se pudo procesar el archivo: {error}"})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 400
     except Exception:
         app.logger.exception("Error procesando archivo")
-        return add_cors_headers(jsonify({"error": "El archivo requiere análisis personalizado"})), 500
+        response = jsonify({"error": "El archivo requiere análisis personalizado"})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 500
+
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))

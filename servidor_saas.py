@@ -22,7 +22,7 @@ ALLOWED_ORIGINS = {
     "http://127.0.0.1:5500",
 }
 
-#CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": list(ALLOWED_ORIGINS)}})
 
 def add_cors_headers(response):
     response.headers["Access-Control-Allow-Origin"] = "*"

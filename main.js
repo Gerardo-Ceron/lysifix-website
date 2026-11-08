@@ -50,13 +50,28 @@
         return '';
     }
 
-    // FILTRO INTELIGENTE DE AVISOS: Bloquea avisos viejos de éxito para dar paso a SweetAlert
+   // // FILTRO INTELIGENTE DE AVISOS: Bloquea avisos viejos de éxito y activa SweetAlert2
     function mostrarMensajeArchivo(message) {
-        if (message.includes("Procesamiento completado") || message.includes("La descarga ha iniciado") || message.includes("Archivo cargado correctamente")) {
+        if (message.includes("Procesamiento completado") || message.includes("Archivo cargado correctamente") || message.includes("La descarga ha iniciado")) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: '¡Proceso Exitoso!',
+                    text: message,
+                    icon: 'success',
+                    confirmButtonColor: '#03adfa'
+                });
+            }
             return;
         }
-        if (typeof window.alert === 'function') {
-            window.alert(message);
+
+        // Si es cualquier otro mensaje o advertencia del sistema
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Aviso de Lysifix',
+                text: message,
+                icon: 'warning',
+                confirmButtonColor: '#03adfa'
+            });
         }
     }
 
@@ -446,5 +461,5 @@
             return "ID_PROCESADO_OK";
         }
     };
-    
+
 })();

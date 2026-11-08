@@ -157,7 +157,7 @@ def chat():
         mensaje_usuario = datos.get('mensaje')
         
         # 1. LEEMOS EL IDIOMA QUE MANDA TU PÁGINA (Si no viene, por defecto es español)
-        idioma_pagina = datos.get('idioma', 'es')
+        idioma_pagina = datos.get('idioma', 'en')
 
         # 2. SELECCIONAMOS LAS INSTRUCCIONES SEGÚN EL IDIOMA
         if idioma_pagina == 'en':

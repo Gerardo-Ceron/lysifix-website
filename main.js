@@ -9,12 +9,12 @@
             ? (window.location.port === '3000' ? window.location.origin : 'http://127.0.0.1:5000')
             : 'https://lysifix-saas-oficial.onrender.com/upload');
 
-    const API_BASE_URL = apiBase.replace(/\/+$/, '');
+    //const API_BASE_URL = apiBase.replace(/\/+$/, '');
     const esIngles = window.location.pathname.includes('/en/');
     const MAX_FILE_SIZE = 25 * 1024 * 1024;
     const EXTENSIONES_PERMITIDAS = ['csv', 'xlsx', 'xls'];
 
-    window.LYSIFIX_API_URL = API_BASE_URL;
+    window.LYSIFIX_API_URL = apiBase;
 
     const PLANES_LYSIFIX = {
         precio_basico_id: {

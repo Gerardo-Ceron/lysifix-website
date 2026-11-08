@@ -511,4 +511,3 @@
             console.error("Error en la conexión del asistente:", error);
         }
     };
-})();

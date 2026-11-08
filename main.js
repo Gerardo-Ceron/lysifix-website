@@ -486,7 +486,7 @@
 
         try {
             // 2. ENVÍO REAL AL BACKEND UTILIZANDO TU API_BASE_URL OFICIAL
-            const response = await fetch('https://lysifix-saas-oficial.onrender.com/chat', {
+            const response = await fetch('https://lysifix-SaaS-oficial.onrender.com/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: mensajeUsuario })

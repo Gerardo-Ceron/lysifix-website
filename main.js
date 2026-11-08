@@ -68,10 +68,14 @@
     }
 
     function mostrarMensajeArchivo(message) {
-        if (typeof window.alert === 'function') {
-            window.alert(message);
-        }
-    }
+    Swal.fire({
+        title: 'Aviso del Sistema',
+        text: message,
+        icon: 'info',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#ffc107' // Color dorado tipo premium
+    });
+}
 
     function configurarSelectorDeArchivos() {
         if (!dropZone || !fileInput) {
@@ -148,7 +152,7 @@
         botonProcesar.textContent = 'Procesando...';
 
         try {
-            const response = await fetch(API_BASE_URL + '/upload', {
+            const response = await fetch('https://lysifix-saas-oficial.onrender.com', {
                 method: 'POST',
                 body: formData
             });

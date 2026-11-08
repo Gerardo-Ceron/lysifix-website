@@ -178,22 +178,22 @@ def chat():
 
         respuesta_ia = completion.choices[0].message.content
 
-        return add_cors_headers(jsonify({"status": "success", "respuesta": respuesta_ia}))
+        return jsonify({"status": "success", "respuesta": respuesta_ia})
 
     except Exception as e:
-       return add_cors_headers(jsonify({"status": "error", "message": str(e)})), 500
+       return jsonify({"status": "error", "message": str(e)})
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
     if not request.files:
-        return add_cors_headers(jsonify({"error": "No se recibió ningún archivo"})), 400
+        return jsonify({"error": "No se recibió ningún archivo"})
         
     archivo = next(iter(request.files.values()))
     nombre = archivo.filename or ""
     extension = os.path.splitext(nombre)[1].lower()
 
     if extension not in {".csv", ".xlsx", ".xls"}:
-        return add_cors_headers(jsonify({"error": "Formato no compatible"})), 400
+        return jsonify({"error": "Formato no compatible"})
 
     try:
         if extension == ".csv":

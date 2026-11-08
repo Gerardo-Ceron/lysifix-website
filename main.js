@@ -7,7 +7,7 @@
     const apiBase = window.LYSIFIX_API_URL ||
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? (window.location.port === '3000' ? window.location.origin : 'http://127.0.0.1:5000')
-            : 'https://lysifix-website.onrender.com');
+            : 'https://lysifix-SaaS-oficial.onrender.com');
 
     const API_BASE_URL = apiBase.replace(/\/+$/, '');
     const esIngles = window.location.pathname.includes('/en/');

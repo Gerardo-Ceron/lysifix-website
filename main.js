@@ -418,24 +418,7 @@
         }
     };
 
-    // Cierre oficial de la estructura autoejecutable
-    // ========================================================
-    // FUNCIÓN DE RESPALDO - GUARDAR ARCHIVO PENDIENTE EN BLOB
-    // ========================================================
-    window.guardarArchivoPendiente = async function() {
-        if (!archivoActual) return "ID_PROCESADO_OK";
-        
-        try {
-            const formData = new FormData();
-            formData.append('file', archivoActual, archivoActual.name);
-
-            const response = await fetch(API_BASE_URL + '/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) throw new Error('Error al procesar el archivo pendiente.');
-
+   
             // LEER COMO BLOB BINARIO (Esto elimina el SyntaxError de "PK")
             const blobExcel = await response.blob();
 

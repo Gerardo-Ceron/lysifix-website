@@ -202,10 +202,10 @@ def procesar_archivo_express():
         else:
             dataframe = pd.read_excel(archivo, engine="openpyxl")
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-
+        dataframe = dataframe.head(5)
         if len(dataframe) > 10000:
             return add_cors_headers(jsonify({"error": "Archivo demasiado grande para el servicio express"})), 400
-
+        return jsonify({"error": "Archivo demasiado grande"})
         dataframe.drop_duplicates(inplace=True)
         dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
         dataframe.dropna(how="all", axis=1, inplace=True)

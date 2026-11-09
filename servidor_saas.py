@@ -211,7 +211,7 @@ def procesar_archivo_express():
         dataframe.dropna(how="all", axis=1, inplace=True)
 
         # Muestra gratuita de 5 filas
-        dataframe = dataframe.head(5)
+        dataframe = dataframe.head(1)
 
         print("================================")
         print("FILAS FINALES:", len(dataframe))
@@ -228,7 +228,7 @@ def procesar_archivo_express():
             output,
             mimetype=mimetype,
             as_attachment=True,
-            download_name=f"Lysifix_Express_{os.path.basename(nombre)}",
+            download_name=f"PRUEBA_1_FILA_{os.path.basename(nombre)}",
         )
         return add_cors_headers(response)
     except (ValueError, ImportError) as error:

@@ -185,15 +185,13 @@ def chat():
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
+
+    return jsonify({
+        "error": "PRUEBA GERARDO 123"
+    }), 500
+
     if not request.files:
         return jsonify({"error": "No se recibió ningún archivo"})
-        
-    archivo = next(iter(request.files.values()))
-    nombre = archivo.filename or ""
-    extension = os.path.splitext(nombre)[1].lower()
-
-    if extension not in {".csv", ".xlsx", ".xls"}:
-        return jsonify({"error": "Formato no compatible"})
 
     try:
         if extension == ".csv":

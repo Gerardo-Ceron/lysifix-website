@@ -194,9 +194,13 @@ def procesar_archivo_express():
         return jsonify({"error": "No se recibió ningún archivo"})
 
     try:
+        raise Exception("PRUEBA GERARDO")
+        
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
             mimetype = "text/csv"
+
+            
         else:
             dataframe = pd.read_excel(archivo, engine="openpyxl")
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

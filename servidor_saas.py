@@ -239,6 +239,28 @@ def procesar_archivo_express():
             "error": "El archivo requiere análisis personalizado"
         }), 500
 
+@app.route('/api/archivos-pendientes', methods=['GET', 'POST'])
+def guardar_archivo_pendiente():
+
+    if request.method == 'GET':
+        return jsonify({
+            "status": "ok",
+            "message": "Ruta encontrada"
+        })
+
+    if not request.files:
+        return jsonify({
+            "status": "error",
+            "message": "No se recibió archivo"
+        }), 400
+
+    archivo = next(iter(request.files.values()))
+
+    return jsonify({
+        "status": "success",
+        "file_id": archivo.filename
+    })
+
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))
      app.run(host='0.0.0.0', port=port)

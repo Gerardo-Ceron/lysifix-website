@@ -178,10 +178,15 @@
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
-           mostrarMensajeArchivo(
-    'Has descargado una muestra gratuita de 5 filas. Para procesar el archivo completo puedes usar nuestros planes premium.',
-    'success'
-);
+            mostrarMensajeArchivo(
+                `✅ Optimización completada
+
+Has recibido una muestra gratuita de 5 registros.
+
+¿Necesitas procesar el archivo completo?
+Nuestros planes premium te permiten optimizar miles de registros en minutos..`,
+                'success'
+            );
             downloadLink.href = url;
             downloadLink.download = 'Lysifix_Express_' + file.name;
             document.body.appendChild(downloadLink);

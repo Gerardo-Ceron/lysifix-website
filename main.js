@@ -181,13 +181,13 @@
             mostrarMensajeArchivo(
 `
 <div style="line-height:1.8;">
-    <strong>✅ Optimización completada</strong><br><br>
+    <strong>✅ Optimización completada</strong><br>
 
-    Has recibido una muestra gratuita de <strong>5 registros</strong>.<br><br>
+    Has recibido una muestra gratuita de <strong>5 registros</strong>.<br>
 
     🚀 ¿Necesitas procesar el archivo completo?<br>
 
-    Nuestros planes Premium permiten optimizar miles de registros en minutos.<br><br>
+    Nuestros planes Premium permiten optimizar miles de registros en minutos.<br>
 
     📥 Descarga la muestra y continúa con el plan que mejor se adapte a tus necesidades.
 </div>

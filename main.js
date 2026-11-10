@@ -179,15 +179,22 @@
             const url = window.URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
             
-mostrarMensajeArchivo(`
-    <div style="line-height:1.8;">
-        <strong>📄 Optimización completada</strong><br><br>
-        Has recibido una muestra gratuita de <strong>5 registros</strong>.<br><br>
-        🚀 ¿Necesitas procesar el archivo completo?<br>
-        Nuestros planes Premium permiten optimizar miles de registros en minutos.<br><br>
-        📥 Descarga la muestra y continúa con el plan que mejor se adapte a tus necesidades.
-    </div>
-`, 'success');
+mostrarMensajeArchivo(
+`
+<div style="line-height:1.8;">
+    <strong>📄 Optimización completada</strong><br><br>
+
+    Has recibido una muestra gratuita de <strong>5 registros</strong>.<br><br>
+
+    🚀 ¿Necesitas procesar el archivo completo?<br>
+
+    Nuestros planes Premium permiten optimizar miles de registros en minutos.<br><br>
+
+    📥 Descarga la muestra y continúa con el plan que mejor se adapte a tus necesidades.
+</div>
+`,
+'success'
+);
 
             downloadLink.href = url;
             downloadLink.download = 'Lysifix_Express_' + file.name;

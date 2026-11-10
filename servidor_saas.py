@@ -191,6 +191,10 @@ def procesar_archivo_express():
     if not request.files:
         return jsonify({"error": "No se recibió ningún archivo"})
 
+        archivo = next(iter(request.files.values()))
+        nombre = archivo.filename or ""
+        extension = os.path.splitext(nombre)[1].lower()
+
     try:
        
 
@@ -204,14 +208,14 @@ def procesar_archivo_express():
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         if len(dataframe) > 10000:
-            return add_cors_headers(jsonify({"error": "Archivo demasiado grande para el servicio express"})), 400
+           
 
-        dataframe.drop_duplicates(inplace=True)
-        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
-        dataframe.dropna(how="all", axis=1, inplace=True)
+            dataframe.drop_duplicates(inplace=True)
+            dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
+            dataframe.dropna(how="all", axis=1, inplace=True)
 
         # Muestra gratuita de 5 filas
-        dataframe = dataframe.head(5)
+            dataframe = dataframe.head(5)
 
         print("================================")
         print("FILAS FINALES:", len(dataframe))

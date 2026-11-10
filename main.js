@@ -67,13 +67,18 @@
         return '';
     }
 
-    function mostrarMensajeArchivo(message) {
+    function mostrarMensajeArchivo(message, tipo = 'info') {
     Swal.fire({
-        title: 'Aviso del Sistema',
+        title: 'Lysifix',
         text: message,
-        icon: 'info',
+        icon: tipo,
+        background: '#0b1020',
+        color: '#ffffff',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#ffc107' // Color dorado tipo premium
+        confirmButtonColor: '#d4a017',
+        customClass: {
+            popup: 'lysifix-alert'
+        }
     });
 }
 
@@ -173,8 +178,9 @@
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
-            mostrarMensajeArchivo(
-    '🎉 ¡Felicidades! Has descargado una muestra gratuita de 5 filas. Si deseas procesar el archivo completo, puedes adquirir uno de nuestros planes premium.'
+           mostrarMensajeArchivo(
+    'Has descargado una muestra gratuita de 5 filas. Para procesar el archivo completo puedes usar nuestros planes premium.',
+    'success'
 );
             downloadLink.href = url;
             downloadLink.download = 'Lysifix_Express_' + file.name;

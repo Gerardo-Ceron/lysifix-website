@@ -54,6 +54,12 @@
         return file.name.split('.').pop().toLowerCase();
     }
 
+
+    function validarArchivo(file) {
+        if (!file) {
+            return 'select a file before continuing.';
+        }
+
     function validarArchivo(file) {
         if (!file) {
             return 'Selecciona un archivo antes de continuar.';

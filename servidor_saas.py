@@ -186,16 +186,14 @@ def chat():
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
 
-    return jsonify({
-        "error": "PRUEBA GERARDO 123"
-    }), 500
+  
 
     if not request.files:
         return jsonify({"error": "No se recibió ningún archivo"})
 
     try:
-        raise Exception("PRUEBA GERARDO")
-        
+       
+
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
             mimetype = "text/csv"
@@ -213,7 +211,7 @@ def procesar_archivo_express():
         dataframe.dropna(how="all", axis=1, inplace=True)
 
         # Muestra gratuita de 5 filas
-        dataframe = dataframe.head(1)
+        dataframe = dataframe.head(5)
 
         print("================================")
         print("FILAS FINALES:", len(dataframe))

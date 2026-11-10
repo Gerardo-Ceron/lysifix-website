@@ -103,7 +103,15 @@
                 mostrarMensajeArchivo('❌ ' + error);
                 return;
             }
+ 
+             if (esIngles) {
 
+                archivoPendienteId = null;
+            mostrarMensajeArchivo('✅ Fie uploaded successfully: ' + file.name);
+            alSubirArchivoExitoso(file);
+        });
+
+                
             archivoPendienteId = null;
             mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
             alSubirArchivoExitoso(file);

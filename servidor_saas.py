@@ -185,37 +185,34 @@ def chat():
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
-
-  
-
     if not request.files:
         return jsonify({"error": "No se recibió ningún archivo"})
 
-        archivo = next(iter(request.files.values()))
-        nombre = archivo.filename or ""
-        extension = os.path.splitext(nombre)[1].lower()
+    archivo = next(iter(request.files.values()))
+    nombre = archivo.filename or ""
+    extension = os.path.splitext(nombre)[1].lower()
 
     try:
-       
+        print("ENTRO AL TRY")
 
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
             mimetype = "text/csv"
-
-            
         else:
             dataframe = pd.read_excel(archivo, engine="openpyxl")
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         if len(dataframe) > 10000:
-           
+            return jsonify({
+                "error": "Archivo demasiado grande para el servicio express"
+            }), 400
 
-            dataframe.drop_duplicates(inplace=True)
-            dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
-            dataframe.dropna(how="all", axis=1, inplace=True)
+        dataframe.drop_duplicates(inplace=True)
+        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
+        dataframe.dropna(how="all", axis=1, inplace=True)
 
         # Muestra gratuita de 5 filas
-            dataframe = dataframe.head(5)
+        dataframe = dataframe.head(5)
 
         print("================================")
         print("FILAS FINALES:", len(dataframe))
@@ -237,14 +234,13 @@ def procesar_archivo_express():
         return response
     except (ValueError, ImportError) as error:
         return jsonify({
-    "error": f"No se pudo procesar el archivo: {error}"
-}), 400
+            "error": f"No se pudo procesar el archivo: {error}"
+        }), 400
     except Exception:
         app.logger.exception("Error procesando archivo")
         return jsonify({
-
-    "error": "El archivo requiere análisis personalizado"
-}), 500
+            "error": "El archivo requiere análisis personalizado"
+        }), 500
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))

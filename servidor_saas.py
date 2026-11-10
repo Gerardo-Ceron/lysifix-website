@@ -230,12 +230,17 @@ def procesar_archivo_express():
             as_attachment=True,
             download_name=f"GERARDO_PRUEBA_{os.path.basename(nombre)}"
         )
-        return add_cors_headers(response)
+        return response
     except (ValueError, ImportError) as error:
-        return add_cors_headers(jsonify({"error": f"No se pudo procesar el archivo: {error}"})), 400
+        return jsonify({
+    "error": f"No se pudo procesar el archivo: {error}"
+}), 400
     except Exception:
         app.logger.exception("Error procesando archivo")
-        return add_cors_headers(jsonify({"error": "El archivo requiere análisis personalizado"})), 500
+        return jsonify({
+
+    "error": "El archivo requiere análisis personalizado"
+}), 500
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))

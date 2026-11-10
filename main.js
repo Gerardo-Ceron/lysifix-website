@@ -179,12 +179,7 @@
             const url = window.URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
             mostrarMensajeArchivo(
-                `✅ Optimización completada
-
-Has recibido una muestra gratuita de 5 registros.
-
-¿Necesitas procesar el archivo completo?
-Nuestros planes premium te permiten optimizar miles de registros en minutos..`,
+                `✅ Optimización completada Has recibido una muestra gratuita de 5 registros.¿Necesitas procesar el archivo completo? Nuestros planes premium te permiten optimizar miles de registros en minutos.`,
                 'success'
             );
             downloadLink.href = url;

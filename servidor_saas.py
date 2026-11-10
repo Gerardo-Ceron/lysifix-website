@@ -1,12 +1,16 @@
 import os
 import pandas as pd
 import io
+import uuid
 from flask import Flask, request, jsonify, send_from_directory, make_response, send_file
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 from openai import OpenAI
 from dotenv import load_dotenv
+
+UPLOAD_FOLDER = "archivos_pendientes"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True) 
 
 load_dotenv()
 
@@ -256,12 +260,86 @@ def guardar_archivo_pendiente():
 
     archivo = next(iter(request.files.values()))
 
+    extension = os.path.splitext(archivo.filename)[1]
+
+    file_id = f"{uuid.uuid4()}{extension}"
+
+    ruta_archivo = os.path.join(
+        UPLOAD_FOLDER,
+        file_id
+    )
+
+    archivo.save(ruta_archivo)
+
     return jsonify({
         "status": "success",
-        "file_id": archivo.filename
+        "file_id": file_id
+    })
+
+    # ==========================================
+# VERIFICAR PAGO Y PROCESAR
+# ==========================================
+
+trabajos = {}
+
+@app.route('/api/verificar_pago_y_procesar', methods=['POST'])
+def verificar_pago_y_procesar():
+
+    datos = request.get_json()
+
+    order_id = datos.get('order_id')
+    plan = datos.get('plan')
+    email = datos.get('email')
+    file_id = datos.get('file_id')
+
+    print("Pago recibido:")
+    print(order_id)
+    print(plan)
+    print(email)
+    print(file_id)
+
+    trabajos[order_id] = {
+        "status": "listo",
+        "archivo_salida": file_id
+    }
+
+    return jsonify({
+        "status": "success",
+        "message": "Pago registrado correctamente"
+    })
+
+
+# ==========================================
+# CONSULTAR ESTADO DEL TRABAJO
+# ==========================================
+
+@app.route('/api/estado_trabajo/<order_id>')
+def estado_trabajo(order_id):
+
+    trabajo = trabajos.get(order_id)
+
+    if not trabajo:
+        return jsonify({
+            "status": "procesando"
+        })
+
+    return jsonify(trabajo)
+
+
+# ==========================================
+# DESCARGAR ARCHIVO
+# ==========================================
+
+@app.route('/api/descargar/<nombre_archivo>')
+def descargar_archivo(nombre_archivo):
+
+    return jsonify({
+        "status": "success",
+        "message": f"Archivo listo: {nombre_archivo}"
     })
 
 if __name__ == '__main__':
      port = int(os.environ.get("PORT", 5000))
      app.run(host='0.0.0.0', port=port)
+    
     

@@ -54,12 +54,6 @@
         return file.name.split('.').pop().toLowerCase();
     }
 
-
-    function validarArchivo(file) {
-        if (!file) {
-            return 'select a file before continuing.';
-        }
-
     function validarArchivo(file) {
         if (!file) {
             return 'Selecciona un archivo antes de continuar.';
@@ -109,15 +103,7 @@
                 mostrarMensajeArchivo('❌ ' + error);
                 return;
             }
- 
-             if (esIngles) {
 
-                archivoPendienteId = null;
-            mostrarMensajeArchivo('✅ Fie uploaded successfully: ' + file.name);
-            alSubirArchivoExitoso(file);
-        });
-
-                
             archivoPendienteId = null;
             mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
             alSubirArchivoExitoso(file);

@@ -178,23 +178,43 @@
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
+
+            const esIngles =
+    window.location.pathname.startsWith('/en');
             
-mostrarMensajeArchivo(
-`
-<div style="line-height:1.8;">
-    <strong>📄 Optimización completada</strong><br><br>
+           if (esIngles) {
 
-    Has recibido una muestra gratuita de <strong>5 registros</strong>.<br><br>
+    mostrarMensajeArchivo(`
+    <div style="line-height:1.8;">
+        <strong>📄 Optimization completed</strong><br><br>
 
-    🚀 ¿Necesitas procesar el archivo completo?<br>
+        You have received a free sample of <strong>5 records</strong>.<br><br>
 
-    Nuestros planes Premium permiten optimizar miles de registros en minutos.<br><br>
+        🚀 Need to process the complete file?<br>
 
-    📥 Descarga la muestra y continúa con el plan que mejor se adapte a tus necesidades.
-</div>
-`,
-'success'
-);
+        Our Premium plans can optimize thousands of records in minutes.<br><br>
+
+        📥 Download the sample and continue with the plan that best suits your needs.
+    </div>
+    `, 'success');
+
+} else {
+
+    mostrarMensajeArchivo(`
+    <div style="line-height:1.8;">
+        <strong>📄 Optimización completada</strong><br><br>
+
+        Has recibido una muestra gratuita de <strong>5 registros</strong>.<br><br>
+
+        🚀 ¿Necesitas procesar el archivo completo?<br>
+
+        Nuestros planes Premium permiten optimizar miles de registros en minutos.<br><br>
+
+        📥 Descarga la muestra y continúa con el plan que mejor se adapte a tus necesidades.
+    </div>
+    `, 'success');
+
+}
 
             downloadLink.href = url;
             downloadLink.download = 'Lysifix_Express_' + file.name;

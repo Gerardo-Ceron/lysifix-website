@@ -70,7 +70,7 @@
     function mostrarMensajeArchivo(message, tipo = 'info') {
     Swal.fire({
         title: 'Lysifix',
-        text: message,
+        html: message,
         icon: tipo,
         background: '#0b1020',
         color: '#ffffff',

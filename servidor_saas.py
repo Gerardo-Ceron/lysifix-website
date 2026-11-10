@@ -214,9 +214,6 @@ def procesar_archivo_express():
         # Muestra gratuita de 5 filas
         dataframe = dataframe.head(5)
 
-        print("================================")
-        print("FILAS FINALES:", len(dataframe))
-        print("================================")
 
         output = io.BytesIO()
         if extension == ".csv":
@@ -229,7 +226,7 @@ def procesar_archivo_express():
             output,
             mimetype=mimetype,
             as_attachment=True,
-            download_name=f"GERARDO_PRUEBA_{os.path.basename(nombre)}"
+            download_name=f"Lysifix_Express_{os.path.basename(nombre)}"
         )
         return response
     except (ValueError, ImportError) as error:

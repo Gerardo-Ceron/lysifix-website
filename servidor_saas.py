@@ -131,7 +131,7 @@ def consumir_credito():
             "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
             "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
             "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-            "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+            "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: <a href=\"http://es.fiverr.com/gerardo_cg?public_mode=true\">Fiverr</a>. "
             "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
             "Responde siempre en el mismo idioma en el que escriba el usuario."
         )
@@ -174,7 +174,7 @@ def chat():
     "Advanced Plan: $75 USD, and Premium Plan: $150 USD. "
     "For quick and standard tasks, users can upload files and have them processed automatically. "
     "If the user is looking for custom software, advanced automation, complex web scraping, or a fully personalized solution, "
-    "inform them that professional services can be hired through Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+    "inform them that professional services can be hired through Fiverr:<a href=\"http://es.fiverr.com/gerardo_cg?public_mode=true\">Fiverr</a>. "
     "Keep responses short and easy to understand. "
     "Always reply in the same language used by the user."
 )
@@ -188,7 +188,7 @@ def chat():
     "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
     "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
     "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr:<a href=\"http://es.fiverr.com/gerardo_cg?public_mode=true\">Fiverr</a>. "
     "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
     "Responde siempre en el mismo idioma en el que escriba el usuario."
 )

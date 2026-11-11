@@ -103,7 +103,7 @@ def obtener_respuesta_ia(mensaje_usuario: str) -> str:
     )):
         return (
             f"{saludo}Para conocer precios, automatizaciones y cotizaciones "
-            "puedes visitar nuestro enlace oficial de Fiverr:<a href=\"http://es.fiverr.com/gerardo_cg?public_mode=true\">Fiverr</a>. "
+            'puedes visitar nuestro enlace oficial de Fiverr:https://es.fiverr.com/gerardo_cg?public_mode=true '
         )
     if any(palabra in mensaje for palabra in ("servicios", "que hacen", "desarrollo")):
         return (

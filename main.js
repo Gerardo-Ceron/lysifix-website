@@ -105,6 +105,11 @@
             }
 
             archivoPendienteId = null;
+
+            if (enIngles) {
+            mostrarMensajeArchivo(`✅ "${file.name}" uploaded successfully`);
+
+        
             mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
             alSubirArchivoExitoso(file);
         });

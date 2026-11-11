@@ -55,17 +55,26 @@
     }
 
     function validarArchivo(file) {
-        if (!file) {
-            return 'Selecciona un archivo antes de continuar.';
-        }
-        if (!EXTENSIONES_PERMITIDAS.includes(obtenerExtension(file))) {
-            return 'Solo se admiten archivos .csv, .xlsx o .xls.';
-        }
-        if (file.size > MAX_FILE_SIZE) {
-            return 'El archivo no puede superar los 25 MB.';
-        }
-        return '';
+    if (!file) {
+        return esIngles
+            ? 'Select a file before continuing.'
+            : 'Selecciona un archivo antes de continuar.';
     }
+
+    if (!EXTENSIONES_PERMITIDAS.includes(obtenerExtension(file))) {
+        return esIngles
+            ? 'Only .csv, .xlsx or .xls files are allowed.'
+            : 'Solo se admiten archivos .csv, .xlsx o .xls.';
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+        return esIngles
+            ? 'The file cannot exceed 25 MB.'
+            : 'El archivo no puede superar los 25 MB.';
+    }
+
+    return '';
+}
 
     function mostrarMensajeArchivo(message, tipo = 'info') {
     Swal.fire({
@@ -104,14 +113,15 @@
                 return;
             }
 
-            archivoPendienteId = null;
+           archivoPendienteId = null;
 
-            if (enIngles) {
-            mostrarMensajeArchivo(`✅ "${file.name}" uploaded successfully`);
+if (esIngles) {
+    mostrarMensajeArchivo(`✅ "${file.name}" uploaded successfully`);
+} else {
+    mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
+}
 
-        
-            mostrarMensajeArchivo('✅ Archivo cargado correctamente: ' + file.name);
-            alSubirArchivoExitoso(file);
+alSubirArchivoExitoso(file);
         });
 
         dropZone.addEventListener('dragover', function (event) {
@@ -138,8 +148,11 @@
 
             fileInput.files = event.dataTransfer.files;
             archivoPendienteId = null;
-            mostrarMensajeArchivo('✅ Archivo arrastrado correctamente: ' + file.name);
-            alSubirArchivoExitoso(file);
+            if (esIngles) {
+    mostrarMensajeArchivo(`✅ "${file.name}" dragged successfully`);
+} else {
+    mostrarMensajeArchivo('✅ Archivo arrastrado correctamente: ' + file.name);
+}
         });
     }
 
@@ -159,7 +172,9 @@
         botonProcesar.disabled = true;
 
         const textoOriginal = botonProcesar.textContent;
-        botonProcesar.textContent = 'Procesando...';
+        botonProcesar.textContent = esIngles
+        'Processing...'
+        'Procesando...';
 
         try {
         const response = await fetch('https://lysifix-saas-oficial.onrender.com/upload', {
@@ -273,7 +288,13 @@
         });
         const result = await response.json();
         if (!response.ok || result.status !== 'success') {
-            throw new Error(result.detail || result.message || 'No se pudo guardar el archivo.');
+            throw new Error(
+    result.detail ||
+    result.message ||
+    (esIngles
+        ? 'The file could not be saved.'
+        : 'No se pudo guardar el archivo.')
+);
         }
         archivoPendienteId = result.file_id;
         return archivoPendienteId;

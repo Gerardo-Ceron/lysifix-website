@@ -122,15 +122,19 @@ def consumir_credito():
         return jsonify({"status": "bloqueado", "message": "Créditos agotados. Redirigiendo al Paywall."}), 403
 
     try:
-        instrucciones = "Eres el asistente virtual oficial de Lysifix. "
-        "Responde de forma breve, clara y profesional. "
-        "Lysifix ofrece servicios automáticos directamente en la página con los siguientes planes: "
-        "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
-        "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
-        "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente a través de la plataforma. "
-        "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-        "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
-        "Responde siempre en el mismo idioma en el que escriba el usuario."
+       instrucciones = (
+    "Eres el asistente virtual oficial de Lysifix. "
+    "Responde de forma breve, clara y profesional. "
+    "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
+    "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
+    "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
+    "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
+    "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
+    "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
+    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+    "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
+    "Responde siempre en el mismo idioma en el que escriba el usuario."
+)
 
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -162,28 +166,33 @@ def chat():
         # 2. SELECCIONAMOS LAS INSTRUCCIONES SEGÚN EL IDIOMA
         if idioma_pagina == 'en':
             instrucciones = (
-                "You are the official virtual assistant of Lysifix. "
-                "Respond in a brief, clear, and professional manner. "
-                "Lysifix offers automated services directly on the website with the following plans: "
-                "Basic Plan: $35 USD, Professional Plan: $45 USD, "
-                "Advanced Plan: $75 USD, and Premium Plan: $150 USD. "
-                "For quick and standard tasks, users can upload their files and have them processed automatically through the platform. "
-                "If the user is looking for custom software, advanced automation, complex web scraping, or a fully personalized solution, "
-                "inform them that professional services can be hired through Fiverr at: TU_LINK_DE_FIVERR "
-                "Always reply in the same language used by the user."
-            )
+    "You are the official virtual assistant of Lysifix. "
+    "Reply in a brief, clear, and professional manner. "
+    "Lysifix offers a free trial where users can upload a file and receive a processed sample automatically. "
+    "Lysifix also provides automated services on the platform with the following plans: "
+    "Basic Plan: $35 USD, Professional Plan: $45 USD, "
+    "Advanced Plan: $75 USD, and Premium Plan: $150 USD. "
+    "For quick and standard tasks, users can upload files and have them processed automatically. "
+    "If the user is looking for custom software, advanced automation, complex web scraping, or a fully personalized solution, "
+    "inform them that professional services can be hired through Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+    "Keep responses short and easy to understand. "
+    "Always reply in the same language used by the user."
+)
         else:
             instrucciones = (
-"Eres el asistente virtual oficial de Lysifix. "
-"Responde de forma breve, clara y profesional. "
-"Lysifix ofrece servicios automáticos directamente en la página con los siguientes planes: "
-"Plan Básico: $35 USD, Plan Profesional: $45 USD, "
-"Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
-"Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente a través de la plataforma. "
-"Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-"indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: TU_LINK_DE_FIVERR "
-"Responde siempre en el mismo idioma en el que escriba el usuario."
+    "Eres el asistente virtual oficial de Lysifix. "
+    "Responde de forma breve, clara y profesional. "
+    "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
+    "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
+    "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
+    "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
+    "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
+    "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
+    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+    "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
+    "Responde siempre en el mismo idioma en el que escriba el usuario."
 )
+
 
         completion = client.chat.completions.create(
             model="gpt-4o-mini",

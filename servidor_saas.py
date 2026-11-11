@@ -122,19 +122,19 @@ def consumir_credito():
         return jsonify({"status": "bloqueado", "message": "Créditos agotados. Redirigiendo al Paywall."}), 403
 
     try:
-       instrucciones = (
-    "Eres el asistente virtual oficial de Lysifix. "
-    "Responde de forma breve, clara y profesional. "
-    "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
-    "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
-    "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
-    "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
-    "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
-    "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
-    "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
-    "Responde siempre en el mismo idioma en el que escriba el usuario."
-)
+        instrucciones = (
+            "Eres el asistente virtual oficial de Lysifix. "
+            "Responde de forma breve, clara y profesional. "
+            "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
+            "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
+            "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
+            "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
+            "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
+            "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
+            "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr: http://es.fiverr.com/gerardo_cg?public_mode=true "
+            "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
+            "Responde siempre en el mismo idioma en el que escriba el usuario."
+        )
 
         completion = client.chat.completions.create(
             model="gpt-4o-mini",

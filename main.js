@@ -83,7 +83,7 @@
         icon: tipo,
         background: '#0b1020',
         color: '#ffffff',
-        confirmButtonText: 'Aceptar',
+        confirmButtonText: esIngles ? 'Accept' : 'Aceptar',
         confirmButtonColor: '#d4a017',
         customClass: {
             popup: 'lysifix-alert'

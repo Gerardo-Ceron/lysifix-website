@@ -1167,7 +1167,7 @@ historial.scrollTop = historial.scrollHeight;
         mensaje.includes("informac") || 
         mensaje.includes("info")
     ) {
-        return `${saludoInicial}Para contrataciones inmediatas, soporte y mensajes directos de forma 100% segura, te invito a escribirme a mi perfil oficial de Fiverr: <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visitar Fiverr</a>`;
+        return `${saludoInicial}Para contrataciones inmediatas, soporte y mensajes directos de forma 100% segura, te invito a escribirme a mi perfil oficial de Fiverr: <a href="https://es.fiverr.com/gerardo_cg" class="boton-fiverr">Visitar Fiverr</a>`;
     }
 
          // 13. SOLO SALUDO (Si no detectó ninguna pregunta anterior)
@@ -1175,7 +1175,7 @@ historial.scrollTop = historial.scrollHeight;
         return saludoInicial.trim();
     }
    // RESPUESTA POR DEFECTO: SI NO DETECTÓ NINGUNA PALABRA ANTERIOR
-    return `Disculpa, todavía estoy aprendiendo y no entendí tu pregunta. Si deseas una cotización o hablar conmigo directamente, haz clic en este enlace:  <a href="https://es.fiverr.com/gerardo_cg?public_mode=true" class="boton-fiverr">Visitar Fiverr</a>`;
+    return `Disculpa, todavía estoy aprendiendo y no entendí tu pregunta. Si deseas una cotización o hablar conmigo directamente, haz clic en este enlace:  <a href="https://es.fiverr.com/gerardo_cg" class="boton-fiverr">Visitar Fiverr</a>`;
  }     
     document.getElementById('entrada').addEventListener('keydown', (event) => {
             if (event.key === 'Enter') enviarMensaje();

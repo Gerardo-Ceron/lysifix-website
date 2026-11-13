@@ -218,7 +218,6 @@ def chat():
             "url_fiverr": "https://es.fiverr.com/gerardo_cg"
         })
 
-        return jsonify({"status": "success", "respuesta": respuesta_ia})
 
     except Exception as e:
        return jsonify({"status": "error", "message": str(e)})

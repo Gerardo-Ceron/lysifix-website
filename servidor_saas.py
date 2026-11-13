@@ -167,6 +167,7 @@ def chat():
         if idioma_pagina == 'en':
             instrucciones = (
     "You are the official virtual assistant of Lysifix. "
+    "Lysifix was created by Gerardo Cerón. "
     "Reply in a brief, clear, and professional manner. "
     "Lysifix offers a free trial where users can upload a file and receive a processed sample automatically. "
     "Lysifix also provides automated services on the platform with the following plans: "
@@ -181,6 +182,7 @@ def chat():
         else:
             instrucciones = (
     "Eres el asistente virtual oficial de Lysifix. "
+    "Lysifix fue creado por Gerardo Cerón. "
     "Responde de forma breve, clara y profesional. "
     "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
     "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "

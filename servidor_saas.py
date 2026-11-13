@@ -131,7 +131,7 @@ def consumir_credito():
     "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
     "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
     "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr:"
+     "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr y escribe exactamente [BOTON_FIVERR] al final de tu respuesta. "
     "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
     "Responde siempre en el mismo idioma en el que escriba el usuario."
         )
@@ -166,34 +166,34 @@ def chat():
         # 2. SELECCIONAMOS LAS INSTRUCCIONES SEGÚN EL IDIOMA
         if idioma_pagina == 'en':
             instrucciones = (
-    "You are the official virtual assistant of Lysifix. "
-    "Lysifix was created by Gerardo Cerón. "
-    "Reply in a brief, clear, and professional manner. "
-    "Lysifix offers a free trial where users can upload a file and receive a processed sample automatically. "
-    "Lysifix also provides automated services on the platform with the following plans: "
-    "Basic Plan: $35 USD, Professional Plan: $45 USD, "
-    "Advanced Plan: $75 USD, and Premium Plan: $150 USD. "
-    "For quick and standard tasks, users can upload files and have them processed automatically. "
-    "If the user is looking for custom software, advanced automation, complex web scraping, or a fully personalized solution, "
-    "inform them that professional services can be hired through Fiverr:"
-    "Keep responses short and easy to understand. "
-    "Always reply in the same language used by the user."
-)
+                "You are the official virtual assistant of Lysifix. "
+                "Lysifix was created by Gerardo Cerón. "
+                "Reply in a brief, clear, and professional manner. "
+                "Lysifix offers a free trial where users can upload a file and receive a processed sample automatically. "
+                "Lysifix also provides automated services on the platform with the following plans: "
+                "Basic Plan: $35 USD, Professional Plan: $45 USD, "
+                "Advanced Plan: $75 USD, and Premium Plan: $150 USD. "
+                "For quick and standard tasks, users can upload files and have them processed automatically. "
+                "If the user is looking for custom software, advanced automation, complex web scraping, or a fully personalized solution, "
+                "inform them that professional services can be hired through Fiverr and write the exact tag [BOTON_FIVERR] at the end of your reply. "
+                "Keep responses short and easy to understand. "
+                "Always reply in the same language used by the user."
+            )
         else:
             instrucciones = (
-    "Eres el asistente virtual oficial de Lysifix. "
-    "Lysifix fue creado por Gerardo Cerón. "
-    "Responde de forma breve, clara y profesional. "
-    "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
-    "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
-    "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
-    "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
-    "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
-    "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
-    "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr:"
-    "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
-    "Responde siempre en el mismo idioma en el que escriba el usuario."
-)
+                "Eres el asistente virtual oficial de Lysifix. "
+                "Lysifix fue creado por Gerardo Cerón. "
+                "Responde de forma breve, clara y profesional. "
+                "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
+                "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
+                "Plan Básico: $35 USD, Plan Profesional: $45 USD, "
+                "Plan Avanzado: $75 USD y Plan Premium: $150 USD. "
+                "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
+                "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
+                "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr y escribe exactamente [BOTON_FIVERR] al final de tu respuesta. "
+                "Procura responder en pocas líneas, evitando explicaciones innecesariamente largas. "
+                "Responde siempre en el mismo idioma en el que escriba el usuario."
+            )
 
 
         completion = client.chat.completions.create(
@@ -205,6 +205,18 @@ def chat():
         )
 
         respuesta_ia = completion.choices[0].message.content
+        mostrar_fiverr = False
+
+        # Detectamos si la IA incluyó la etiqueta y la limpiamos del texto visible
+        if "[BOTON_FIVERR]" in respuesta_ia:
+            mostrar_fiverr = True
+            respuesta_ia = respuesta_ia.replace("[BOTON_FIVERR]", "").strip()
+
+        return jsonify({
+            "respuesta": respuesta_ia,
+            "mostrar_fiverr": mostrar_fiverr,
+            "url_fiverr": "https://es.fiverr.com/gerardo_cg"
+        })
 
         return jsonify({"status": "success", "respuesta": respuesta_ia})
 

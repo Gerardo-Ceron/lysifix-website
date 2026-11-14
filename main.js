@@ -50,6 +50,20 @@
     const botonProcesar = document.getElementById('btnProcesar');
     let archivoPendienteId = null;
 
+    function actualizarTextoBoton(tieneCreditos) {
+  if (!botonProcesar) return;
+  
+  if (tieneCreditos) {
+    botonProcesar.textContent = esIngles 
+      ? 'Process full file' 
+      : 'Procesar archivo completo';
+  } else {
+    botonProcesar.textContent = esIngles 
+      ? 'Get free sample' 
+      : 'Obtener muestra gratis';
+  }
+}
+
     function obtenerExtension(file) {
         return file.name.split('.').pop().toLowerCase();
     }
@@ -360,6 +374,15 @@ alSubirArchivoExitoso(file);
                         }
                         capturedOrderId = orderData.id;
 
+                        capturedOrderId = orderData.id;
+        actualizarTextoBoton(true);
+
+        contenedorBotones.innerHTML = `<p>${
+          esIngles
+            ? 'Payment approved. Processing...'
+            : 'Pago aprobado. Procesando tu pedido...'
+        }</p>`;  
+        
                         contenedorBotones.innerHTML = `<p>${
                             esIngles
                                 ? 'Payment approved. Processing your request...'

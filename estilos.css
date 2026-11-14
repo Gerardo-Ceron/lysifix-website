@@ -891,3 +891,22 @@ a {
         0 0 25px rgba(212, 160, 23, 0.15),
         0 0 50px rgba(0, 80, 255, 0.10);
 }
+
+.prueba-gratis-info {
+  margin-bottom: 20px; /* Separa todo el texto de la caja de subir archivo */
+}
+
+.titulo-prueba {
+  margin-bottom: 12px;
+  font-size: 1.5rem; /* Ajusta según el tamaño de tus otros títulos */
+}
+
+.beneficio {
+  margin: 0 0 8px 0; /* Quita márgenes por defecto y deja 8px abajo */
+  line-height: 1.5;  /* Mejora la lectura si el texto baja a dos líneas en celular */
+}
+
+.garantia {
+  margin-top: 14px;  /* Separa la garantía de los puntos con rombo */
+  font-weight: 700;  /* Aplica las negritas directamente desde CSS */
+}

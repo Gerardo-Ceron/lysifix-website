@@ -1,4 +1,6 @@
 import os
+import smtplib
+from email.message import EmailMessage
 import pandas as pd
 import io
 import uuid
@@ -16,6 +18,40 @@ load_dotenv()
 
 # PRIMERO CREAMOS LA APP PARA QUE NO DE ERROR
 app = Flask(__name__)
+
+def enviar_notificacion(nombre_archivo, filas):
+    try:
+        msg = EmailMessage()
+
+        msg["Subject"] = "🚀 Nuevo uso de Lysifix"
+        msg["From"] = os.environ["GMAIL_USER"]
+        msg["To"] = os.environ["ADMIN_EMAIL"]
+
+        msg.set_content(
+            f"""
+Lysifix fue utilizado.
+
+Archivo: {nombre_archivo}
+Filas procesadas: {filas}
+"""
+        )
+
+        with smtplib.SMTP_SSL(
+            "smtp.gmail.com",
+            465
+        ) as smtp:
+
+            smtp.login(
+                os.environ["GMAIL_USER"],
+                os.environ["GMAIL_PASSWORD"]
+            )
+
+            smtp.send_message(msg)
+
+    except Exception as e:
+        app.logger.error(
+            f"Error enviando correo: {e}"
+        )
 
 ALLOWED_ORIGINS = {
     "https://lysifix.dev",
@@ -251,8 +287,8 @@ def procesar_archivo_express():
         dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
         dataframe.dropna(how="all", axis=1, inplace=True)
 
-        # Muestra gratuita de 5 filas
-        dataframe = dataframe.head(5)
+        # Muestra gratuita de 20 filas
+        dataframe = dataframe.head(20)
 
 
         output = io.BytesIO()
@@ -268,6 +304,16 @@ def procesar_archivo_express():
             as_attachment=True,
             download_name=f"Lysifix_Express_{os.path.basename(nombre)}"
         )
+
+        app.logger.info(
+            f"🚀 Lysifix usado - Archivo: {nombre} - Filas: {len(dataframe)}"
+        )
+
+        enviar_notificacion(
+            nombre,
+            len(dataframe)
+        )
+
         return response
     except (ValueError, ImportError) as error:
         return jsonify({

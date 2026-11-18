@@ -29,10 +29,13 @@ def enviar_notificacion(nombre_archivo, filas):
 
         msg.set_content(
             f"""
-Lysifix fue utilizado.
+🚀 NUEVO USO DE LYSIFIX
 
 Archivo: {nombre_archivo}
 Filas procesadas: {filas}
+Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
+
+La muestra gratuita fue utilizada correctamente.
 """
         )
 

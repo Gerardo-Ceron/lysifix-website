@@ -222,7 +222,7 @@ alSubirArchivoExitoso(file);
     <div style="line-height:1.8;">
         <strong>📄 Optimization completed</strong><br><br>
 
-        You have received a free sample of <strong>5 records</strong>.<br><br>
+        You have received a free sample of <strong> 20 records</strong>.<br><br>
 
         🚀 Need to process the complete file?<br>
 
@@ -238,7 +238,7 @@ alSubirArchivoExitoso(file);
     <div style="line-height:1.8;">
         <strong>📄 Optimización completada</strong><br><br>
 
-        Has recibido una muestra gratuita de <strong>5 registros</strong>.<br><br>
+        Has recibido una muestra gratuita de <strong> 20 registros</strong>.<br><br>
 
         🚀 ¿Necesitas procesar el archivo completo?<br>
 

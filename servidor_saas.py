@@ -34,7 +34,6 @@ def enviar_notificacion(nombre_archivo, filas):
 
 Archivo: {nombre_archivo}
 Filas procesadas: {filas}
-Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
 
 La muestra gratuita fue utilizada correctamente.
 """

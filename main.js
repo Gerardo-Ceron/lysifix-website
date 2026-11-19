@@ -28,10 +28,6 @@
         precio_avanzado_id: {
             nombre: esIngles ? 'Advanced Plan' : 'Plan Avanzado',
             precio: '75.00'
-        },
-        precio_premium_id: {
-            nombre: esIngles ? 'Premium Plan' : 'Plan Premium',
-            precio: '150.00'
         }
     };
 
@@ -39,7 +35,6 @@
         basic_plan_id: 'precio_basico_id',
         professional_plan_id: 'precio_profesional_id',
         advanced_plan_id: 'precio_avanzado_id',
-        premium_plan_id: 'precio_premium_id'
     };
 
     // ==========================================

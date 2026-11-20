@@ -264,8 +264,14 @@ def procesar_archivo_automatico(usuario_email: str, ruta_entrada: Path, order_id
             (col for col in dataframe.columns if "email" in str(col).lower()),
             None,
         )
+        print("COLUMNAS:", dataframe.columns.tolist())
+        print("EMAIL ENCONTRADO:", columna_email)
+
         if columna_email:
+            print("ANTES:", len(dataframe))
+            print(dataframe[columna_email].head(20).tolist())
             dataframe = dataframe.drop_duplicates(subset=[columna_email])
+            print("DESPUÉS:", len(dataframe))
 
         nombre_salida = f"resultado_{order_id}.{extension}"
         ruta_salida = DOWNLOAD_DIR / nombre_salida

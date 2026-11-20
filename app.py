@@ -185,12 +185,48 @@ async def procesar_archivo(file: UploadFile = File(...)):
 
     try:
         dataframe = await leer_dataframe(file, extension)
+        print("=" * 50)
+        print("ENTRÓ AL PROCESAMIENTO")
+        print("=" * 50)
+        raise Exception("PRUEBA LYSIFIX")
+        # Estandarización de encabezados
+        dataframe.columns = (
+            dataframe.columns
+            .astype(str)
+            .str.strip()
+            .str.upper()
+        )
+
+        # Eliminación de columnas completamente vacías
+        dataframe.dropna(
+            how="all",
+            axis=1,
+            inplace=True
+        )
+
         columna_email = next(
-            (col for col in dataframe.columns if "email" in str(col).lower()),
+            (
+                col
+                for col in dataframe.columns
+                if "EMAIL" in str(col).upper()
+            ),
             None,
         )
+        print("COLUMNAS:", dataframe.columns.tolist())
+        print("EMAIL ENCONTRADO:", columna_email)
+
+        print("FILAS ANTES:", len(dataframe))
+
         if columna_email:
+            dataframe[columna_email] = (
+                dataframe[columna_email]
+                .astype(str)
+                .str.strip()
+                .str.lower()
+            )
             dataframe = dataframe.drop_duplicates(subset=[columna_email])
+
+        print("FILAS DESPUÉS:", len(dataframe))
 
         contenido, media_type = convertir_dataframe(dataframe, extension)
         nombre_seguro = secure_filename(filename) or f"archivo.{extension}"

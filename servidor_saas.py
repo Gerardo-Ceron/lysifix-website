@@ -308,6 +308,9 @@ def procesar_archivo_express():
                 inplace=True
             )
 
+       
+        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
+
         if "NOMBRE" in dataframe.columns:
             dataframe["NOMBRE"] = (
                 dataframe["NOMBRE"]
@@ -323,7 +326,6 @@ def procesar_archivo_express():
                 .str.strip()
                 .str.title()
             )
-        dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
         dataframe.dropna(how="all", axis=1, inplace=True)
 
         dataframe.dropna(

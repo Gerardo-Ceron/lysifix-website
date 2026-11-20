@@ -283,7 +283,27 @@ def procesar_archivo_express():
                 "error": "Archivo demasiado grande para el servicio express"
             }), 400
 
-        dataframe.drop_duplicates(inplace=True)
+        columna_email = next(
+            (
+                col
+                for col in dataframe.columns
+                if "EMAIL" in str(col).upper()
+            ),
+            None,
+        )
+
+        if columna_email:
+            dataframe[columna_email] = (
+                dataframe[columna_email]
+                .astype(str)
+                .str.strip()
+                .str.lower()
+            )
+
+            dataframe.drop_duplicates(
+                subset=[columna_email],
+                inplace=True
+            )
         dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
         dataframe.dropna(how="all", axis=1, inplace=True)
 

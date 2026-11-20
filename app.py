@@ -185,10 +185,8 @@ async def procesar_archivo(file: UploadFile = File(...)):
 
     try:
         dataframe = await leer_dataframe(file, extension)
-        print("=" * 50)
-        print("ENTRÓ AL PROCESAMIENTO")
-        print("=" * 50)
-        raise Exception("PRUEBA LYSIFIX")
+      
+    
         # Estandarización de encabezados
         dataframe.columns = (
             dataframe.columns
@@ -212,10 +210,7 @@ async def procesar_archivo(file: UploadFile = File(...)):
             ),
             None,
         )
-        print("COLUMNAS:", dataframe.columns.tolist())
-        print("EMAIL ENCONTRADO:", columna_email)
-
-        print("FILAS ANTES:", len(dataframe))
+       
 
         if columna_email:
             dataframe[columna_email] = (
@@ -226,7 +221,7 @@ async def procesar_archivo(file: UploadFile = File(...)):
             )
             dataframe = dataframe.drop_duplicates(subset=[columna_email])
 
-        print("FILAS DESPUÉS:", len(dataframe))
+   
 
         contenido, media_type = convertir_dataframe(dataframe, extension)
         nombre_seguro = secure_filename(filename) or f"archivo.{extension}"
@@ -264,14 +259,12 @@ def procesar_archivo_automatico(usuario_email: str, ruta_entrada: Path, order_id
             (col for col in dataframe.columns if "email" in str(col).lower()),
             None,
         )
-        print("COLUMNAS:", dataframe.columns.tolist())
-        print("EMAIL ENCONTRADO:", columna_email)
+       
 
         if columna_email:
-            print("ANTES:", len(dataframe))
-            print(dataframe[columna_email].head(20).tolist())
+          
             dataframe = dataframe.drop_duplicates(subset=[columna_email])
-            print("DESPUÉS:", len(dataframe))
+            
 
         nombre_salida = f"resultado_{order_id}.{extension}"
         ruta_salida = DOWNLOAD_DIR / nombre_salida

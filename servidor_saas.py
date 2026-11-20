@@ -278,6 +278,9 @@ def procesar_archivo_express():
             dataframe = pd.read_excel(archivo, engine="openpyxl")
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
+        filas_originales = len(dataframe)
+        columnas_originales = len(dataframe.columns)
+
         if len(dataframe) > 10000:
             return jsonify({
                 "error": "Archivo demasiado grande para el servicio express"
@@ -304,9 +307,42 @@ def procesar_archivo_express():
                 subset=[columna_email],
                 inplace=True
             )
+
+        if "NOMBRE" in dataframe.columns:
+            dataframe["NOMBRE"] = (
+                dataframe["NOMBRE"]
+                .astype(str)
+                .str.strip()
+                .str.title()
+            )
+
+        if "CIUDAD" in dataframe.columns:
+            dataframe["CIUDAD"] = (
+                dataframe["CIUDAD"]
+                .astype(str)
+                .str.strip()
+                .str.title()
+            )
         dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
         dataframe.dropna(how="all", axis=1, inplace=True)
 
+        dataframe.dropna(
+            how="all",
+            inplace=True
+        )
+        for columna in dataframe.select_dtypes(include="object"):
+            dataframe[columna] = (
+                dataframe[columna]
+                .astype(str)
+                .str.strip()
+            )
+
+        dataframe.columns = [
+            f"COLUMNA_{i}"
+            if "unnamed" in str(col).lower()
+            else col
+            for i, col in enumerate(dataframe.columns)
+        ]
         # Muestra gratuita de 20 filas
         dataframe = dataframe.head(20)
 
@@ -317,6 +353,17 @@ def procesar_archivo_express():
         else:
             dataframe.to_excel(output, index=False, engine="openpyxl")
         output.seek(0)
+
+        filas_finales = len(dataframe)
+        columnas_finales = len(dataframe.columns)
+
+        print("================================")
+        print("RESULTADO LYSIFIX")
+        print("Filas originales:", filas_originales)
+        print("Filas finales:", filas_finales)
+        print("Columnas originales:", columnas_originales)
+        print("Columnas finales:", columnas_finales)
+        print("================================")
 
         response = send_file(
             output,

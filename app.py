@@ -30,13 +30,11 @@ DOWNLOAD_DIR.mkdir(exist_ok=True)
 ALLOWED_EXTENSIONS = {"csv", "xlsx", "xls"}
 PLAN_CREDITS = {
     "precio_basico_id": 100,
-    "precio_profesional_id": 250,
-    "precio_avanzado_id": 500,
+    "precio_plus_id": 250,
 }
 PLAN_PRICES = {
     "precio_basico_id": "9.00",
-    "precio_profesional_id": "19.00",
-    "precio_avanzado_id": "39.00",
+    "precio_plus_id": "19.00",
 }
 PAYPAL_API_BASE_URL = os.environ.get(
     "PAYPAL_API_BASE_URL",
@@ -438,8 +436,7 @@ def verificar_pago_y_procesar():
     # Diccionario blindado de asignación de créditos
     CREDITOS_POR_PLAN = {
         'precio_basico_id': 100,
-        'precio_profesional_id': 250,
-        'precio_avanzado_id': 500 
+        'precio_plus_id': 250
     }
     creditos_a_sumar = CREDITOS_POR_PLAN.get(plan_id, 0)
 

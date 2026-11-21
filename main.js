@@ -22,19 +22,14 @@
             precio: '9.00'
         },
         precio_profesional_id: {
-            nombre: esIngles ? 'Professional Plan' : 'Plan Profesional',
+            nombre: esIngles ? 'Plus Plan' : 'Plan Plus',
             precio: '19.00'
-        },
-        precio_avanzado_id: {
-            nombre: esIngles ? 'Advanced Plan' : 'Plan Avanzado',
-            precio: '39.00'
         }
     };
 
     const ALIAS_PLANES_INGLES = {
         basic_plan_id: 'precio_basico_id',
-        professional_plan_id: 'precio_profesional_id',
-        advanced_plan_id: 'precio_avanzado_id',
+        plus_plan_id: 'precio_plus_id',
     };
 
     // ==========================================

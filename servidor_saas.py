@@ -167,7 +167,7 @@ def consumir_credito():
     "Responde de forma breve, clara y profesional. "
     "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
     "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
-    "Plan Básico: $9 USD, Plan Profesional: $19 USD, y Plan Avanzado: $39 USD. "
+    "Plan Básico: $9 USD y Plan Plus: $19 USD. "
     "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
     "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
      "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr y escribe exactamente [BOTON_FIVERR] al final de tu respuesta. "
@@ -210,7 +210,7 @@ def chat():
                 "Reply in a brief, clear, and professional manner. "
                 "Lysifix offers a free trial where users can upload a file and receive a processed sample automatically. "
                 "Lysifix also provides automated services on the platform with the following plans: "
-                "Basic Plan: $9 USD, Professional Plan: $19 USD, and Advanced Plan: $39 USD. " 
+                "Basic Plan: $9 USD and Plus Plan: $19 USD. " 
                 "For quick and standard tasks, users can upload files and have them processed automatically. "
                 "If the user is looking for custom software, advanced automation, complex web scraping, or a fully personalized solution, "
                 "inform them that professional services can be hired through Fiverr and write the exact tag [BOTON_FIVERR] at the end of your reply. "
@@ -224,7 +224,7 @@ def chat():
                 "Responde de forma breve, clara y profesional. "
                 "Lysifix ofrece una prueba gratuita donde el usuario puede subir un archivo y recibir una muestra procesada automáticamente. "
                 "Además, cuenta con servicios automáticos en la plataforma con los siguientes planes: "
-                "Plan Básico: $9 USD, Plan Profesional: $19 USD, y Plan Avanzado: $39 USD. "
+                "Plan Básico: $9 USD y Plan Plus: $19 USD. "
                 "Para trabajos rápidos y estándar, los usuarios pueden subir sus archivos y procesarlos automáticamente. "
                 "Si el usuario busca software personalizado, automatizaciones avanzadas, web scraping complejo o una solución totalmente a medida, "
                 "indícale que puede contratar los servicios profesionales de Lysifix en Fiverr y escribe exactamente [BOTON_FIVERR] al final de tu respuesta. "
@@ -345,8 +345,8 @@ def procesar_archivo_express():
             else col
             for i, col in enumerate(dataframe.columns)
         ]
-        # Muestra gratuita de 20 filas
-        dataframe = dataframe.head(20)
+        # Muestra gratuita de 250 filas
+        dataframe = dataframe.head(250)
 
 
         output = io.BytesIO()

@@ -19,15 +19,15 @@
     const PLANES_LYSIFIX = {
         precio_basico_id: {
             nombre: esIngles ? 'Basic Plan' : 'Plan Básico',
-            precio: '35.00'
+            precio: '9.00'
         },
         precio_profesional_id: {
             nombre: esIngles ? 'Professional Plan' : 'Plan Profesional',
-            precio: '45.00'
+            precio: '19.00'
         },
         precio_avanzado_id: {
             nombre: esIngles ? 'Advanced Plan' : 'Plan Avanzado',
-            precio: '75.00'
+            precio: '39.00'
         }
     };
 
@@ -217,7 +217,7 @@ alSubirArchivoExitoso(file);
     <div style="line-height:1.8;">
         <strong>📄 Optimization completed</strong><br><br>
 
-        You have received a free sample of <strong> 20 records</strong>.<br><br>
+        You have received a free sample of <strong> 250 records</strong>.<br><br>
 
         🚀 Need to process the complete file?<br>
 
@@ -233,7 +233,7 @@ alSubirArchivoExitoso(file);
     <div style="line-height:1.8;">
         <strong>📄 Optimización completada</strong><br><br>
 
-        Has recibido una muestra gratuita de <strong> 20 registros</strong>.<br><br>
+        Has recibido una muestra gratuita de <strong> 250 registros</strong>.<br><br>
 
         🚀 ¿Necesitas procesar el archivo completo?<br>
 

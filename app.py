@@ -34,9 +34,9 @@ PLAN_CREDITS = {
     "precio_avanzado_id": 500,
 }
 PLAN_PRICES = {
-    "precio_basico_id": "35.00",
-    "precio_profesional_id": "45.00",
-    "precio_avanzado_id": "75.00",
+    "precio_basico_id": "9.00",
+    "precio_profesional_id": "19.00",
+    "precio_avanzado_id": "39.00",
 }
 PAYPAL_API_BASE_URL = os.environ.get(
     "PAYPAL_API_BASE_URL",

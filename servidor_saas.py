@@ -85,9 +85,36 @@ class Usuario(Base):
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 Base.metadata.create_all(bind=engine)
+
+# ==========================================
+# FUNCIONES DE LIMPIEZA
+# ==========================================
+
+def limpieza_inteligente(dataframe):
+
+    dataframe.columns = (
+        dataframe.columns.astype(str)
+        .str.strip()
+        .str.upper()
+    )
+
+    dataframe.dropna(
+        how="all",
+        inplace=True
+    )
+
+    for columna in dataframe.select_dtypes(include="object"):
+         dataframe[columna] = (
+             dataframe[columna]
+             .astype(str)
+             .str.strip()
+         )
+    return dataframe
+
 # ==========================================
 # RUTAS PARA EL DISEÑO Y LA PÁGINA WEB
 # ==========================================
+
 @app.route('/')
 @app.route('/index.html')
 def home():
@@ -274,9 +301,10 @@ def procesar_archivo_express():
             dataframe = pd.read_excel(
                 archivo,
                 engine="openpyxl",
-                header=2
+                
             )
-
+            
+            dataframe = limpieza_inteligente(dataframe)
         print("COLUMNAS:")
         print(dataframe.columns.tolist())
 
@@ -305,9 +333,12 @@ def procesar_archivo_express():
                 .str.lower()
             )
 
+            dataframe.drop_duplicates(inplace=True)
+
+        if "ID_PEDIDO" in dataframe.columns:
             dataframe.drop_duplicates(
-                subset=[columna_email],
-                inplace=True
+                subset=["ID_PEDIDO"],
+                inplace=True,
             )
 
        

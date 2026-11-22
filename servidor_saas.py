@@ -585,6 +585,8 @@ def procesar_archivo_express():
         # Muestra gratuita de 250 filas
         dataframe = dataframe.head(250)
 
+        print("COLUMNAS FINALES:")
+        print(dataframe.columns.tolist())
 
         output = io.BytesIO()
         if extension == ".csv":

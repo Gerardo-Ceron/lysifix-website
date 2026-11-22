@@ -273,7 +273,8 @@ def procesar_archivo_express():
         else:
             dataframe = pd.read_excel(
                 archivo,
-                engine="openpyxl"
+                engine="openpyxl",
+                header=2
             )
 
         print("COLUMNAS:")

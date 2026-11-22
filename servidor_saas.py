@@ -280,6 +280,7 @@ def procesar_archivo_express():
                 archivo,
                 engine="openpyxl"
             )
+            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         print("=" * 50)
         print("COLUMNAS DETECTADAS")
@@ -287,8 +288,6 @@ def procesar_archivo_express():
         print("=" * 50)
 
         print(dataframe.head())
-
-            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         print("COLUMNAS:")
         print(dataframe.columns.tolist())

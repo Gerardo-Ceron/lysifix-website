@@ -283,6 +283,33 @@ def chat():
     except Exception as e:
        return jsonify({"status": "error", "message": str(e)})
 
+COLUMNAS_EQUIVALENTES = {
+    "EMAIL": [
+        "EMAIL", "E-MAIL", "MAIL", "CORREO", "CORREO ELECTRONICO",
+        "CORREO_ELECTRONICO", "EMAIL CLIENTE", "EMAIL PRINCIPAL"
+    ],
+    "NOMBRE_CLIENTE": [
+        "NOMBRE", "CLIENTE", "PERSONA", "NOMBRE_CLIENTE", "NOMBRE CLIENTE"
+    ],
+    "CIUDAD": ["CIUDAD", "LOCALIDAD", "MUNICIPIO", "POBLACION", "UBICACION"],
+    "FECHA_COMPRA": ["FECHA", "FECHA_COMPRA", "FECHA COMPRA", "FECHA DE COMPRA"],
+    "MONTO_TOTAL": ["MONTO", "TOTAL", "IMPORTE", "PRECIO", "VALOR"],
+    "ESTADO_PAGO": ["ESTADO", "ESTADO_PAGO", "STATUS", "PAGO", "SITUACION"],
+}
+
+
+def normalizar_columnas(dataframe):
+    nuevas = {}
+    for columna in dataframe.columns:
+        nombre = str(columna).upper().strip()
+        for canonica, equivalentes in COLUMNAS_EQUIVALENTES.items():
+            if nombre in equivalentes:
+                nuevas[columna] = canonica
+                break
+    dataframe.rename(columns=nuevas, inplace=True)
+    return dataframe
+
+
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
     if not request.files:
@@ -307,6 +334,7 @@ def procesar_archivo_express():
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             
             dataframe = limpieza_inteligente(dataframe)
+            dataframe = normalizar_columnas(dataframe)
         print("COLUMNAS:")
         print(dataframe.columns.tolist())
 
@@ -317,6 +345,82 @@ def procesar_archivo_express():
             return jsonify({
                 "error": "Archivo demasiado grande para el servicio express"
             }), 400
+
+        COLUMNAS_EQUIVALENTES = {
+    "EMAIL": [
+        "EMAIL",
+        "E-MAIL",
+        "MAIL",
+        "CORREO",
+        "CORREO ELECTRONICO",
+        "CORREO_ELECTRONICO",
+        "EMAIL CLIENTE",
+        "EMAIL PRINCIPAL"
+    ],
+
+    "NOMBRE_CLIENTE": [
+        "NOMBRE",
+        "CLIENTE",
+        "PERSONA",
+        "NOMBRE_CLIENTE",
+        "NOMBRE CLIENTE"
+    ],
+
+    "CIUDAD": [
+        "CIUDAD",
+        "LOCALIDAD",
+        "MUNICIPIO",
+        "POBLACION",
+        "UBICACION"
+    ],
+
+    "FECHA_COMPRA": [
+        "FECHA",
+        "FECHA_COMPRA",
+        "FECHA COMPRA",
+        "FECHA DE COMPRA"
+    ],
+
+    "MONTO_TOTAL": [
+        "MONTO",
+        "TOTAL",
+        "IMPORTE",
+        "PRECIO",
+        "VALOR"
+    ],
+
+    "ESTADO_PAGO": [
+        "ESTADO",
+        "ESTADO_PAGO",
+        "STATUS",
+        "PAGO",
+        "SITUACION"
+    ]
+}
+
+        def normalizar_columnas(dataframe):
+            nuevas = {}
+
+        for columna in dataframe.columns:
+            nombre = str(columna).upper().strip()
+
+        for canonica, equivalentes in COLUMNAS_EQUIVALENTES.items():
+
+            equivalentes = [
+                e.upper().strip()
+                for e in equivalentes
+            ]
+
+            if nombre in equivalentes:
+                nuevas[columna] = canonica
+                break
+
+        dataframe.rename(
+        columns=nuevas,
+        inplace=True
+    )
+
+        return dataframe
 
         columna_email = next(
             (

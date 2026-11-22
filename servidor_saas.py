@@ -155,6 +155,70 @@ def limpieza_inteligente(dataframe):
             .apply(corregir_fecha)
         )
 
+# =========================
+# CIUDADES
+# =========================
+
+if "CIUDAD" in dataframe.columns:
+
+    ciudades = {
+        "CDMX": "Ciudad De México",
+        "GDL": "Guadalajara",
+        "MTY": "Monterrey",
+        "QRO": "Querétaro"
+    }
+
+    dataframe["CIUDAD"] = (
+        dataframe["CIUDAD"]
+        .astype(str)
+        .str.upper()
+        .str.strip()
+        .replace(ciudades)
+        .str.title()
+    )
+
+
+# =========================
+# ESTADOS
+# =========================
+
+if "ESTADO_PAGO" in dataframe.columns:
+
+    estados = {
+        "PAGADO": "Pagado",
+        "PENDIENTE": "Pendiente",
+        "CANCELADO": "Cancelado",
+        "REEMBOLSO": "Reembolso"
+    }
+
+    dataframe["ESTADO_PAGO"] = (
+        dataframe["ESTADO_PAGO"]
+        .astype(str)
+        .str.upper()
+        .str.strip()
+        .replace(estados)
+    )
+
+
+# =========================
+# MONTOS
+# =========================
+
+if "MONTO_TOTAL" in dataframe.columns:
+
+    dataframe["MONTO_TOTAL"] = (
+        dataframe["MONTO_TOTAL"]
+        .astype(str)
+        .str.replace("$", "", regex=False)
+        .str.replace("MXN", "", regex=False)
+        .str.replace(",", "", regex=False)
+        .str.strip()
+    )
+
+    dataframe["MONTO_TOTAL"] = pd.to_numeric(
+        dataframe["MONTO_TOTAL"],
+        errors="coerce"
+    )
     return dataframe
 
 # ==========================================

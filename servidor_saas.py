@@ -326,8 +326,8 @@ def procesar_archivo_express():
 
         for columna in dataframe.columns:
             if "CIUDAD" in columna:
-                dataframe["CIUDAD"] = (
-                    dataframe["CIUDAD"]
+                dataframe[columna] = (
+                    dataframe[columna]
                     .astype(str)
                     .str.strip()
                     .str.title()

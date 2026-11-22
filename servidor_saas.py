@@ -499,7 +499,7 @@ def procesar_archivo_express():
                 engine="openpyxl",
                 header=1,
             )
-            print("COLUMNAS LEIDAS:")
+            print("🚨🚨🚨 GERARDO PRUEBA 999 🚨🚨🚨")
             print(dataframe.columns.tolist())
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             

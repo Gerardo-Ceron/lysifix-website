@@ -428,9 +428,9 @@ def procesar_archivo_express():
     except Exception as error:
         app.logger.exception(error)
 
-    return jsonify({
-        "error": str(error)
-    }), 500
+        return jsonify({
+            "error": str(error)
+        }), 500
 
 @app.route('/api/archivos-pendientes', methods=['GET', 'POST'])
 def guardar_archivo_pendiente():

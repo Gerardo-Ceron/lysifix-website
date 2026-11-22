@@ -5,12 +5,52 @@ from datetime import datetime
 import pandas as pd
 import io
 import uuid
+from dateutil import parser
 from flask import Flask, request, jsonify, send_from_directory, make_response, send_file
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 from openai import OpenAI
 from dotenv import load_dotenv
+
+def corregir_fecha(valor):
+
+    if pd.isna(valor):
+        return None
+
+    texto = str(valor).strip()
+
+    formatos = [
+        "%Y-%m-%d",
+        "%d/%m/%Y",
+        "%Y/%m/%d",
+        "%d-%m-%Y",
+        "%b %d, %Y",
+        "%B %d, %Y"
+    ]
+
+    for formato in formatos:
+        try:
+            fecha = pd.to_datetime(
+                texto,
+                format=formato
+            )
+
+            return fecha.strftime("%Y-%m-%d")
+
+        except (ValueError, TypeError):
+            pass
+
+    try:
+        fecha = parser.parse(
+            texto,
+            dayfirst=True
+        )
+
+        return fecha.strftime("%Y-%m-%d")
+
+    except Exception:
+        return None
 
 UPLOAD_FOLDER = "archivos_pendientes"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True) 
@@ -109,6 +149,12 @@ def limpieza_inteligente(dataframe):
              .astype(str)
              .str.strip()
          )
+    if "FECHA_COMPRA" in dataframe.columns:
+        dataframe["FECHA_COMPRA"] = (
+            dataframe["FECHA_COMPRA"]
+            .apply(corregir_fecha)
+        )
+
     return dataframe
 
 # ==========================================

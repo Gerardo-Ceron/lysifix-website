@@ -297,12 +297,14 @@ def procesar_archivo_express():
 
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
+            mimetype = "text/csv"
+
         else:
             dataframe = pd.read_excel(
                 archivo,
-                engine="openpyxl",
-                
+                engine="openpyxl"
             )
+            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             
             dataframe = limpieza_inteligente(dataframe)
         print("COLUMNAS:")

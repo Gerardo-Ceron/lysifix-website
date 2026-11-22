@@ -270,7 +270,9 @@ def procesar_archivo_express():
 
     try:
         print("ENTRO AL TRY")
-    
+
+        print("COLUMNAS:")
+        print(dataframe.columns.tolist())
 
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
@@ -280,20 +282,9 @@ def procesar_archivo_express():
                 archivo,
                 engine="openpyxl"
             )
-            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-
-        print("=" * 50)
-        print("COLUMNAS DETECTADAS")
-        print(dataframe.columns.tolist())
-        print("=" * 50)
 
         print(dataframe.head())
-
-        print("COLUMNAS:")
         print(dataframe.columns.tolist())
-
-        print("HEAD:")
-        print(dataframe.head())
 
         filas_originales = len(dataframe)
         columnas_originales = len(dataframe.columns)

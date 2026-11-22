@@ -284,17 +284,183 @@ def chat():
        return jsonify({"status": "error", "message": str(e)})
 
 COLUMNAS_EQUIVALENTES = {
-    "EMAIL": [
-        "EMAIL", "E-MAIL", "MAIL", "CORREO", "CORREO ELECTRONICO",
-        "CORREO_ELECTRONICO", "EMAIL CLIENTE", "EMAIL PRINCIPAL"
-    ],
+
     "NOMBRE_CLIENTE": [
-        "NOMBRE", "CLIENTE", "PERSONA", "NOMBRE_CLIENTE", "NOMBRE CLIENTE"
+
+        # Español
+        "NOMBRE",
+        "CLIENTE",
+        "PERSONA",
+        "USUARIO",
+        "CONTACTO",
+        "SOCIO",
+        "COMPRADOR",
+        "NOMBRE CLIENTE",
+        "RAZON SOCIAL",
+
+        # Inglés
+        "NAME",
+        "CUSTOMER",
+        "CLIENT",
+        "USER",
+        "CONTACT",
+        "PARTNER",
+        "BUYER",
+        "CUSTOMER NAME",
+        "CLIENT NAME",
+        "FULL NAME"
     ],
-    "CIUDAD": ["CIUDAD", "LOCALIDAD", "MUNICIPIO", "POBLACION", "UBICACION"],
-    "FECHA_COMPRA": ["FECHA", "FECHA_COMPRA", "FECHA COMPRA", "FECHA DE COMPRA"],
-    "MONTO_TOTAL": ["MONTO", "TOTAL", "IMPORTE", "PRECIO", "VALOR"],
-    "ESTADO_PAGO": ["ESTADO", "ESTADO_PAGO", "STATUS", "PAGO", "SITUACION"],
+
+    "CORREO_ELECTRONICO": [
+
+        # Español
+        "CORREO",
+        "EMAIL",
+        "MAIL",
+        "E-MAIL",
+        "CORREO ELECTRONICO",
+        "CORREO_ELECTRONICO",
+        "CORREO CONTACTO",
+
+        # Inglés
+        "EMAIL ADDRESS",
+        "CUSTOMER EMAIL",
+        "CLIENT EMAIL",
+        "CONTACT EMAIL",
+        "USER EMAIL"
+    ],
+
+    "TELEFONO": [
+
+        # Español
+        "TELEFONO",
+        "CELULAR",
+        "MOVIL",
+        "CONTACTO",
+        "NUMERO",
+
+        # Inglés
+        "PHONE",
+        "PHONE NUMBER",
+        "MOBILE",
+        "CELL",
+        "CONTACT NUMBER"
+    ],
+
+    "CIUDAD": [
+
+        # Español
+        "CIUDAD",
+        "PUEBLO",
+        "LOCALIDAD",
+        "ZONA",
+        "POBLACION",
+        "REGION",
+        "MUNICIPIO",
+        "UBICACION",
+
+        # Inglés
+        "CITY",
+        "TOWN",
+        "LOCATION",
+        "AREA",
+        "DISTRICT",
+        "REGION",
+        "MUNICIPALITY"
+    ],
+
+    "ESTADO": [
+
+        # Español
+        "ESTADO",
+        "PROVINCIA",
+        "ENTIDAD",
+
+        # Inglés
+        "STATE",
+        "PROVINCE",
+        "REGION"
+    ],
+
+    "PAIS": [
+
+        # Español
+        "PAIS",
+        "NACION",
+
+        # Inglés
+        "COUNTRY",
+        "NATION"
+    ],
+
+    "FECHA_COMPRA": [
+
+        # Español
+        "FECHA",
+        "FECHA COMPRA",
+        "FECHA DE COMPRA",
+        "FECHA PEDIDO",
+        "FECHA VENTA",
+
+        # Inglés
+        "DATE",
+        "PURCHASE DATE",
+        "ORDER DATE",
+        "SALE DATE",
+        "TRANSACTION DATE"
+    ],
+
+    "MONTO_TOTAL": [
+
+        # Español
+        "MONTO",
+        "TOTAL",
+        "IMPORTE",
+        "VALOR",
+        "PRECIO",
+        "COSTO",
+
+        # Inglés
+        "AMOUNT",
+        "TOTAL AMOUNT",
+        "PRICE",
+        "VALUE",
+        "COST",
+        "SALES"
+    ],
+
+    "ESTADO_PAGO": [
+
+        # Español
+        "ESTADO PAGO",
+        "PAGO",
+        "ESTATUS",
+        "STATUS",
+        "SITUACION",
+
+        # Inglés
+        "PAYMENT STATUS",
+        "ORDER STATUS",
+        "STATUS",
+        "PAYMENT STATUS"
+    ],
+
+    "ID": [
+
+        # Español
+        "ID",
+        "IDENTIFICADOR",
+        "FOLIO",
+        "NUMERO",
+        "CODIGO",
+
+        # Inglés
+        "ID",
+        "IDENTIFIER",
+        "NUMBER",
+        "CODE",
+        "REFERENCE"
+    ]
 }
 
 

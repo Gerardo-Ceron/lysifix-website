@@ -586,6 +586,7 @@ def normalizar_columnas(dataframe):
     return dataframe
 
 
+
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def procesar_archivo_express():
     if not request.files:

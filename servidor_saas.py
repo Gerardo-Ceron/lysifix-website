@@ -75,7 +75,6 @@ client = OpenAI()
 # Configuración de Base de Datos SQLite local
 engine = create_engine('sqlite:///lysifix.db', echo=True)
 Base = declarative_base()
-from sqlalchemy import Column, Integer, String
 
 class Usuario(Base):
     __tablename__ = 'usuarios'
@@ -92,7 +91,6 @@ Base.metadata.create_all(bind=engine)
 @app.route('/')
 @app.route('/index.html')
 def home():
-    from flask import send_from_directory
     return send_from_directory('.', 'index.html')
 
 @app.route('/estilos.css')
@@ -115,9 +113,8 @@ def favicon16():
 # ==========================================
 @app.route('/en')
 @app.route('/en/index.html')
-def home_en():
+def home_ingles():
     from flask import send_from_directory
-    import os
     ruta_ingles = os.path.join('.', 'en')
     return send_from_directory(ruta_ingles, 'index.html')
 
@@ -271,19 +268,15 @@ def procesar_archivo_express():
     try:
         print("ENTRO AL TRY")
 
-        print("COLUMNAS:")
-        print(dataframe.columns.tolist())
-
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
-            mimetype = "text/csv"
         else:
             dataframe = pd.read_excel(
                 archivo,
                 engine="openpyxl"
             )
 
-        print(dataframe.head())
+        print("COLUMNAS:")
         print(dataframe.columns.tolist())
 
         filas_originales = len(dataframe)
@@ -318,22 +311,26 @@ def procesar_archivo_express():
 
        
         dataframe.columns = dataframe.columns.astype(str).str.strip().str.upper()
+        print("COLUMNAS NORMALIZADAS:")
+        print(dataframe.columns.tolist())
 
-        if "NOMBRE" in dataframe.columns:
-            dataframe["NOMBRE"] = (
-                dataframe["NOMBRE"]
-                .astype(str)
-                .str.strip()
-                .str.title()
-            )
+        for columna in dataframe.columns:
+            if "NOMBRE" in columna:
+                dataframe[columna] = (
+                    dataframe[columna]
+                    .astype(str)
+                    .str.strip()
+                    .str.title()
+                )
 
-        if "CIUDAD" in dataframe.columns:
-            dataframe["CIUDAD"] = (
-                dataframe["CIUDAD"]
-                .astype(str)
-                .str.strip()
-                .str.title()
-            )
+        for columna in dataframe.columns:
+            if "CIUDAD" in columna:
+                dataframe["CIUDAD"] = (
+                    dataframe["CIUDAD"]
+                    .astype(str)
+                    .str.strip()
+                    .str.title()
+                )
         dataframe.dropna(how="all", axis=1, inplace=True)
 
         dataframe.dropna(
@@ -396,11 +393,12 @@ def procesar_archivo_express():
         return jsonify({
             "error": f"No se pudo procesar el archivo: {error}"
         }), 400
-    except Exception:
-        app.logger.exception("Error procesando archivo")
-        return jsonify({
-            "error": "El archivo requiere análisis personalizado"
-        }), 500
+    except Exception as error:
+        app.logger.exception(error)
+
+    return jsonify({
+        "error": str(error)
+    }), 500
 
 @app.route('/api/archivos-pendientes', methods=['GET', 'POST'])
 def guardar_archivo_pendiente():

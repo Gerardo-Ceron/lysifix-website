@@ -270,13 +270,23 @@ def procesar_archivo_express():
 
     try:
         print("ENTRO AL TRY")
+        return jsonify({"prueba": "si entro"})
 
         if extension == ".csv":
             dataframe = pd.read_csv(archivo)
             mimetype = "text/csv"
         else:
-            dataframe = pd.read_excel(archivo, engine="openpyxl")
+            dataframe = pd.read_excel(
+                archivo,
+                engine="openpyxl"
+            )
             mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+        print("COLUMNAS:")
+        print(dataframe.columns.tolist())
+
+        print("HEAD:")
+        print(dataframe.head())
 
         filas_originales = len(dataframe)
         columnas_originales = len(dataframe.columns)

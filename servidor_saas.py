@@ -497,7 +497,7 @@ def procesar_archivo_express():
             dataframe = pd.read_excel(
                 archivo,
                 engine="openpyxl",
-                header=1,
+                header=2,
             )
             print("🚨🚨🚨 GERARDO PRUEBA 999 🚨🚨🚨")
             print(dataframe.columns.tolist())

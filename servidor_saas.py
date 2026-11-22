@@ -501,8 +501,8 @@ def procesar_archivo_express():
             
             dataframe = limpieza_inteligente(dataframe)
             dataframe = normalizar_columnas(dataframe)
-        print("COLUMNAS:")
-        print(dataframe.columns.tolist())
+            print("COLUMNAS DESPUES DE NORMALIZAR:")
+            print(dataframe.columns.tolist())
 
         filas_originales = len(dataframe)
         columnas_originales = len(dataframe.columns)

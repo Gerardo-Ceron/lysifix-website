@@ -639,15 +639,7 @@ def procesar_archivo_express():
 
             dataframe.drop_duplicates(inplace=True)
 
-        if columna_email:
-            dataframe[columna_email] = (
-                dataframe[columna_email]
-                .astype(str)
-                .str.strip()
-                .str.lower()
-            )
-
-            dataframe.drop_duplicates(inplace=True)
+       
 
         if "ID_PEDIDO" in dataframe.columns:
             dataframe.drop_duplicates(

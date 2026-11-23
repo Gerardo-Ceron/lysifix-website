@@ -199,27 +199,27 @@ def limpieza_inteligente(dataframe):
             .replace(estados)
         )
 
-        # =====================
-        # MONTOS
-        # =====================
+    # =====================
+    # MONTOS
+    # =====================
 
-        if "MONTO_TOTAL" in dataframe.columns:
+    if "MONTO_TOTAL" in dataframe.columns:
 
-            dataframe["MONTO_TOTAL"] = (
-                dataframe["MONTO_TOTAL"]
-                .astype(str)
-                .str.replace("$", "", regex=False)
-                .str.replace("MXN", "", regex=False)
-                .str.replace(",", "", regex=False)
-                .str.strip()
-            )
+        dataframe["MONTO_TOTAL"] = (
+            dataframe["MONTO_TOTAL"]
+            .astype(str)
+            .str.replace("$", "", regex=False)
+            .str.replace("MXN", "", regex=False)
+            .str.replace(",", "", regex=False)
+            .str.strip()
+        )
 
-            dataframe["MONTO_TOTAL"] = pd.to_numeric(
-                dataframe["MONTO_TOTAL"],
-                errors="coerce"
-            )
+        dataframe["MONTO_TOTAL"] = pd.to_numeric(
+            dataframe["MONTO_TOTAL"],
+            errors="coerce"
+        )
 
-        # return dataframe
+    return dataframe
 
 # ==========================================
 # RUTAS PARA EL DISEÑO Y LA PÁGINA WEB

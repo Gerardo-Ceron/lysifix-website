@@ -691,6 +691,39 @@ def procesar_archivo_express():
         # Muestra gratuita de 250 filas
         dataframe = dataframe.head(250)
 
+        dataframe["OBSERVACIONES"] = ""
+        
+
+        if "CORREO_ELECTRONICO" in dataframe.columns:
+            mascara = ~dataframe["CORREO_ELECTRONICO"].astype(str).str.contains(
+                r"^[^@]+@[^@]+\.[^@]+$",
+                regex=True,
+                na=False
+            )
+            dataframe.loc[
+                mascara,
+                "OBSERVACIONES"
+            ] += "Correo posiblemente incompleto | "
+
+        if "MONTO_TOTAL" in dataframe.columns:
+            mascara = dataframe["MONTO_TOTAL"] < 0
+            dataframe.loc[
+                mascara,
+                "OBSERVACIONES"
+            ] += "Monto negativo detectado | "
+
+        if "FECHA_COMPRA" in dataframe.columns:
+            mascara = dataframe["FECHA_COMPRA"].isna()
+            dataframe.loc[
+                mascara,
+                "OBSERVACIONES"
+            ] += "Fecha invalida | "
+
+            dataframe = limpieza_inteligente(dataframe)
+            dataframe = normalizar_columnas(dataframe)
+            dataframe = generar_observaciones(dataframe)
+
+
         print("COLUMNAS FINALES:")
         print(dataframe.columns.tolist())
 

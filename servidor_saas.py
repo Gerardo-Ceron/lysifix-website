@@ -629,14 +629,15 @@ def procesar_archivo_express():
 
       
        
-        columna_email = next(
-            (
-                col
-                for col in dataframe.columns
-                if "EMAIL" in str(col).upper()
-            ),
-            None,
-        )
+        if "CORREO_ELECTRONICO" in dataframe.columns:
+            dataframe["CORREO_ELECTRONICO"] = (
+                dataframe["CORREO_ELECTRONICO"]
+                .astype(str)
+                .str.strip()
+                .str.lower()
+            )
+
+            dataframe.drop_duplicates(inplace=True)
 
         if columna_email:
             dataframe[columna_email] = (

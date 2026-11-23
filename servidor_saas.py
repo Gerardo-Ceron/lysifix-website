@@ -721,7 +721,7 @@ def procesar_archivo_express():
 
             dataframe = limpieza_inteligente(dataframe)
             dataframe = normalizar_columnas(dataframe)
-            dataframe = generar_observaciones(dataframe)
+    
 
 
         print("COLUMNAS FINALES:")

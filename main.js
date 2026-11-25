@@ -21,7 +21,7 @@
             nombre: esIngles ? 'Basic Plan' : 'Plan Básico',
             precio: '9.00'
         },
-        precio_profesional_id: {
+        precio_plus_id: {
             nombre: esIngles ? 'Plus Plan' : 'Plan Plus',
             precio: '19.00'
         }

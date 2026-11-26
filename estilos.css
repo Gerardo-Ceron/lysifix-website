@@ -910,3 +910,45 @@ a {
   margin-top: 14px;  /* Separa la garantía de los puntos con rombo */
   font-weight: 700;  /* Aplica las negritas directamente desde CSS */
 }
+
+.feedback-box {
+    background: #101828;
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+.feedback-box textarea {
+    width: 100%;
+    max-width: 700px;
+    min-height: 120px;
+
+    background-color: #0b0f19;
+    color: #ffffff;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+
+    padding: 16px;
+
+    font-size: 18px;
+    line-height: 1.6;
+}
+.feedback-box textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.feedback-box button {
+    background: #d4a017;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.feedback-box button:hover {
+    opacity: 0.9;
+}
